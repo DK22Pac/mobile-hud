@@ -1,5 +1,6 @@
 #include "MobileMissionTimers.h"
 #include "Settings.h"
+#include "Utility.h"
 #include "plugin.h"
 #include "game_sa\CWorld.h"
 #include "game_sa\CHud.h"
@@ -69,7 +70,8 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.vecMissionTimersBoxSize.x);
                     x2 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX);
                 }
-                CSprite2d::DrawRect(CRect(x1, baseY, x2, baseY + SCREEN_COORD(settings.vecMissionTimersBoxSize.y)),
+                CSprite2d::DrawRect(CRect(BilinearOffset(x1), BilinearOffset(baseY), BilinearOffset(x2), 
+                    BilinearOffset(baseY + SCREEN_COORD(settings.vecMissionTimersBoxSize.y))),
                     CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 255), CRGBA(0, 0, 0, alpha * 255));
                 CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_BLUELIGHT, alpha * 255));
                 CFont::SetOutlinePosition(1);
@@ -96,6 +98,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     CFont::PrintString(x1, baseY + SCREEN_COORD(settings.fMissionTimersTextOffsetY),
                         TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_acDescriptionTextKey));
                 }
+                baseY += SCREEN_COORD(settings.vecMissionTimersBoxSize.y);
             }
             for (int i = 0; i < 4; ++i) { // Draw counters
                 if (CUserDisplay::OnscnTimer.m_aCounters[i].m_bEnabled == 1) {
@@ -110,7 +113,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     float alpha = 1.0f;
                     if (TimerCounterHideState[i] > 0)
                         alpha = static_cast<float>(TimerCounterHideState[i]) / 20.0f;
-                    float boxY = settings.vecMissionTimersBoxSize.y * (i + 1);
+                    float boxY = settings.vecMissionTimersBoxSize.y * i;
                     float x1, x2;
                     if (settings.bMissionTimersTop) {
                         x1 = SCREEN_COORD_CENTER_LEFT(settings.vecMissionTimersBoxSize.x / 2.0f);
@@ -120,8 +123,8 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                         x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.vecMissionTimersBoxSize.x);
                         x2 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX);
                     }
-                    CSprite2d::DrawRect(CRect(
-                        x1, baseY + SCREEN_COORD(boxY) + i + 1, x2, baseY + SCREEN_COORD(boxY + settings.vecMissionTimersBoxSize.y) + i + 1),
+                    CSprite2d::DrawRect(CRect(BilinearOffset(x1), BilinearOffset(baseY + SCREEN_COORD(boxY) + i + 1), BilinearOffset(x2), 
+                        BilinearOffset(baseY + SCREEN_COORD(boxY + settings.vecMissionTimersBoxSize.y) + i + 1)),
                         CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 255), CRGBA(0, 0, 0, alpha * 255));
                     if (CUserDisplay::OnscnTimer.m_aCounters[i].m_nType == 1) {
                         if (settings.bMissionTimersTop)
