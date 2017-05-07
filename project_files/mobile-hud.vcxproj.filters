@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\source\Utility.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Settings.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileTextBox.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileSubtitles.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileRadioName.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileRadar.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileProgressBar.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobilePlayerInfo.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileMissionTimers.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileHud.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileColors.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\Utility.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Settings.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileTextBox.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileSubtitles.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileRadioName.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileRadar.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileProgressBar.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobilePlayerInfo.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileMissionTimers.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileColors.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{f484916a-7047-44a6-b4f9-6cf37c35f69e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

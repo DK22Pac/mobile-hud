@@ -21,13 +21,13 @@ void MobileRadar::DrawRadarRectangle(CSprite2d *sprite, CRect const& rect, CRGBA
 		if(settings.bRadarTop)
 			sprite->Draw(rect, color);
 		else
-			sprite->Draw(CRect(rect.m_fLeft, SCREEN_HEIGHT - rect.m_fTop, rect.m_fRight, SCREEN_HEIGHT - rect.m_fBottom), color);
+			sprite->Draw(CRect(rect.left, SCREEN_HEIGHT - rect.top, rect.right, SCREEN_HEIGHT - rect.bottom), color);
 	}
 	else {
 		if(settings.bRadarTop)
 			CSprite2d::DrawRect(rect, color);
 		else
-			CSprite2d::DrawRect(CRect(rect.m_fLeft, SCREEN_HEIGHT - rect.m_fTop, rect.m_fRight, SCREEN_HEIGHT - rect.m_fBottom), color);
+			CSprite2d::DrawRect(CRect(rect.left, SCREEN_HEIGHT - rect.top, rect.right, SCREEN_HEIGHT - rect.bottom), color);
 	}
 }
 

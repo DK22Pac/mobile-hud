@@ -28,8 +28,8 @@ void MobileTextBox::MyHelpBox_DrawBox(CRect const& rect, CRGBA const& color) {
 	RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(rwSHADEMODEGOURAUD));
     RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
-	CSprite2d::DrawRect(CRect(BilinearOffset(rect.m_fLeft - settings.fTextBoxBorderSize), BilinearOffset(rect.m_fBottom - settings.fTextBoxBorderSize),
-		BilinearOffset(rect.m_fRight + settings.fTextBoxBorderSize), BilinearOffset(rect.m_fTop + settings.fTextBoxBorderSize)),
+	CSprite2d::DrawRect(CRect(BilinearOffset(rect.left - settings.fTextBoxBorderSize), BilinearOffset(rect.bottom - settings.fTextBoxBorderSize),
+		BilinearOffset(rect.right + settings.fTextBoxBorderSize), BilinearOffset(rect.top + settings.fTextBoxBorderSize)),
 		CRGBA(color.red, color.green, color.blue, 130), CRGBA(color.red, color.green, color.blue, 130), 
 		CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, 255));
 	RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(savedShade));
