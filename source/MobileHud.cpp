@@ -1,4 +1,7 @@
-#include "plugin.h"
+// plugin-sdk
+#include <plugin.h>
+
+// mobile-hud
 #include "MobilePlayerInfo.h"
 #include "MobileRadar.h"
 #include "MobileColors.h"
@@ -7,6 +10,8 @@
 #include "MobileTextBox.h"
 #include "MobileMissionTimers.h"
 #include "MobileProgressBar.h"
+#include "MobileAreaName.h"
+#include "MobileVehicleName.h"
 #include "Settings.h"
 
 using namespace plugin;
@@ -25,6 +30,8 @@ public:
             MobileTextBox::InstallPatches();
             MobileMissionTimers::InstallPatches();
             MobileProgressBar::InstallPatches();
+			MobileAreaName::InstallPatches();
+			MobileVehicleName::InstallPatches();
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {

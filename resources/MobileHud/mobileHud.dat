@@ -1,6 +1,6 @@
 # Mobile HUD settings
 
-RADAR_TOP                               NO
+RADAR_TOP                               YES
 
 WEAPON_ICON_POSN                        141.0 20.0
 WEAPON_ICON_SCALE                       124.0 124.0
@@ -61,6 +61,16 @@ MISSIONTIMERS_TEXT_DESCRIPTION_OFFSET_X 8.0
 MISSIONTIMERS_TEXT_VALUE_OFFSET_X       8.0
 MISSIONTIMERS_PROGRESSBAR_OFFSET        6.0   11.0
 MISSIONTIMERS_PROGRESSBAR_SIZE          92.0  18.0
+
+SUBTITLES_POSN_Y                        60.0
+SUBTITLES_WIDESCREEN_POSN_Y             5.0
+SUBTITLES_SCALE                         1.0   1.9
+
+AREA_NAME_POSN                          25.0  50.0
+AREA_NAME_SCALE                         1.1   2.1
+
+VEHICLE_NAME_POSN                       25.0  40.0
+VEHICLE_NAME_SCALE                      0.8   1.6
 
 # YES (enable), NO (disable), or VirtualKey number (9 for TAB) to reload when key is pressed
 RELOAD_SETTINGS                         NO

@@ -1,6 +1,8 @@
 #pragma once
+// plugin-sdk
+#include <plugin.h>
 
-#include "plugin.h"
+// mobile-hud
 
 class Settings {
 public:
@@ -59,6 +61,15 @@ public:
     float     fMissionTimersTextValueOffsetX;
     CVector2D vecMissionTimersProgressBarOffset;
     CVector2D vecMissionTimersProgressBarSize;
+
+	float     fSubtitlesPosnY;
+	float     fSubtitlesWidePosnY;
+	CVector2D vecSubtitlesScale;
+	CVector2D vecAreaNamePosn;
+	CVector2D vecAreaNameScale;
+	CVector2D vecVehicleNamePosn;
+	CVector2D vecVehicleNameScale;
+
     int       iReloadKey;
 
     void Read();
