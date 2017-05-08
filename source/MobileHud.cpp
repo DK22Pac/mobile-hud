@@ -12,6 +12,7 @@
 #include "MobileProgressBar.h"
 #include "MobileAreaName.h"
 #include "MobileVehicleName.h"
+#include "MobileMenuSystem.h"
 #include "Settings.h"
 
 using namespace plugin;
@@ -32,6 +33,7 @@ public:
             MobileProgressBar::InstallPatches();
 			MobileAreaName::InstallPatches();
 			MobileVehicleName::InstallPatches();
+			MobileMenuSystem::InstallPatches();
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {
