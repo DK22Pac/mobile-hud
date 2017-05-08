@@ -31,9 +31,9 @@ public:
             MobileTextBox::InstallPatches();
             MobileMissionTimers::InstallPatches();
             MobileProgressBar::InstallPatches();
-			MobileAreaName::InstallPatches();
-			MobileVehicleName::InstallPatches();
-			MobileMenuSystem::InstallPatches();
+            MobileAreaName::InstallPatches();
+            MobileVehicleName::InstallPatches();
+            MobileMenuSystem::InstallPatches();
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {
