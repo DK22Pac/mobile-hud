@@ -47,6 +47,8 @@ void Settings::Read() {
     fTextBoxProgressBarYShift             = config["TEXT_BOX_PROGRESS_BAR_Y_SHIFT"          ].asFloat(3.0f);
     fTextBoxWidthWithProgressBar          = config["TEXT_BOX_WIDTH_WITH_PROGRESS_BAR"       ].asFloat(164.0f);
     fTextBoxPlusMinTextXShift             = config["TEXT_BOX_PLUS_MIN_TEXT_X_SHIFT"         ].asFloat(152.0f);
+    vecTextBoxTextPosnWhenMenuEnabled     = config["TEXT_BOX_TEXT_POSN_WHEN_MENU_ENABLED"   ].asVec2d(CVector2D(18.0f, 10.0f));
+    fTextBoxHeightWhenMenuEnabled         = config["TEXT_BOX_HEIGHT_WHEN_MENU_ENABLED"      ].asFloat(55.0f);
     bMissionTimersTop                     = config["MISSIONTIMERS_TOP"                      ].asBool(true);
     fMissionTimersTopPosnY                = config["MISSIONTIMERS_TOP_POSN_Y"               ].asFloat(36.0f);
     fMissionTimersBoxPosnX                = config["MISSIONTIMERS_BOX_POSN_X"               ].asFloat(20.0f);
@@ -60,15 +62,13 @@ void Settings::Read() {
     fMissionTimersTextValueOffsetX        = config["MISSIONTIMERS_TEXT_VALUE_OFFSET_X"      ].asFloat(8.0f);
     vecMissionTimersProgressBarOffset     = config["MISSIONTIMERS_PROGRESSBAR_OFFSET"       ].asVec2d(CVector2D(6.0f, 11.0f));
     vecMissionTimersProgressBarSize       = config["MISSIONTIMERS_PROGRESSBAR_SIZE"         ].asVec2d(CVector2D(92.0f, 18.0f));
-
-	fSubtitlesPosnY                       = config["SUBTITLES_POSN_Y"                       ].asFloat(60.0f);
-	fSubtitlesWidePosnY                   = config["SUBTITLES_WIDESCREEN_POSN_Y"            ].asFloat(5.0f);
-	vecSubtitlesScale                     = config["SUBTITLES_SCALE"                        ].asVec2d(CVector2D(1.0f, 1.9f));
-	vecAreaNamePosn                       = config["AREA_NAME_POSN"                         ].asVec2d(CVector2D(25.0f, 50.0f));
-	vecAreaNameScale                      = config["AREA_NAME_SCALE"                        ].asVec2d(CVector2D(1.1f, 2.1f));
-	vecVehicleNamePosn                    = config["VEHICLE_NAME_POSN"                      ].asVec2d(CVector2D(25.0f, 40.0f));
-	vecVehicleNameScale                   = config["VEHICLE_NAME_SCALE"                     ].asVec2d(CVector2D(0.8f, 1.6f));
-
+    fSubtitlesPosnY                       = config["SUBTITLES_POSN_Y"                       ].asFloat(60.0f);
+    fSubtitlesWidePosnY                   = config["SUBTITLES_WIDESCREEN_POSN_Y"            ].asFloat(5.0f);
+    vecSubtitlesScale                     = config["SUBTITLES_SCALE"                        ].asVec2d(CVector2D(1.0f, 1.9f));
+    vecAreaNamePosn                       = config["AREA_NAME_POSN"                         ].asVec2d(CVector2D(25.0f, 50.0f));
+    vecAreaNameScale                      = config["AREA_NAME_SCALE"                        ].asVec2d(CVector2D(1.1f, 2.1f));
+    vecVehicleNamePosn                    = config["VEHICLE_NAME_POSN"                      ].asVec2d(CVector2D(25.0f, 40.0f));
+    vecVehicleNameScale                   = config["VEHICLE_NAME_SCALE"                     ].asVec2d(CVector2D(0.8f, 1.6f));
 
     iReloadKey                            = config["RELOAD_SETTINGS"                        ].asBool(false);
     

@@ -48,6 +48,8 @@ public:
     float     fTextBoxProgressBarYShift;
     float     fTextBoxWidthWithProgressBar;
     float     fTextBoxPlusMinTextXShift;
+    CVector2D vecTextBoxTextPosnWhenMenuEnabled;
+    float     fTextBoxHeightWhenMenuEnabled;
     bool      bMissionTimersTop;
     float     fMissionTimersTopPosnY;
     float     fMissionTimersBoxPosnX;

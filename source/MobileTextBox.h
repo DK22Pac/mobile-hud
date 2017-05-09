@@ -8,4 +8,5 @@ public:
 	static void MyHelpBox_DrawBox(CRect const& rect, CRGBA const& color);
 	static void MyHelpBox_Draw();
 	static float GetHelpBoxXShift();
+    static bool IsMenuEnabled();
 };

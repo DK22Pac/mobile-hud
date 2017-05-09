@@ -53,3 +53,12 @@ void DrawProgressBarWithProgressDelta_BilinearOffset(float x, float y, float wid
             (int)(x + width * (progress / 100.f)) - 0.5f, (int)(y + height) - 0.5f), deltaColor);
     }
 }
+
+void StringReplace(std::string &str, std::string substring, std::string replacement) {
+    size_t i = str.find(substring);
+    size_t len = substring.length();
+    while (i != std::string::npos) {
+        str.replace(i, len, replacement);
+        i = str.find(substring, i);
+    }
+}
