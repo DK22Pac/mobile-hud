@@ -8,6 +8,6 @@
 
 class MobileVehicleName {
 public:
-	static void InstallPatches();
-	static void DrawVehicleName(float x, float y, char* str);
+    static void InstallPatches();
+    static void DrawVehicleName(float x, float y, char* str);
 };

@@ -30,7 +30,7 @@ void MobileProgressBar::MyDrawProgressBar(float x, float y, unsigned short width
             CFont::SetAlignment(ALIGN_RIGHT);
         else {
             CFont::SetAlignment(ALIGN_LEFT);
-            text_x += 5.0f; 
+            text_x += 5.0f;
         }
         CFont::PrintString(text_x, y, text);
     }

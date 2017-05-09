@@ -3,17 +3,17 @@
 #include "Settings.h"
 
 void MobileRadioName::InstallPatches() {
-	plugin::patch::RedirectCall(0x4E9F3F, MySetRadioNameScale);
-	plugin::patch::RedirectCall(0x4E9F4D, MySetRadioNameAlignment);
-	plugin::patch::RedirectCall(0x4E9FF1, MyDrawRadioName);
+    plugin::patch::RedirectCall(0x4E9F3F, MySetRadioNameScale);
+    plugin::patch::RedirectCall(0x4E9F4D, MySetRadioNameAlignment);
+    plugin::patch::RedirectCall(0x4E9FF1, MyDrawRadioName);
 }
 
 void MobileRadioName::MySetRadioNameScale(float x, float y) {
-	CFont::SetScale(SCREEN_MULTIPLIER(settings.vecRadioNameScale.x), SCREEN_MULTIPLIER(settings.vecRadioNameScale.y));
+    CFont::SetScale(SCREEN_MULTIPLIER(settings.vecRadioNameScale.x), SCREEN_MULTIPLIER(settings.vecRadioNameScale.y));
 }
 
 void MobileRadioName::MyDrawRadioName(float x, float y, char *name) {
-    if(settings.bRadioNameTop)
+    if (settings.bRadioNameTop)
         CFont::PrintString(SCREEN_COORD_CENTER_X, SCREEN_COORD_TOP(settings.fRadioNameTopPosnY), name);
     else
         CFont::PrintString(SCREEN_COORD(settings.vecRadioNamePosn.x), SCREEN_COORD_BOTTOM(settings.vecRadioNamePosn.y), name);

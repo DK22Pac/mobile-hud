@@ -17,52 +17,52 @@
 #include "game_sa\CMenuSystem.h"
 
 void MobileTextBox::InstallPatches() {
-	plugin::patch::RedirectCall(0x573EF4, MyHelpBox_DrawBox);
-	plugin::patch::RedirectCall(0x71A7EE, MyHelpBox_DrawBox);
-	plugin::patch::RedirectCall(0x58FCFA, MyHelpBox_Draw);
+    plugin::patch::RedirectCall(0x573EF4, MyHelpBox_DrawBox);
+    plugin::patch::RedirectCall(0x71A7EE, MyHelpBox_DrawBox);
+    plugin::patch::RedirectCall(0x58FCFA, MyHelpBox_Draw);
 }
 
 void MobileTextBox::MyHelpBox_DrawBox(CRect const& rect, CRGBA const& color) {
-	unsigned int savedShade;
-	unsigned int savedAlpha;
-	RwRenderStateGet(rwRENDERSTATESHADEMODE, &savedShade);
-	RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(rwSHADEMODEGOURAUD));
+    unsigned int savedShade;
+    unsigned int savedAlpha;
+    RwRenderStateGet(rwRENDERSTATESHADEMODE, &savedShade);
+    RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(rwSHADEMODEGOURAUD));
     RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
-	CSprite2d::DrawRect(CRect(BilinearOffset(rect.left - settings.fTextBoxBorderSize), BilinearOffset(rect.bottom - settings.fTextBoxBorderSize),
-		BilinearOffset(rect.right + settings.fTextBoxBorderSize), BilinearOffset(rect.top + settings.fTextBoxBorderSize)),
-		CRGBA(color.red, color.green, color.blue, 130), CRGBA(color.red, color.green, color.blue, 130), 
-		CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, 255));
-	RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(savedShade));
-	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
+    CSprite2d::DrawRect(CRect(BilinearOffset(rect.left - settings.fTextBoxBorderSize), BilinearOffset(rect.bottom - settings.fTextBoxBorderSize),
+        BilinearOffset(rect.right + settings.fTextBoxBorderSize), BilinearOffset(rect.top + settings.fTextBoxBorderSize)),
+        CRGBA(color.red, color.green, color.blue, 130), CRGBA(color.red, color.green, color.blue, 130),
+        CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, 255));
+    RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(savedShade));
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
 }
 
 float MobileTextBox::GetHelpBoxXShift() {
-	if(settings.bRadarTop && FrontEndMenuManager.drawRadarOrMap != 2) {
+    if (settings.bRadarTop && FrontEndMenuManager.drawRadarOrMap != 2) {
         CVehicle *vehicle = FindPlayerVehicle(-1, 0);
-		if(vehicle && vehicle->m_wModelIndex != MODEL_VORTEX && (vehicle->m_dwVehicleSubClass == VEHICLE_PLANE || vehicle->m_dwVehicleSubClass == VEHICLE_HELI))
-			return settings.fTextBoxPosnXWithRadarAndPlane;
-		else if(FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_Type == WEAPON_PARACHUTE)
-			return settings.fTextBoxPosnXWithRadarAndPlane;
-		else return settings.fTextBoxPosnXWithRadar;
-	}
-	else return settings.vecTextBoxPosn.x;
+        if (vehicle && vehicle->m_wModelIndex != MODEL_VORTEX && (vehicle->m_dwVehicleSubClass == VEHICLE_PLANE || vehicle->m_dwVehicleSubClass == VEHICLE_HELI))
+            return settings.fTextBoxPosnXWithRadarAndPlane;
+        else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_Type == WEAPON_PARACHUTE)
+            return settings.fTextBoxPosnXWithRadarAndPlane;
+        else return settings.fTextBoxPosnXWithRadar;
+    }
+    else return settings.vecTextBoxPosn.x;
 }
 
 void MobileTextBox::MyHelpBox_Draw() {
-	if(CHud::m_pHelpMessage[0]) {
-		if(!CMessages::StringCompare(CHud::m_pHelpMessage, CHud::m_pLastHelpMessage, 400)) {
-			switch (CHud::m_nHelpMessageState) {
-			case 0: // STATE_FREE_TO_USE
+    if (CHud::m_pHelpMessage[0]) {
+        if (!CMessages::StringCompare(CHud::m_pHelpMessage, CHud::m_pLastHelpMessage, 400)) {
+            switch (CHud::m_nHelpMessageState) {
+            case 0: // STATE_FREE_TO_USE
                 CHud::m_nHelpMessageState = 2; // STATE_FADE_OUT
                 CHud::m_nHelpMessageTimer = 0;
                 CHud::m_nHelpMessageFadeTimer = 0;
-				CMessages::StringCopy(CHud::m_pHelpMessageToPrint, CHud::m_pHelpMessage, 400);
-				CFont::SetAlignment(ALIGN_LEFT);
-				CFont::SetJustify(false); 
-				CFont::SetFontStyle(FONT_SUBTITLES);
-				CFont::SetBackground(true, true);
-				CFont::SetDropShadowPosition(0);
+                CMessages::StringCopy(CHud::m_pHelpMessageToPrint, CHud::m_pHelpMessage, 400);
+                CFont::SetAlignment(ALIGN_LEFT);
+                CFont::SetJustify(false);
+                CFont::SetFontStyle(FONT_SUBTITLES);
+                CFont::SetBackground(true, true);
+                CFont::SetDropShadowPosition(0);
                 CFont::SetScale(SCREEN_MULTIPLIER(settings.vecTextBoxFontScale.x), SCREEN_MULTIPLIER(settings.vecTextBoxFontScale.y));
                 if (IsMenuEnabled())
                     CHud::m_fHelpMessageTime = 4;
@@ -73,20 +73,20 @@ void MobileTextBox::MyHelpBox_Draw() {
                 }
                 CFont::SetWrapx(SCREEN_WIDTH);
                 plugin::CallMethod<0x506EA0>(0xB6BC90, 32, 0.0f, 1.0f);
-				break;
-			case 1:
-			case 2:
-			case 3:
-			case 4:
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
                 CHud::m_nHelpMessageState = 4; // STATE_REPLACE
                 CHud::m_nHelpMessageTimer = 5;
-				break;
-			default:
-				break;
-			}
-			CMessages::StringCopy(CHud::m_pLastHelpMessage, CHud::m_pHelpMessage, 400);
-		}
-		float alpha = 200.0f;
+                break;
+            default:
+                break;
+            }
+            CMessages::StringCopy(CHud::m_pLastHelpMessage, CHud::m_pHelpMessage, 400);
+        }
+        float alpha = 200.0f;
         if (CHud::m_nHelpMessageState) {
             switch (CHud::m_nHelpMessageState) {
             case 2: // STATE_FADE_OUT
@@ -235,8 +235,8 @@ void MobileTextBox::MyHelpBox_Draw() {
                 return;
             }
         }
-	}
-	else
+    }
+    else
         CHud::m_nHelpMessageState = 0;
 }
 

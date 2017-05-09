@@ -19,5 +19,5 @@ public:
 private:
     static void DrawRect(float x, float y, float width, float height, bool bFading, CRGBA const &color) {
         DrawRect(CRect(x, y, x + width, y + height), bFading, (color));
-	}
+    }
 };

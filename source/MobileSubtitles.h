@@ -9,6 +9,6 @@
 
 class MobileSubtitles {
 public:
-	static void InstallPatches();
-	static void DrawSubtitles(float x, float y, char* str);
+    static void InstallPatches();
+    static void DrawSubtitles(float x, float y, char* str);
 };

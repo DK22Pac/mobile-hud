@@ -21,36 +21,36 @@ unsigned int MobilePlayerInfo::m_CurrentStar;
 void MobilePlayerInfo::InstallPatches() {
     static float shadowOffsetMp = 0.0009765625f;
     plugin::patch::SetPointer(0x719D7C + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719D94 + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719DB5 + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719DD1 + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719DF2 + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719E0E + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719E2F + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719E4B + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719E6F + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719E97 + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719EBF + 2, &shadowOffsetMp);
-	plugin::patch::SetPointer(0x719EE3 + 2, &shadowOffsetMp);
-	plugin::patch::SetUInt(0x719D90, 0xC17048);
-	plugin::patch::SetUInt(0x719DCD, 0xC17048);
-	plugin::patch::SetUInt(0x719E0A, 0xC17048);
-	plugin::patch::SetUInt(0x719E47, 0xC17048);
-	plugin::patch::SetUInt(0x719E63, 0xC17048);
-	plugin::patch::SetUInt(0x719E8B, 0xC17048);
-	plugin::patch::RedirectJump(0x58D7D0, MyDrawWeaponIcon);
-	plugin::patch::RedirectJump(0x5893B0, MyDrawWeaponAmmo);
-	plugin::patch::RedirectCall(0x58EB4E, MySetClockScale);
-	plugin::patch::RedirectCall(0x58EC21, MyDrawClock);
-	plugin::patch::RedirectCall(0x58F56B, MySetMoneyScale);
-	plugin::patch::RedirectCall(0x58F607, MyDrawMoney);
-	plugin::patch::RedirectJump(0x589270, MyDrawHealth);
-	plugin::patch::RedirectJump(0x5890A0, MyDrawArmor);
-	plugin::patch::RedirectJump(0x589190, MyDrawBreath);
-	plugin::patch::RedirectCall(0x58DD42, MyStoreCurrentStar);
-	plugin::patch::RedirectCall(0x58DFD3, MyDrawWantedLevel);
-	strcpy(reinterpret_cast<char *>(0x866C8C), "$-%d");
-	strcpy(reinterpret_cast<char *>(0x866C94), "$%d");
+    plugin::patch::SetPointer(0x719D94 + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719DB5 + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719DD1 + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719DF2 + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719E0E + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719E2F + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719E4B + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719E6F + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719E97 + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719EBF + 2, &shadowOffsetMp);
+    plugin::patch::SetPointer(0x719EE3 + 2, &shadowOffsetMp);
+    plugin::patch::SetUInt(0x719D90, 0xC17048);
+    plugin::patch::SetUInt(0x719DCD, 0xC17048);
+    plugin::patch::SetUInt(0x719E0A, 0xC17048);
+    plugin::patch::SetUInt(0x719E47, 0xC17048);
+    plugin::patch::SetUInt(0x719E63, 0xC17048);
+    plugin::patch::SetUInt(0x719E8B, 0xC17048);
+    plugin::patch::RedirectJump(0x58D7D0, MyDrawWeaponIcon);
+    plugin::patch::RedirectJump(0x5893B0, MyDrawWeaponAmmo);
+    plugin::patch::RedirectCall(0x58EB4E, MySetClockScale);
+    plugin::patch::RedirectCall(0x58EC21, MyDrawClock);
+    plugin::patch::RedirectCall(0x58F56B, MySetMoneyScale);
+    plugin::patch::RedirectCall(0x58F607, MyDrawMoney);
+    plugin::patch::RedirectJump(0x589270, MyDrawHealth);
+    plugin::patch::RedirectJump(0x5890A0, MyDrawArmor);
+    plugin::patch::RedirectJump(0x589190, MyDrawBreath);
+    plugin::patch::RedirectCall(0x58DD42, MyStoreCurrentStar);
+    plugin::patch::RedirectCall(0x58DFD3, MyDrawWantedLevel);
+    strcpy(reinterpret_cast<char *>(0x866C8C), "$-%d");
+    strcpy(reinterpret_cast<char *>(0x866C94), "$%d");
 }
 
 void MobilePlayerInfo::MyDrawWeaponIcon(CPed *player, int, int, float alpha) {
@@ -135,19 +135,19 @@ void MobilePlayerInfo::MyDrawWeaponAmmo(CPed *player, int, int, float alpha) {
 }
 
 void MobilePlayerInfo::MySetClockScale(float scaleX, float scaleY) {
-	CFont::SetScale(SCREEN_MULTIPLIER(settings.vecClockScale.x), SCREEN_MULTIPLIER(settings.vecClockScale.y));
+    CFont::SetScale(SCREEN_MULTIPLIER(settings.vecClockScale.x), SCREEN_MULTIPLIER(settings.vecClockScale.y));
 }
 
 void MobilePlayerInfo::MyDrawClock(float x, float y, char *text) {
-	CFont::PrintString(SCREEN_COORD_RIGHT(settings.vecClockPosn.x), SCREEN_COORD(settings.vecClockPosn.y), text);
+    CFont::PrintString(SCREEN_COORD_RIGHT(settings.vecClockPosn.x), SCREEN_COORD(settings.vecClockPosn.y), text);
 }
 
 void MobilePlayerInfo::MySetMoneyScale(float scaleX, float scaleY) {
-	CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMoneyScale.x), SCREEN_MULTIPLIER(settings.vecMoneyScale.y));
+    CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMoneyScale.x), SCREEN_MULTIPLIER(settings.vecMoneyScale.y));
 }
 
 void MobilePlayerInfo::MyDrawMoney(float x, float y, char *text) {
-	CFont::PrintString(SCREEN_COORD_RIGHT(settings.vecMoneyPosn.x), SCREEN_COORD(settings.vecMoneyPosn.y), text);
+    CFont::PrintString(SCREEN_COORD_RIGHT(settings.vecMoneyPosn.x), SCREEN_COORD(settings.vecMoneyPosn.y), text);
 }
 
 void MobilePlayerInfo::MyDrawHealth(int playerId, int, int) {
@@ -198,16 +198,16 @@ void MobilePlayerInfo::MyDrawBreath(int playerId, int, int) {
 }
 
 __declspec(naked) void MobilePlayerInfo::MyStoreCurrentStar(short) {
-	__asm mov m_CurrentStar, edi
-	__asm retn
+    __asm mov m_CurrentStar, edi
+    __asm retn
 }
 
 void MobilePlayerInfo::MyDrawWantedLevel(float x, float y, char *text) {
-	if(FindPlayerPed(-1)->m_pPlayerData->m_pWanted->m_dwWantedLevel > m_CurrentStar)
-		CFont::SetOutlinePosition(2);
-	else
-		CFont::SetOutlinePosition(0);
-	CFont::SetScale(SCREEN_MULTIPLIER(settings.vecWantedLevelStarScale.x), SCREEN_MULTIPLIER(settings.vecWantedLevelStarScale.y));
-	CFont::PrintString(SCREEN_COORD_MAX_X - SCREEN_COORD(settings.vecWantedLevelPosn.x) - SCREEN_COORD(settings.fWantedLevelStarSpace) * m_CurrentStar,
+    if (FindPlayerPed(-1)->m_pPlayerData->m_pWanted->m_dwWantedLevel > m_CurrentStar)
+        CFont::SetOutlinePosition(2);
+    else
+        CFont::SetOutlinePosition(0);
+    CFont::SetScale(SCREEN_MULTIPLIER(settings.vecWantedLevelStarScale.x), SCREEN_MULTIPLIER(settings.vecWantedLevelStarScale.y));
+    CFont::PrintString(SCREEN_COORD_MAX_X - SCREEN_COORD(settings.vecWantedLevelPosn.x) - SCREEN_COORD(settings.fWantedLevelStarSpace) * m_CurrentStar,
         SCREEN_COORD(settings.vecWantedLevelPosn.y), text);
 }

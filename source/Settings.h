@@ -64,13 +64,13 @@ public:
     CVector2D vecMissionTimersProgressBarOffset;
     CVector2D vecMissionTimersProgressBarSize;
 
-	float     fSubtitlesPosnY;
-	float     fSubtitlesWidePosnY;
-	CVector2D vecSubtitlesScale;
-	CVector2D vecAreaNamePosn;
-	CVector2D vecAreaNameScale;
-	CVector2D vecVehicleNamePosn;
-	CVector2D vecVehicleNameScale;
+    float     fSubtitlesPosnY;
+    float     fSubtitlesWidePosnY;
+    CVector2D vecSubtitlesScale;
+    CVector2D vecAreaNamePosn;
+    CVector2D vecAreaNameScale;
+    CVector2D vecVehicleNamePosn;
+    CVector2D vecVehicleNameScale;
 
     int       iReloadKey;
 

@@ -43,6 +43,15 @@
     <ClCompile Include="..\source\MobileVehicleName.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\MobileFrontEnd.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileLoadingScreen.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileTextures.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Utility.h">
@@ -82,6 +91,18 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\source\MobileVehicleName.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileFrontEnd.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileLoadingScreen.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileText.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileTextures.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

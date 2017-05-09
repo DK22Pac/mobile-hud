@@ -70,7 +70,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.vecMissionTimersBoxSize.x);
                     x2 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX);
                 }
-                CSprite2d::DrawRect(CRect(BilinearOffset(x1), BilinearOffset(baseY), BilinearOffset(x2), 
+                CSprite2d::DrawRect(CRect(BilinearOffset(x1), BilinearOffset(baseY), BilinearOffset(x2),
                     BilinearOffset(baseY + SCREEN_COORD(settings.vecMissionTimersBoxSize.y))),
                     CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 255), CRGBA(0, 0, 0, alpha * 255));
                 CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_BLUELIGHT, alpha * 255));
@@ -123,7 +123,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                         x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.vecMissionTimersBoxSize.x);
                         x2 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX);
                     }
-                    CSprite2d::DrawRect(CRect(BilinearOffset(x1), BilinearOffset(baseY + SCREEN_COORD(boxY) + i + 1), BilinearOffset(x2), 
+                    CSprite2d::DrawRect(CRect(BilinearOffset(x1), BilinearOffset(baseY + SCREEN_COORD(boxY) + i + 1), BilinearOffset(x2),
                         BilinearOffset(baseY + SCREEN_COORD(boxY + settings.vecMissionTimersBoxSize.y) + i + 1)),
                         CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 255), CRGBA(0, 0, 0, alpha * 255));
                     if (CUserDisplay::OnscnTimer.m_aCounters[i].m_nType == 1) {

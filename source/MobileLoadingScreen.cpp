@@ -61,13 +61,13 @@ void MobileLoadingScreen::RenderSplash() {
     // CLoadingScreen::m_bFading
     if (*(bool*)0xBAB31C) {
         // CurrentLoadingSprite
-        if (!*(int*)0x8D093C) {            
+        if (!*(int*)0x8D093C) {
             float posX = SCREEN_COORD_CENTER_X - SCREEN_COORD(1444.0f / 2);
             float posY = SCREEN_COORD_CENTER_Y - SCREEN_COORD(450.0f / 2);
 
             static CRect rect;
-            CSprite2d::DrawRect(CRect(BilinearOffset(rect.left - 0.0f), BilinearOffset(rect.bottom - 0.0f), BilinearOffset(rect.right - SCREEN_WIDTH), BilinearOffset(rect.top - SCREEN_HEIGHT)), CRGBA(0,0,0,255));
-        
+            CSprite2d::DrawRect(CRect(BilinearOffset(rect.left - 0.0f), BilinearOffset(rect.bottom - 0.0f), BilinearOffset(rect.right - SCREEN_WIDTH), BilinearOffset(rect.top - SCREEN_HEIGHT)), CRGBA(0, 0, 0, 255));
+
             // legal_screen
             CFont::SetProp(true);
             CFont::SetBackground(0, 0);

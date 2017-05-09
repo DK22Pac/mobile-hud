@@ -2,7 +2,7 @@
 #include "MobileMenuSystem.h"
 
 void MobileMenuSystem::InstallPatches() {
-	plugin::patch::RedirectJump(0x580E00, DisplayStandardMenu);
+    plugin::patch::RedirectJump(0x580E00, DisplayStandardMenu);
 }
 
 void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFont) {
@@ -20,7 +20,7 @@ void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFon
             // Scroll up to 20 rows
             if (MenuNumber[menuId]->m_nSelectedRow >= 8 && MenuNumber[menuId]->m_nSelectedRow <= (MenuNumber[menuId]->m_nNumRows)) {
                 if (MenuNumber[menuId]->m_nSelectedRow == 8)
-                fMenu_PosY -= SCREEN_COORD(80.0);
+                    fMenu_PosY -= SCREEN_COORD(80.0);
                 if (MenuNumber[menuId]->m_nSelectedRow == 9)
                     fMenu_PosY -= SCREEN_COORD(80.0 * 2);
                 if (MenuNumber[menuId]->m_nSelectedRow == 10)
@@ -45,7 +45,7 @@ void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFon
                     fMenu_PosY -= SCREEN_COORD(80.0 * 12);
                 if (MenuNumber[menuId]->m_nSelectedRow == 20)
                     fMenu_PosY -= SCREEN_COORD(80.0 * 13);
-            }        
+            }
 
             // Second Column position
             if (MenuNumber[menuId]->m_anColumnAlignment[i] == ALIGN_RIGHT || MenuNumber[menuId]->m_anColumnAlignment[i] == ALIGN_CENTER)
@@ -66,14 +66,14 @@ void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFon
                         if (fMenu_PosY > SCREEN_COORD_BOTTOM(50.0f))
                             fAlpha = 50.0;
                         else
-                        fAlpha = 255.0f;
+                            fAlpha = 255.0f;
 
                     // Set colors
                     if (MenuNumber[menuId]->m_anColumnAlignment[i] == ALIGN_RIGHT || MenuNumber[menuId]->m_anColumnAlignment[i] == ALIGN_CENTER) {
                         CFont::SetColor(CRGBA(0, 120, 0, static_cast<BYTE>(fAlpha)));
                         CFont::SetDropColor(CRGBA(0, 0, 0, static_cast<BYTE>(fAlpha)));
                     }
-                    else {                      
+                    else {
                         CFont::SetColor(CRGBA(255, 255, 255, static_cast<BYTE>(fAlpha)));
                         CFont::SetDropColor(CRGBA(0, 0, 0, static_cast<BYTE>(fAlpha)));
 
@@ -89,8 +89,8 @@ void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFon
                     CFont::SetProp(true);
                     CFont::SetAlignment(ALIGN_LEFT);
                     CFont::SetOutlinePosition(2);
-                    CFont::SetFontStyle(FONT_MENU);           
-     
+                    CFont::SetFontStyle(FONT_MENU);
+
                     if (MenuNumber[menuId]->m_nNumColumns == 2) { // bottom
                         CFont::SetScale(SCREEN_MULTIPLIER(0.8f), SCREEN_MULTIPLIER(1.6f));
                         float width = CFont::GetStringWidth(gString, true, false);
@@ -130,20 +130,20 @@ void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFon
 }
 
 void MobileMenuSystem::DrawRect(CRect const& rect, bool bFading, CRGBA const& color) {
-	unsigned int savedShade;
-	unsigned int savedAlpha;
-	RwRenderStateGet(rwRENDERSTATESHADEMODE, &savedShade);
-	RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(rwSHADEMODEGOURAUD));
-	RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
-	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
-	if (bFading)
-		CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
-			BilinearOffset(rect.right), BilinearOffset(rect.top)),
-			CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha),
-			CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha));
-	else
-		CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
-			BilinearOffset(rect.right), BilinearOffset(rect.top)), color);
-	RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(savedShade));
-	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
+    unsigned int savedShade;
+    unsigned int savedAlpha;
+    RwRenderStateGet(rwRENDERSTATESHADEMODE, &savedShade);
+    RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(rwSHADEMODEGOURAUD));
+    RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
+    if (bFading)
+        CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
+            BilinearOffset(rect.right), BilinearOffset(rect.top)),
+            CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha),
+            CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha));
+    else
+        CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
+            BilinearOffset(rect.right), BilinearOffset(rect.top)), color);
+    RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(savedShade));
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
 }

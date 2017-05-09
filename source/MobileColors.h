@@ -2,5 +2,5 @@
 
 class MobileColors {
 public:
-	static void Read();
+    static void Read();
 };
