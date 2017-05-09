@@ -13,6 +13,9 @@
 #include "MobileAreaName.h"
 #include "MobileVehicleName.h"
 #include "MobileMenuSystem.h"
+#include "MobileLoadingScreen.h"
+#include "MobileTextures.h"
+#include "MobileFrontEnd.h"
 #include "Settings.h"
 
 using namespace plugin;
@@ -34,6 +37,8 @@ public:
             MobileAreaName::InstallPatches();
             MobileVehicleName::InstallPatches();
             MobileMenuSystem::InstallPatches();
+            MobileLoadingScreen::InstallPatches();
+            MobileTextures::Initialise();
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {
