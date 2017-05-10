@@ -13,7 +13,8 @@
 
 class MobileLoadingScreen {
 public:
-    int& m_lCurrentSprite = *(int*)0x8D093C;
+    int& m_currDisplayedSplash = *(int*)0x8D093C;
+    bool& m_bFading = *(bool*)0xBAB31C;
 
 public:
     static void InstallPatches();
@@ -22,4 +23,4 @@ public:
     static void RenderLoadingBar(float x, float y, unsigned short width, unsigned char height, float progress, signed char progressAdd, unsigned char drawPercentage, unsigned char drawBlackBorder, CRGBA color, CRGBA addColor);
 };
 
-extern MobileLoadingScreen loadSc;
+extern MobileLoadingScreen MobileLoad;
