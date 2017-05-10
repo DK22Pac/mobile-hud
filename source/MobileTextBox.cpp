@@ -49,8 +49,16 @@ float MobileTextBox::GetHelpBoxXShift() {
     else return settings.vecTextBoxPosn.x;
 }
 
+float fTextBoxYWhenMenuEnabled = -80.0f;
+
 void MobileTextBox::MyHelpBox_Draw() {
     if (CHud::m_pHelpMessage[0]) {
+        if (IsMenuEnabled()) {
+            if (fTextBoxYWhenMenuEnabled < 0.0f)
+                fTextBoxYWhenMenuEnabled += 5.0f;
+        }
+        else
+            fTextBoxYWhenMenuEnabled = -80.0f;
         if (!CMessages::StringCompare(CHud::m_pHelpMessage, CHud::m_pLastHelpMessage, 400)) {
             switch (CHud::m_nHelpMessageState) {
             case 0: // STATE_FREE_TO_USE
@@ -161,9 +169,9 @@ void MobileTextBox::MyHelpBox_Draw() {
                         posX = CFont::GetStringWidth(TheText.Get(gString), 1, 0) + SCREEN_COORD(settings.vecTextBoxTextPosnWhenMenuEnabled.x);
                         posY = SCREEN_COORD(settings.vecTextBoxTextPosnWhenMenuEnabled.y);
                         CFont::SetWrapx(SCREEN_WIDTH);
-                        CSprite2d::DrawRect(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_COORD(settings.fTextBoxHeightWhenMenuEnabled)), CRGBA(0, 0, 0, 255));
+                        CSprite2d::DrawRect(CRect(0.0f, SCREEN_COORD(fTextBoxYWhenMenuEnabled), SCREEN_WIDTH, SCREEN_COORD(fTextBoxYWhenMenuEnabled + settings.fTextBoxHeightWhenMenuEnabled)), CRGBA(0, 0, 0, 255));
                         CFont::PrintString(SCREEN_COORD(settings.vecTextBoxTextPosnWhenMenuEnabled.x),
-                            SCREEN_COORD(settings.vecTextBoxTextPosnWhenMenuEnabled.y), TheText.Get(gString));
+                            SCREEN_COORD(fTextBoxYWhenMenuEnabled + settings.vecTextBoxTextPosnWhenMenuEnabled.y), TheText.Get(gString));
                     }
                     else {
                         CFont::SetBackground(true, true);
@@ -213,12 +221,12 @@ void MobileTextBox::MyHelpBox_Draw() {
                     if (IsMenuEnabled()) {
                         CFont::SetWrapx(SCREEN_WIDTH);
                         CFont::SetBackground(false, false);
-                        CSprite2d::DrawRect(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_COORD(settings.fTextBoxHeightWhenMenuEnabled)), CRGBA(0, 0, 0, 255));
+                        CSprite2d::DrawRect(CRect(0.0f, SCREEN_COORD(fTextBoxYWhenMenuEnabled), SCREEN_WIDTH, SCREEN_COORD(fTextBoxYWhenMenuEnabled + settings.fTextBoxHeightWhenMenuEnabled)), CRGBA(0, 0, 0, 255));
                         std::string strHelpMessage = CHud::m_pHelpMessageToPrint;
                         StringReplace(strHelpMessage, "~n~", " ");
                         StringReplace(strHelpMessage, "~N~", " ");
                         CFont::PrintString(SCREEN_COORD(settings.vecTextBoxTextPosnWhenMenuEnabled.x),
-                            SCREEN_COORD(settings.vecTextBoxTextPosnWhenMenuEnabled.y), const_cast<char *>(strHelpMessage.c_str()));
+                            SCREEN_COORD(fTextBoxYWhenMenuEnabled + settings.vecTextBoxTextPosnWhenMenuEnabled.y), const_cast<char *>(strHelpMessage.c_str()));
                     }
                     else {
                         if (CHud::m_fHelpMessageBoxWidth == 200.0f)
