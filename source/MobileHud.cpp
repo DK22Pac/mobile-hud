@@ -38,9 +38,9 @@ public:
             MobileVehicleName::InstallPatches();
             MobileMenuSystem::InstallPatches();
             MobileLoadingScreen::InstallPatches();
+            MobileMenuPage::InstallPatches();
             MobileFrontEnd::InstallPatches();
             MobileFrontEnd::Setup();
-            MobileTextures::Initialise();
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {
