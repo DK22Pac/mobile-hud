@@ -38,6 +38,8 @@ public:
             MobileVehicleName::InstallPatches();
             MobileMenuSystem::InstallPatches();
             MobileLoadingScreen::InstallPatches();
+            MobileFrontEnd::InstallPatches();
+            MobileFrontEnd::Setup();
             MobileTextures::Initialise();
 
             if (settings.iReloadKey) {
@@ -48,6 +50,16 @@ public:
                     }
                 };
             }
+        };
+
+        Events::shutdownRwEvent += [] {
+            MobileTxdStorage::Instance().Shutdown();
+        };
+
+        CdeclEvent<AddressList<0x71982E, H_JUMP>, PRIORITY_BEFORE, ArgPickNone, void()> myProcessPerFrameEvent;
+
+        myProcessPerFrameEvent += [] {
+            MobileTxdStorage::Instance().Process();
         };
     }
 } mobileHud;
