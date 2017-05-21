@@ -75,13 +75,16 @@ void __fastcall MobileFrontEnd::DrawStandardMenu(void *ecx0, int, char a2) {
         }
         case 17:
         {
-            if (FrontEndMobile.SlotValidation[FrontEndMenuManager.m_bSelectedSaveGame + 1]) {
-                if (FrontEndMobile.SlotValidation[FrontEndMenuManager.m_bSelectedSaveGame + 1] != 2) {
-                    pText = TheText.Get("FESZ_QC");
-                }
-                else {
+            switch (FrontEndMobile.SlotValidation[FrontEndMenuManager.m_bSelectedSaveGame + 1]) {
+            case 0:
                     pText = TheText.Get("FESZ_QO");
-                }
+                    break;
+            case 2:
+                    pText = TheText.Get("FESZ_QC");
+                    break;
+            default:
+                pText = TheText.Get(MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[0].m_szName);
+                break;
             }
             break;
         }
