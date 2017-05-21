@@ -5,27 +5,81 @@ MobileTexDictionary MobileFrontEnd::m_menuSliderTxd;
 MobileFrontEnd FrontEndMobile;
 
 void MobileFrontEnd::InstallPatches() {
-    plugin::patch::Set<BYTE>(0x57C18F + 1, 0);
-    plugin::patch::Set(0x57B764, 0x36EBC030);
-    plugin::patch::RedirectCall(0x57BA58, DrawStandardMenu);
+    plugin::patch::RedirectJump(0x57B750, DrawBackground);
+    plugin::patch::RedirectCall(0x57FEAB, CheckMouseInput);
     plugin::patch::RedirectCall(0x57B66F, ProcessMobileMenuOptions);
     plugin::patch::RedirectCall(0x57B702, ProcessMobileMenuOptions);
     plugin::patch::RedirectCall(0x574F54, DrawStatsSlider);
 }
 
-void MobileFrontEnd::Setup() {
-    m_menuSliderTxd.Init(PLUGIN_PATH("MobileHud\\menu_slider.txd"));
-}
+void MobileFrontEnd::DrawBackground(void *ecx0) {
+    CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT), CRGBA(0, 0, 0, 255));
 
-void __fastcall MobileFrontEnd::DrawStandardMenu(void *ecx0, int, char a2) {
-    // Background & Char
     if (FrontEndMenuManager.m_nCurrentMenuPage != 5) {
-        CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT), CRGBA(255, 255, 255, 50));
+        MobileFrontEnd::GetRandomBGCoords();
 
+        // Char Template
         CSprite2d::DrawRect(CRect(SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2),
             SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2) + SCREEN_MULTIPLIER(375.0f), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2) + SCREEN_MULTIPLIER(837.0f)), CRGBA(255, 255, 255, 255));
     }
 
+    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_MAP) {
+        MobileFrontEnd::PrintMap();
+    }
+
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_CONTROLS_VEHICLE_ONFOOT) {
+        // TODO: DrawControllerSetupScreen
+    }
+
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_EMPTY) {
+        FrontEndMenuManager.SaveSettings();
+        RsGlobal.quit = true;
+    }
+
+    else {
+        MobileFrontEnd::DrawStandardMenu();
+    }
+
+    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_STATS) {
+        // TODO: PrintStats
+    }
+
+    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_BRIEF) {
+        // TODO: PrintBrief
+    }
+
+    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_AUDIO_SETTINGS) {
+        MobileFrontEnd::PrintRadioStationList();
+    }
+
+    if (FrontEndMenuManager.m_bDrawMouse) {
+        // TODO: Get cursor icon from system.
+        POINT position;
+        if (GetCursorPos(&position))
+            FrontEndMenuManager.m_apTextures[23].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
+    }
+}
+
+void MobileFrontEnd::GetRandomBGCoords() {
+    int savedAlpha;
+
+    // Background Template
+    CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT), CRGBA(255, 255, 255, 50));
+
+    // Mask Template
+    RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
+    CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT),
+        CRGBA(0, 0, 0, 255), CRGBA(0, 0, 0, 255),
+        CRGBA(0, 0, 0, 0), CRGBA(0, 0, 0, 0));
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
+}
+
+float __fastcall MobileFrontEnd::CheckMouseInput(float a1) {
+    return SCREEN_COORD_CENTER_Y - SCREEN_COORD(-a1 - 30.0f);
+}
+
+void MobileFrontEnd::DrawStandardMenu() {
     CFont::SetBackground(0, 0);
     CFont::SetProp(1);
     CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
@@ -33,14 +87,6 @@ void __fastcall MobileFrontEnd::DrawStandardMenu(void *ecx0, int, char a2) {
     CFont::SetRightJustifyWrap(12.5f);
     CFont::SetCentreSize(SCREEN_COORD_MAX_X);
     CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-
-    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_STATS) {
-        // PrintStats
-    }
-
-    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_BRIEF) {
-        // PrintBrief
-    }
 
     // Header
     if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_szTitleName[0]) {
@@ -53,10 +99,6 @@ void __fastcall MobileFrontEnd::DrawStandardMenu(void *ecx0, int, char a2) {
             CFont::SetDropColor(CRGBA(0, 0, 0, 255));
             CFont::PrintString(SCREEN_COORD_CENTER_X - SCREEN_COORD(282.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(794.0f / 2), TheText.Get(MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_szTitleName));
         }
-    }
-
-    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_AUDIO_SETTINGS) {
-        MobileFrontEnd::PrintRadioStationList();
     }
 
     // Actions
@@ -109,10 +151,6 @@ void __fastcall MobileFrontEnd::DrawStandardMenu(void *ecx0, int, char a2) {
         }
         }
         CFont::PrintString(SCREEN_COORD_CENTER_X - SCREEN_COORD(282.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(640.0f / 2), pText);
-    }
-
-    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_CONTROLS_VEHICLE_ONFOOT) {
-        //DrawControllerScreenExtraText // Don't know if really used
     }
 
     for (unsigned int i = 0; i < 12; i++) {
@@ -855,6 +893,10 @@ void MobileFrontEnd::PrintRadioStationList()
     } while (v2 < 13);
 }
 
+void MobileFrontEnd::PrintMap() {
+
+}
+
 void MobileFrontEnd::DisplaySlider(float x, float y, float width, float height, float progress) {
     // filled_texture
     DrawTexturedProgressBar(x, y, width, height, progress, 0);
@@ -912,6 +954,10 @@ void MobileFrontEnd::DrawTexturedProgressBar(float x, float y, float width, floa
             (int)(y + height) - 0.5f), CRGBA(153, 203, 153, 250));
         //mobileTex.menu_texture[15].Draw(CRect((x), (y), (x + (width) * (progress / 100.0f)), ((y) + (height))), CRGBA(255, 255, 255, 255));
     }
+}
+
+void MobileFrontEnd::Setup() {
+    m_menuSliderTxd.Init(PLUGIN_PATH("MobileHud\\menu_slider.txd"));
 }
 
 void MobileFrontEnd::DrawStatsSlider(float x, float y, unsigned short width, unsigned char height, float percentage, signed char,

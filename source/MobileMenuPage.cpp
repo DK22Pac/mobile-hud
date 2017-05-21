@@ -27,7 +27,7 @@ void MobileMenuPage::InstallPatches() {
     plugin::patch::Set<void*>(0x573EA9, &MenuPages->m_aButtons->m_nActionType);
     plugin::patch::Set<void*>(0x576B08, &MenuPages->m_aButtons[1].m_nTargetMenu);
     plugin::patch::Set<void*>(0x576B1E, &MenuPages->m_aButtons[1].m_nTargetMenu);
-    plugin::patch::Set<void*>(0x576B38, MenuPages);
+    plugin::patch::Set<void*>(0x576B38, &MenuPages);
     plugin::patch::Set<void*>(0x576B58, &MenuPages->m_aButtons->m_szName);
     plugin::patch::Set<void*>(0x57B4F2, &MenuPages->m_aButtons->m_nActionType);
     plugin::patch::Set<void*>(0x57B519, &MenuPages->m_aButtons->m_nActionType);
@@ -362,23 +362,5 @@ CMenuPage MobileMenuPage::PagesMenu[] = {
     24,   "FEM_FRM",    MENU_ENTRY_OPTION,      27,  0,  fPosY2,  0,
     65,   "FED_GLS",    MENU_ENTRY_OPTION,       4,  0,  fPosY3,  0,
    100,   "FEN_NET",    MENU_ENTRY_BUTTON,       0,  0,  fPosY4,  0,
-    },
-
-    {     "", 0, 0,
-    },
-
-    {     "", 0, 0,
-    },
-
-    {     "", 0, 0,
-    },
-
-    {     "", 0, 0,
-    },
-
-    {     "", 0, 0,
-    },
-
-    {     "", 0, 0,
     },
 };
