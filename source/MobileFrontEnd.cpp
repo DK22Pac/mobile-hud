@@ -5,6 +5,7 @@ MobileTexDictionary MobileFrontEnd::m_menuSliderTxd;
 MobileFrontEnd FrontEndMobile;
 
 void MobileFrontEnd::InstallPatches() {
+    plugin::patch::Set<BYTE>(0x57C18F + 1, 0);
     plugin::patch::Set(0x57B764, 0x36EBC030);
     plugin::patch::RedirectCall(0x57BA58, DrawStandardMenu);
     plugin::patch::RedirectCall(0x57B66F, ProcessMobileMenuOptions);
@@ -17,6 +18,14 @@ void MobileFrontEnd::Setup() {
 }
 
 void __fastcall MobileFrontEnd::DrawStandardMenu(void *ecx0, int, char a2) {
+    // Background & Char
+    if (FrontEndMenuManager.m_nCurrentMenuPage != 5) {
+        CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT), CRGBA(255, 255, 255, 50));
+
+        CSprite2d::DrawRect(CRect(SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2),
+            SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2) + SCREEN_MULTIPLIER(375.0f), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2) + SCREEN_MULTIPLIER(837.0f)), CRGBA(255, 255, 255, 255));
+    }
+
     CFont::SetBackground(0, 0);
     CFont::SetProp(1);
     CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
@@ -818,7 +827,7 @@ void MobileFrontEnd::PrintRadioStationList()
     int savedAlpha;
     float fPosX = SCREEN_COORD_CENTER_X - SCREEN_COORD(282.5f / 2);
     float fPosY = SCREEN_COORD_CENTER_Y - SCREEN_COORD(-150.0f / 2);
-    float spacing = SCREEN_COORD(0.625f);
+    float spacing = SCREEN_COORD(0.5f);
     float size = SCREEN_MULTIPLIER(58.125f);
 
     do
@@ -842,7 +851,7 @@ void MobileFrontEnd::PrintRadioStationList()
         }
 
         ++v2;
-        spacing += (size);
+        spacing += size;
     } while (v2 < 13);
 }
 
