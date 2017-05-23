@@ -3,6 +3,35 @@
 #include "plugin.h"
 #include "game_sa\CSprite2d.h"
 
+enum eMenuSliderTexture {
+    MENU_SLIDER_NUB,
+    MENU_SLIDER_FULL,
+    MENU_SLIDER_EMPTY
+};
+
+enum eLoadScreenTexture {
+    MOBILESCREEN_0,
+    MOBILESCREEN_1,
+    MOBILESCREEN_2,
+    MOBILESCREEN_3,
+    MOBILESCREEN_4,
+    MOBILESCREEN_5,
+    MOBILESCREEN_6
+};
+
+enum eMenuBackgroundTexture {
+    MENU_BGMAP,
+    MENU_CHAR_0,
+    MENU_CHAR_1,
+    MENU_CHAR_2,
+    MENU_CHAR_3,
+    MENU_CHAR_4,
+    MENU_CHAR_5,
+    MENU_CHAR_6,
+    MENU_CHAR_7,
+    MENU_CHAR_8
+};
+
 class MobileTexDictionary {
     friend class MobileTxdStorage;
     char m_szPath[MAX_PATH];
@@ -32,15 +61,14 @@ public:
 
 class MobileTextures {
 public:
+    CSprite2d m_menuSlider;
     CSprite2d m_aSplashes[6];
-    CSprite2d m_nBackgroundSprite[1];
-    CSprite2d m_nMenuChar[12];
-    CSprite2d m_nMenuSprite[19];
-    CSprite2d m_nSliderSprite[3];
-    CSprite2d m_nMenuMain[4];
+    CSprite2d m_nBackgroundSprite;
+
+    static MobileTexDictionary m_menuSliderTxd, m_aSplashesTxd, m_nBackgroundSpriteTxd;
 
 public:
-    static void Initialise();
+    static void Setup();
 };
 
 extern MobileTextures mobileTex;

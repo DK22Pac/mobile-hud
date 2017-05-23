@@ -55,10 +55,10 @@ void MobileMenuPage::InstallPatches() {
     plugin::patch::Set<void*>(0x5805D3, &MenuPages->m_aButtons->m_nActionType);
     plugin::patch::Set<void*>(0x57FE57, &MenuPages->m_aButtons->m_wPosnX);
     plugin::patch::Set<void*>(0x57FE96, &MenuPages->m_aButtons->m_wPosnY);
-    plugin::patch::Set<void*>(0x57B6AD, &FrontEndMobile.SlotValidation);
-    plugin::patch::Set<void*>(0x619157, &FrontEndMobile.SlotValidation[1]);
-    plugin::patch::Set<void*>(0x61922D, &FrontEndMobile.SlotValidation[1]);
-    plugin::patch::Set<void*>(0x619247, &FrontEndMobile.SlotValidation[1]);
+    plugin::patch::Set<void*>(0x57B6AD, &FrontEndMobileMenuManager.SlotValidation);
+    plugin::patch::Set<void*>(0x619157, &FrontEndMobileMenuManager.SlotValidation[1]);
+    plugin::patch::Set<void*>(0x61922D, &FrontEndMobileMenuManager.SlotValidation[1]);
+    plugin::patch::Set<void*>(0x619247, &FrontEndMobileMenuManager.SlotValidation[1]);
 }
 
 CMenuPage MobileMenuPage::PagesMenu[] = {

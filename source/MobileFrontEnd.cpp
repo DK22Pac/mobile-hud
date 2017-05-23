@@ -1,8 +1,9 @@
 #include "MobileFrontEnd.h"
+#include "game_sa\CPad.h"
 #include "game_sa\CHudColours.h"
+#include "game_sa\CVector2D.h"
 
-MobileTexDictionary MobileFrontEnd::m_menuSliderTxd;
-MobileFrontEnd FrontEndMobile;
+MobileFrontEnd FrontEndMobileMenuManager;
 
 void MobileFrontEnd::InstallPatches() {
     plugin::patch::RedirectJump(0x57B750, DrawBackground);
@@ -19,12 +20,13 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
         MobileFrontEnd::GetRandomBGCoords();
 
         // Char Template
-        CSprite2d::DrawRect(CRect(SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2),
+        mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_CHAR_0);
+        mobileTex.m_nBackgroundSprite.Draw(CRect(SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2),
             SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2) + SCREEN_MULTIPLIER(375.0f), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2) + SCREEN_MULTIPLIER(837.0f)), CRGBA(255, 255, 255, 255));
     }
 
     if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_MAP) {
-        MobileFrontEnd::PrintMap();
+        FrontEndMenuManager.PrintMap();
     }
 
     else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_CONTROLS_VEHICLE_ONFOOT) {
@@ -33,7 +35,7 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
 
     else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_EMPTY) {
         FrontEndMenuManager.SaveSettings();
-        RsGlobal.quit = true;
+        ExitProcess(0);
     }
 
     else {
@@ -55,23 +57,30 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
     if (FrontEndMenuManager.m_bDrawMouse) {
         // TODO: Get cursor icon from system.
         POINT position;
-        if (GetCursorPos(&position))
+        if (GetCursorPos(&position)) {
+            if (FrontEndMenuManager.m_nCurrentMenuPage == 5 && CPad::NewMouseControllerState.lmb)
+            FrontEndMenuManager.m_apTextures[24].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
+            else
             FrontEndMenuManager.m_apTextures[23].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
+
+        }
     }
 }
 
 void MobileFrontEnd::GetRandomBGCoords() {
     int savedAlpha;
-
-    // Background Template
-    CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT), CRGBA(255, 255, 255, 50));
-
-    // Mask Template
     RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
+
+    // Background Template
+    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_BGMAP);
+    mobileTex.m_nBackgroundSprite.Draw(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH + SCREEN_COORD(900.0f), 0.0 + SCREEN_HEIGHT + SCREEN_COORD(1024.0f)), CRGBA(255, 255, 255, 50));
+
+    // Mask Template
     CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT),
         CRGBA(0, 0, 0, 255), CRGBA(0, 0, 0, 255),
         CRGBA(0, 0, 0, 0), CRGBA(0, 0, 0, 0));
+
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
 }
 
@@ -126,7 +135,7 @@ void MobileFrontEnd::DrawStandardMenu() {
         }
         case 17:
         {
-            switch (FrontEndMobile.SlotValidation[FrontEndMenuManager.m_bSelectedSaveGame + 1]) {
+            switch (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_bSelectedSaveGame + 1]) {
             case 0:
                     pText = TheText.Get("FESZ_QO");
                     break;
@@ -163,7 +172,7 @@ void MobileFrontEnd::DrawStandardMenu() {
             char ReservedSpace[64];
 
             if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType >= MENU_ENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType <= MENU_ENTRY_SAVE_8) { 
-                switch (FrontEndMobile.SlotValidation[i]) {
+                switch (FrontEndMobileMenuManager.SlotValidation[i]) {
                 case 0:
                     LeftColumn = plugin::CallAndReturn<const char*, 0x5D0F40>(i - 1);
                     break;
@@ -375,39 +384,43 @@ void MobileFrontEnd::DrawStandardMenu() {
             }
 
             // Sliders
-            float sliderposX = SCREEN_COORD_CENTER_X - SCREEN_COORD(-430.0f * 900 / 720 / 2);
-            float sliderposY = SCREEN_COORD_CENTER_Y - SCREEN_COORD(-MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_wPosnY) + (15.0f * 900 / 720 / 2);
+            CVector2D vecPosition;
+            CVector2D vecScale;
+            vecPosition.x = 285.0f;
+            vecPosition.y = MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_wPosnY + 2.0f;
+            vecScale.x = 265.0f;
+            vecScale.y = 28.5f;
 
             switch (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nActionType)
             {
             case 27:
             {
                 // Brightness
-                DisplaySlider(sliderposX, sliderposY, SCREEN_MULTIPLIER(228 * 900 / 720), SCREEN_MULTIPLIER(16.0f * 900 / 720), FrontEndMenuManager.m_dwBrightness * 1.0f / 282.0f);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_dwBrightness * 0.0026041667);
                 break;
             }
             case 28:
             {
                 // Radio Volume
-                DisplaySlider(sliderposX, sliderposY, SCREEN_MULTIPLIER(228 * 900 / 720), SCREEN_MULTIPLIER(16.0f * 900 / 720), FrontEndMenuManager.m_nRadioVolume * 1.0f / 64.0f);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nRadioVolume * 0.015625);
                 break;
             }
             case 29:
             {
                 // SFX Volume
-                DisplaySlider(sliderposX, sliderposY, SCREEN_MULTIPLIER(228 * 900 / 720), SCREEN_MULTIPLIER(16.0f * 900 / 720), FrontEndMenuManager.m_nSfxVolume * 1.0f / 64.0f);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nSfxVolume * 0.015625);
                 break;
             }
             case 61:
             {
                 // Draw Distance
-                DisplaySlider(sliderposX, sliderposY, SCREEN_MULTIPLIER(228 * 900 / 720), SCREEN_MULTIPLIER(16.0f * 900 / 720), (FrontEndMenuManager.m_fDrawDistance - 0.922f) * 1.0f / 0.876f);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), (FrontEndMenuManager.m_fDrawDistance - 0.92500001) * 1.1428572);
                 break;
             }
             case 62:
             {
                 // Mouse Sensitivity
-                DisplaySlider(sliderposX, sliderposY, SCREEN_MULTIPLIER(228 * 900 / 720), SCREEN_MULTIPLIER(16.0f * 900 / 720), (CCamera::m_fMouseAccelHorzntl - 0.0003125f) * 1.0f / 0.0049f);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), (CCamera::m_fMouseAccelHorzntl / 0.0049999999));
                 break;
             }
             }
@@ -525,12 +538,12 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
             FrontEndMenuManager.m_bSelectedSaveGame = FrontEndMenuManager.m_dwSelectedMenuItem - 1;
             if (FrontEndMenuManager.m_nCurrentMenuPage == 9)
             {
-                if (FrontEndMobile.SlotValidation[FrontEndMenuManager.m_dwSelectedMenuItem] != 1 && FrontEndMobile.SlotValidation[FrontEndMenuManager.m_dwSelectedMenuItem] != 2)
+                if (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_dwSelectedMenuItem] != 1 && FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_dwSelectedMenuItem] != 2)
                     FrontEndMenuManager.SwitchToNewScreen(11);
             }
             else if (FrontEndMenuManager.m_nCurrentMenuPage == 10)
             {
-               if (FrontEndMobile.SlotValidation[FrontEndMenuManager.m_dwSelectedMenuItem] != 1)
+               if (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_dwSelectedMenuItem] != 1)
                     FrontEndMenuManager.SwitchToNewScreen(12);
             }
         }
@@ -893,84 +906,53 @@ void MobileFrontEnd::PrintRadioStationList()
     } while (v2 < 13);
 }
 
-void MobileFrontEnd::PrintMap() {
-
-}
-
 void MobileFrontEnd::DisplaySlider(float x, float y, float width, float height, float progress) {
-    // filled_texture
-    DrawTexturedProgressBar(x, y, width, height, progress, 0);
+    // empty
+    mobileTex.m_menuSlider.m_pTexture = mobileTex.m_menuSliderTxd.GetTexture(MENU_SLIDER_EMPTY);
+    mobileTex.m_menuSlider.Draw(CRect(x, y, x + width, y + height), CRGBA(255, 255, 255, 255));
+    // full
+    mobileTex.m_menuSlider.m_pTexture = mobileTex.m_menuSliderTxd.GetTexture(MENU_SLIDER_FULL);
+    mobileTex.m_menuSlider.Draw(CRect(x, y, x + width * progress, y + height), CRGBA(255, 255, 255, 255),
+        0.0f, 1.0f, progress, 1.0f, 0.0f, 0.0f, progress, 0.0f);
 
     // percentage
     static char text[4];
     static float percentage;
     percentage = progress * 100.0f;
-    sprintf(text, "%d%%", (int)percentage);
+    sprintf(text, "%d%%", static_cast<int>(percentage));
 
     CFont::SetWrapx(SCREEN_WIDTH);
     CFont::SetRightJustifyWrap(0.0f);
     CFont::SetOutlinePosition(0);
     CFont::SetFontStyle(FONT_SUBTITLES);
-    CFont::SetScale(height * 0.026f * 900 / 720, height * 0.045f * 900 / 720);
-    static float text_x;
-    float fTextAlpha;
-    float fTextAlpha2;
+    CFont::SetScale(height * 0.020f, height * 0.038f);
 
-    if (percentage > 80.0f)
-        fTextAlpha = 10.0f * 900 / 720 * (percentage);
-    else
-        fTextAlpha = 0.0f;
-
-    if (percentage > 80.0f * 900 / 720)
-        fTextAlpha2 = -10.0f * 900 / 720 * (percentage);
-    else
-        fTextAlpha2 = 200.0f * 900 / 720;
-
-    CFont::SetAlignment(ALIGN_LEFT);
-    CFont::SetDropColor(CRGBA(0, 0, 0, static_cast<BYTE>(fTextAlpha)));
-    CFont::SetColor(CRGBA(0, 0, 0, static_cast<BYTE>(fTextAlpha)));
-    CFont::PrintString(x + SCREEN_COORD(3.0f * 900 / 720), y, text);
-
-    CFont::SetAlignment(ALIGN_RIGHT);
-    CFont::SetDropColor(CRGBA(0, 0, 0, static_cast<BYTE>(fTextAlpha2)));
-    CFont::SetColor(CRGBA(255, 255, 255, static_cast<BYTE>(fTextAlpha2)));
-    CFont::PrintString(x + width - SCREEN_COORD(3.0f * 900 / 720), y, text);
-
-    // white nub
-    //mobileTex.m_nSliderSprite[2].Draw(SCREEN_COORD(14.0f * 900 / 720) + (x - SCREEN_COORD(20.0f * 900 / 720)) + (width - SCREEN_COORD(8.0f * 900 / 720)) * (progress), y - SCREEN_COORD(3.0f * 900 / 720), SCREEN_MULTIPLIER(20.0f * 900 / 720), SCREEN_MULTIPLIER(20.0f * 900 / 720), CRGBA(255, 255, 255, 255));
-}
-
-void MobileFrontEnd::DrawTexturedProgressBar(float x, float y, float width, float height, float progress, float deltaProgress)
-{
-    // progress value is 0.0 - 100.0
-    if (progress >= 100.0f)
-        progress = 100.0f;
-    else {
-        CSprite2d::DrawRect(CRect((int)(x)-0.5f, (int)(y)-0.5f, (int)(x + width) - 0.5f, (int)(y + height) - 0.5f),
-            CRGBA(0, 0, 0, 200));
+    if (percentage > 80.0f) {
+        CFont::SetAlignment(ALIGN_LEFT);
+        CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_BLACK, 200));
+        CFont::PrintString(x + SCREEN_COORD(12.0f), y + SCREEN_COORD(3.5f), text);
     }
-    if (progress > 0.0f) {
-        CSprite2d::DrawRect(CRect((int)(x)-0.5f, (int)(y)-0.5f, (int)(x + width * (progress)) - 0.5f,
-            (int)(y + height) - 0.5f), CRGBA(153, 203, 153, 250));
-        //mobileTex.menu_texture[15].Draw(CRect((x), (y), (x + (width) * (progress / 100.0f)), ((y) + (height))), CRGBA(255, 255, 255, 255));
+    if (percentage < 80.0) {
+        CFont::SetAlignment(ALIGN_RIGHT);
+        CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
+        CFont::PrintString(x + width - SCREEN_COORD(12.0f), y + SCREEN_COORD(3.5f), text);
     }
-}
 
-void MobileFrontEnd::Setup() {
-    m_menuSliderTxd.Init(PLUGIN_PATH("MobileHud\\menu_slider.txd"));
+    // nub
+    mobileTex.m_menuSlider.m_pTexture = mobileTex.m_menuSliderTxd.GetTexture(MENU_SLIDER_NUB);
+    mobileTex.m_menuSlider.Draw((x) + (width - SCREEN_COORD(29.0f)) * (progress), (y), height * 1.03f, height * 1.03f, CRGBA(255, 255, 255, 255));
 }
 
 void MobileFrontEnd::DrawStatsSlider(float x, float y, unsigned short width, unsigned char height, float percentage, signed char,
     unsigned char, unsigned char, CRGBA, CRGBA)
 {
     float progress = percentage / 100.0f;
-    CSprite2d temporarySprite;
     // empty
-    temporarySprite.m_pTexture = m_menuSliderTxd.GetTexture(MENU_SLIDER_EMPTY);
-    temporarySprite.Draw(CRect(x, y, x + width, y + height), CRGBA(255, 255, 255, 255));
+    mobileTex.m_menuSlider.m_pTexture = mobileTex.m_menuSliderTxd.GetTexture(MENU_SLIDER_EMPTY);
+    mobileTex.m_menuSlider.Draw(CRect(x, y, x + width, y + height), CRGBA(255, 255, 255, 255));
     // full
-    temporarySprite.m_pTexture = m_menuSliderTxd.GetTexture(MENU_SLIDER_FULL);
-    temporarySprite.Draw(CRect(x, y, x + width * progress, y + height), CRGBA(255, 255, 255, 255),
+    mobileTex.m_menuSlider.m_pTexture = mobileTex.m_menuSliderTxd.GetTexture(MENU_SLIDER_FULL);
+    mobileTex.m_menuSlider.Draw(CRect(x, y, x + width * progress, y + height), CRGBA(255, 255, 255, 255),
         0.0f, 1.0f, progress, 1.0f, 0.0f, 0.0f, progress, 0.0f);
     // nub
     //temporarySprite.m_pTexture = m_menuSliderTxd.GetTexture(MENU_SLIDER_NUB);
@@ -978,7 +960,7 @@ void MobileFrontEnd::DrawStatsSlider(float x, float y, unsigned short width, uns
     //    temporarySprite.Draw(CRect(x, y, x + width, y + height), CRGBA(255, 255, 255, 255));
     //else
     //    temporarySprite.Draw(CRect(x, y, x + width, y + height), CRGBA(255, 255, 255, 255));
-    temporarySprite.m_pTexture = nullptr;
+    //mobileTex.temporarySprite.m_pTexture = nullptr;
 
     static char text[12];
     sprintf(text, "%d%%", static_cast<int>(percentage));

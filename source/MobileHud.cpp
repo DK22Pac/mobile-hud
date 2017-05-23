@@ -40,7 +40,7 @@ public:
             MobileLoadingScreen::InstallPatches();
             MobileMenuPage::InstallPatches();
             MobileFrontEnd::InstallPatches();
-            MobileFrontEnd::Setup();
+            MobileTextures::Setup();
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {
@@ -50,6 +50,12 @@ public:
                     }
                 };
             }
+        };
+
+        ThiscallEvent<AddressList<0x53C69C, H_CALL>, PRIORITY_AFTER, ArgPickNone, void(void *self, unsigned __int8 r, unsigned __int8 g, unsigned __int8 b, unsigned __int8 a)> InitialiseWhenRestarting;
+
+        InitialiseWhenRestarting += [] {
+            MobileLoadingScreen::DisplaySplash();
         };
 
         Events::shutdownRwEvent += [] {
