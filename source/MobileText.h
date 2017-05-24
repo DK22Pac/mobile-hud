@@ -15,15 +15,12 @@ static char *legal_1 = {
     "necessary. Sponsored by Rockstar Games, 622 Broadway, New York, NY, USA." };
 
 static char *legal_2 = {
-    "(c) 2001-2004 Rockstar Games, Inc, Rockstar Games, Rockstar North, the R* Logo, Grand Theft Auto and the Grand Theft "
+    "(c) 2001-2004 Rockstar Games, Inc.  Rockstar Games, Rockstar North, the  R  Logo, Grand Theft Auto and the Grand Theft "
     "Auto logo are registered trademarks of Take-Two Interactive Software, Inc.  All other marks and trademarks are properties "
-    "of their respective owners. All Rights Reserved. The content of this videogame is purely fictional, and is not intended to "
+    "of their respective owners.  All Rights Reserved.  The content of this videogame is purely fictional, and is not intended to "
     "represent any actual person, business or organization. Any similarity between any character, dialogue, event or plot "
-    "element of this game and any actual person, business or organization is purely coincidental. The markers and publischers"
-    "of this videogame do not in any way endorse, condone or encourage this kind of behavior. Unauthorized copying,"
-    "reverse engineering, transmission, public performance, rental, pay for play, or circumvention of copy protection is strictly"
+    "element of this game and any actual person, business or organization is purely coincidental.  The markers and publischers "
+    "of this videogame do not in any way endorse, condone or encourage this kind of behavior. Unauthorized copying, "
+    "reverse engineering, transmission, public performance, rental, pay for play, or circumvention of copy protection is strictly "
     "prohibited."
 };
-
-extern char *legal_1;
-extern char *legal_2;

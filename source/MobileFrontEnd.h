@@ -21,7 +21,6 @@ public:
     static float __fastcall CheckMouseInput(float a1);
     static void DrawStandardMenu();
     static void __fastcall ProcessMobileMenuOptions(void *ecx0, int, signed char nArrowsInput, bool* bReturn, bool bEnterInput);
-    static void __fastcall CheckSliderMovement(void *ecx0, int, char count);
     static void PrintRadioStationList();
     static void DisplaySlider(float x, float y, float width, float height, float progress);
 

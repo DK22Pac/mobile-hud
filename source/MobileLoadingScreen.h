@@ -6,7 +6,6 @@
 #include "MobileTextures.h"
 #include "MobileText.h"
 #include "MobileMenuSystem.h"
-#include "Settings.h"
 #include "Utility.h"
 
 class MobileLoadingScreen {

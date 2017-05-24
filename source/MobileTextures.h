@@ -16,7 +16,9 @@ enum eLoadScreenTexture {
     MOBILESCREEN_3,
     MOBILESCREEN_4,
     MOBILESCREEN_5,
-    MOBILESCREEN_6
+    MOBILESCREEN_6,
+    ROCKSTAR,
+    LEGALSCREEN
 };
 
 enum eMenuBackgroundTexture {

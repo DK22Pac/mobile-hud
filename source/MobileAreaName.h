@@ -1,11 +1,4 @@
 #pragma once
-// plugin-sdk
-#include <plugin.h>
-#include "game_sa\CFont.h"
-
-// mobile-hud
-#include "Settings.h"
-
 class MobileAreaName {
 public:
     static void InstallPatches();

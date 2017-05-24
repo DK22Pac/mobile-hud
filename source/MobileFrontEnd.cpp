@@ -359,6 +359,7 @@ void MobileFrontEnd::DrawStandardMenu() {
             }
 
             CFont::SetScale(SCREEN_MULTIPLIER(0.9f), SCREEN_MULTIPLIER(1.7));
+
             if (FrontEndMenuManager.m_nCurrentMenuPage == 7 || FrontEndMenuManager.m_nCurrentMenuPage == 9 || FrontEndMenuManager.m_nCurrentMenuPage == 10 || FrontEndMenuManager.m_nCurrentMenuPage == 16) {
                 float width = CFont::GetStringWidth((char*)LeftColumn, true, false);
 
@@ -940,7 +941,8 @@ void MobileFrontEnd::DisplaySlider(float x, float y, float width, float height, 
 
     // nub
     mobileTex.m_menuSlider.m_pTexture = mobileTex.m_menuSliderTxd.GetTexture(MENU_SLIDER_NUB);
-    mobileTex.m_menuSlider.Draw((x) + (width - SCREEN_COORD(29.0f)) * (progress), (y), height * 1.03f, height * 1.03f, CRGBA(255, 255, 255, 255));
+    mobileTex.m_menuSlider.Draw((x) + (width - SCREEN_COORD(29.0f)) * (progress), (y), height * 1.0f, height * 1.0f, CRGBA(255, 255, 255, 255));
+    mobileTex.m_menuSlider.m_pTexture = nullptr;
 }
 
 void MobileFrontEnd::DrawStatsSlider(float x, float y, unsigned short width, unsigned char height, float percentage, signed char,
@@ -960,7 +962,7 @@ void MobileFrontEnd::DrawStatsSlider(float x, float y, unsigned short width, uns
     //    temporarySprite.Draw(CRect(x, y, x + width, y + height), CRGBA(255, 255, 255, 255));
     //else
     //    temporarySprite.Draw(CRect(x, y, x + width, y + height), CRGBA(255, 255, 255, 255));
-    //mobileTex.temporarySprite.m_pTexture = nullptr;
+    mobileTex.m_menuSlider.m_pTexture = nullptr;
 
     static char text[12];
     sprintf(text, "%d%%", static_cast<int>(percentage));
