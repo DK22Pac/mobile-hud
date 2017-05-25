@@ -58,11 +58,10 @@ void MobileRadar::MyTransformRadarPointToScreenSpace(CVector2D *out, CVector2D *
         if (settings.bRadarTop)
             out->x = SCREEN_COORD(settings.vecRadarPosn.x) + in->x * SCREEN_COORD(settings.fRadarWidthHalf);
         else
-        if (pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0))
-            out->x = SCREEN_COORD(settings.vecRadarPosn.x + 270.0f) + in->x * SCREEN_COORD(settings.fRadarWidthHalf);
-        else {
+        if (!pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0))
             out->x = SCREEN_COORD(settings.vecRadarPosn.x) + in->x * SCREEN_COORD(settings.fRadarWidthHalf);
-        }
+        else
+            out->x = SCREEN_COORD(settings.vecRadarPosn.x + 270.0f) + in->x * SCREEN_COORD(settings.fRadarWidthHalf);
 
         if (settings.bRadarTop)
             out->y = SCREEN_COORD(settings.vecRadarPosn.y) - in->y * SCREEN_COORD(settings.fRadarHeightHalf);
@@ -91,20 +90,7 @@ void __fastcall MobileRadar::MyDrawRadarCircle(CSprite2d *sprite, int, CRect con
             SCREEN_COORD(settings.vecRadarPosn.x), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
     }
     else
-    if (pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0)) {
-        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f - settings.fRadarBorderWidthHalf),
-            SCREEN_COORD(settings.vecRadarPosn.y - settings.fRadarBorderHeightHalf),
-            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f),
-            SCREEN_COORD(settings.vecRadarPosn.y)),
-            CRGBA(255, 255, 255, 255));
-        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f + settings.fRadarBorderWidthHalf), SCREEN_COORD(settings.vecRadarPosn.y - settings.fRadarBorderHeightHalf),
-            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
-        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f - settings.fRadarBorderWidthHalf), SCREEN_COORD(settings.vecRadarPosn.y + settings.fRadarBorderHeightHalf),
-            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
-        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f + settings.fRadarBorderWidthHalf), SCREEN_COORD(settings.vecRadarPosn.y + settings.fRadarBorderHeightHalf),
-            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
-    }
-    else {
+    if (!pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0)) {
         DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x - settings.fRadarBorderWidthHalf),
             SCREEN_COORD(settings.vecRadarPosn.y - settings.fRadarBorderHeightHalf),
             SCREEN_COORD(settings.vecRadarPosn.x),
@@ -116,6 +102,19 @@ void __fastcall MobileRadar::MyDrawRadarCircle(CSprite2d *sprite, int, CRect con
             SCREEN_COORD(settings.vecRadarPosn.x), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
         DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + settings.fRadarBorderWidthHalf), SCREEN_COORD(settings.vecRadarPosn.y + settings.fRadarBorderHeightHalf),
             SCREEN_COORD(settings.vecRadarPosn.x), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
+    }
+    else {
+        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f - settings.fRadarBorderWidthHalf),
+            SCREEN_COORD(settings.vecRadarPosn.y - settings.fRadarBorderHeightHalf),
+            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f),
+            SCREEN_COORD(settings.vecRadarPosn.y)),
+            CRGBA(255, 255, 255, 255));
+        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f + settings.fRadarBorderWidthHalf), SCREEN_COORD(settings.vecRadarPosn.y - settings.fRadarBorderHeightHalf),
+            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
+        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f - settings.fRadarBorderWidthHalf), SCREEN_COORD(settings.vecRadarPosn.y + settings.fRadarBorderHeightHalf),
+            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
+        DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x + 270.0f + settings.fRadarBorderWidthHalf), SCREEN_COORD(settings.vecRadarPosn.y + settings.fRadarBorderHeightHalf),
+            SCREEN_COORD(settings.vecRadarPosn.x + 270.0f), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
     }
 }
 
