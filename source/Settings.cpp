@@ -24,7 +24,7 @@ void Settings::Read() {
     vecWantedLevelStarScale               = config["WANTED_LEVEL_STAR_SCALE"                ].asVec2d(CVector2D(1.2f, 2.3f));
     fWantedLevelStarSpace                 = config["WANTED_LEVEL_STAR_SPACE"                ].asFloat(46.0f);
     fSecondPlayerOffsetY                  = config["SECOND_PLAYER_OFFSET_Y"                 ].asFloat(190.0f);
-    vecRadarPosn                          = config["RADAR_POSN"                             ].asVec2d(CVector2D(105.0f, 140.0f));
+    vecRadarPosn                          = config["RADAR_POSN"                             ].asVec2d(CVector2D(105.0f, 130.0f));
     fRadarWidthHalf                       = config["RADAR_WIDTH_HALF"                       ].asFloat(93.0f);
     fRadarHeightHalf                      = config["RADAR_HEIGHT_HALF"                      ].asFloat(93.0f);
     fRadarBorderWidthHalf                 = config["RADAR_BORDER_WIDTH_HALF"                ].asFloat(96.0f);
@@ -42,7 +42,7 @@ void Settings::Read() {
     fTextBoxPosnXWithRadarAndPlane        = config["TEXT_BOX_POSN_X_WITH_RADAR_AND_PLANE"   ].asFloat(259.0f);
     vecTextBoxFontScale                   = config["TEXT_BOX_FONT_SCALE"                    ].asVec2d(CVector2D(0.7f, 1.5f));
     fTextBoxWidth                         = config["TEXT_BOX_WIDTH"                         ].asFloat(421.0f);
-    fTextBoxBorderSize                    = config["TEXT_BOX_BORDER_SIZE"                   ].asFloat(6.0f);
+    fTextBoxBorderSize                    = config["TEXT_BOX_BORDER_SIZE"                   ].asFloat(-5.0f);
     vecTextBoxProgressBarSize             = config["TEXT_BOX_PROGRESS_BAR_SIZE"             ].asVec2d(CVector2D(140.0f, 20.0f));
     fTextBoxProgressBarYShift             = config["TEXT_BOX_PROGRESS_BAR_Y_SHIFT"          ].asFloat(3.0f);
     fTextBoxWidthWithProgressBar          = config["TEXT_BOX_WIDTH_WITH_PROGRESS_BAR"       ].asFloat(164.0f);
@@ -69,6 +69,7 @@ void Settings::Read() {
     vecAreaNameScale                      = config["AREA_NAME_SCALE"                        ].asVec2d(CVector2D(1.1f, 2.1f));
     vecVehicleNamePosn                    = config["VEHICLE_NAME_POSN"                      ].asVec2d(CVector2D(25.0f, 40.0f));
     vecVehicleNameScale                   = config["VEHICLE_NAME_SCALE"                     ].asVec2d(CVector2D(0.8f, 1.6f));
+    vecStatsBoxPosn                       = config["STATS_BOX_POSN"                         ].asVec2d(CVector2D(10.0f, 10.0f));
 
     iReloadKey                            = config["RELOAD_SETTINGS"                        ].asBool(false);
     

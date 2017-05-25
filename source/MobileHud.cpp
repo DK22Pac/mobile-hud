@@ -16,6 +16,7 @@
 #include "MobileLoadingScreen.h"
 #include "MobileTextures.h"
 #include "MobileFrontEnd.h"
+#include "MobileStatsBox.h"
 #include "Settings.h"
 
 using namespace plugin;
@@ -41,6 +42,7 @@ public:
             MobileMenuPage::InstallPatches();
             MobileFrontEnd::InstallPatches();
             MobileTextures::Setup();
+            MobileStatsBox::InstallPatches();
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {

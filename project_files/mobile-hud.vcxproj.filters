@@ -52,6 +52,12 @@
     <ClCompile Include="..\source\MobileTextures.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\MobileMenuPage.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MobileStatsBox.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Utility.h">
@@ -103,6 +109,12 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\source\MobileTextures.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileMenuPage.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MobileStatsBox.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

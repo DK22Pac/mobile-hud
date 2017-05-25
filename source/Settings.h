@@ -72,6 +72,8 @@ public:
     CVector2D vecVehicleNamePosn;
     CVector2D vecVehicleNameScale;
 
+    CVector2D vecStatsBoxPosn;
+
     int       iReloadKey;
 
     void Read();

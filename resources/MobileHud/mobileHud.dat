@@ -22,7 +22,7 @@ WANTED_LEVEL_STAR_SPACE                 46.0
 
 SECOND_PLAYER_OFFSET_Y                  190.0
 
-RADAR_POSN                              105.0 140.0
+RADAR_POSN                              105.0 130.0
 RADAR_WIDTH_HALF                        93.0
 RADAR_HEIGHT_HALF                       93.0
 RADAR_BORDER_WIDTH_HALF                 96.0
@@ -42,11 +42,11 @@ TEXT_BOX_POSN_X_WITH_RADAR              231.0
 TEXT_BOX_POSN_X_WITH_RADAR_AND_PLANE    259.0            
 TEXT_BOX_FONT_SCALE                     0.8 1.5
 TEXT_BOX_WIDTH                          421.0
-TEXT_BOX_BORDER_SIZE                    6.0
-TEXT_BOX_PROGRESS_BAR_SIZE              140.0 20.0
+TEXT_BOX_BORDER_SIZE                    -5.0
+TEXT_BOX_PROGRESS_BAR_SIZE              100.0 20.0
 TEXT_BOX_PROGRESS_BAR_Y_SHIFT           3.0
 TEXT_BOX_WIDTH_WITH_PROGRESS_BAR        164.0
-TEXT_BOX_PLUS_MIN_TEXT_X_SHIFT          152.0
+TEXT_BOX_PLUS_MIN_TEXT_X_SHIFT          115.0
 TEXT_BOX_TEXT_POSN_WHEN_MENU_ENABLED    18.0 10.0
 TEXT_BOX_HEIGHT_WHEN_MENU_ENABLED       55.0
 
@@ -73,6 +73,8 @@ AREA_NAME_SCALE                         1.1   2.1
 
 VEHICLE_NAME_POSN                       25.0  40.0
 VEHICLE_NAME_SCALE                      0.8   1.6
+
+STATS_BOX_POSN							10.0  10.0
 
 # YES (enable), NO (disable), or VirtualKey number (9 for TAB) to reload when key is pressed
 RELOAD_SETTINGS                         NO
