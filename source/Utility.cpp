@@ -71,3 +71,11 @@ bool IsEscJustPressed() {
 char *GetForMap(float a1, float a2) {
     return plugin::CallAndReturn<char *__stdcall, 0x571D90>(a1, a2);
 }
+
+int getPlayerRatingValue() {
+    return plugin::CallAndReturn<int __cdecl, 0x559080>();
+}
+
+char *getPlayerRatingText() {
+    return plugin::CallAndReturn<char*, 0x55A210>();
+}

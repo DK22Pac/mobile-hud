@@ -1,6 +1,5 @@
 #include "MobileMenuPage.h"
 
-// TODO: Find a better place
 float fSpacing = 75.0f;
 float fPosY0 = 0.0f;
 float fPosY1 = -299.0f;
@@ -62,8 +61,16 @@ void MobileMenuPage::InstallPatches() {
 }
 
 CMenuPage MobileMenuPage::PagesMenu[] = {
-    // TODO: Stats
+    // Stats
     {   "FEH_STA", 42, 3,
+    21, "FES_PLA",       MENU_ENTRY_OPTION,      0,  0,  fPosY1,  0,
+    21, "FES_MON",       MENU_ENTRY_OPTION,      0,  0,  fPosY2,  0,
+    21, "FES_WEA",       MENU_ENTRY_OPTION,      0,  0,  fPosY3,  0,
+    21, "FES_CRI",       MENU_ENTRY_OPTION,      0,  0,  fPosY4,  0,
+    21, "FES_GAN",       MENU_ENTRY_OPTION,      0,  0,  fPosY5,  0,
+    21, "FES_ACH",       MENU_ENTRY_OPTION,      0,  0,  fPosY6,  0,
+    21, "FES_MIS",       MENU_ENTRY_OPTION,      0,  0,  fPosY7,  0,
+    21, "FES_MSC",       MENU_ENTRY_OPTION,      0,  0,  fPosY8,  0,
     },
 
     // Game
@@ -81,8 +88,9 @@ CMenuPage MobileMenuPage::PagesMenu[] = {
     {    "FEH_AUD", 33, 3,
     28,  "FEA_MUS",      MENU_ENTRY_OPTION,       3,  0,  fPosY1,  0,
     29,  "FEA_SFX",      MENU_ENTRY_OPTION,       3,  0,  fPosY2,  0,
-    31,  "FEA_ART",      MENU_ENTRY_OPTION,       3,  0,  fPosY3,  0,
-     5,  "FEA_TIT",      MENU_ENTRY_BUTTON,      26,  0,  fPosY4,  0,
+    30,  "FEA_BAS",      MENU_ENTRY_OPTION,       3,  0,  fPosY3,  0,
+    31,  "FEA_ART",      MENU_ENTRY_OPTION,       3,  0,  fPosY4,  0,
+    // 5,  "FEA_TIT",      MENU_ENTRY_BUTTON,      26,  0,  fPosY5,  0,
     32,  "FEA_RSS",      MENU_ENTRY_OPTION,       3,  0,  fPosY5,  0,
      5,  "FET_DEF",      MENU_ENTRY_BUTTON,      24,  0,  fPosYd,  0,
     },

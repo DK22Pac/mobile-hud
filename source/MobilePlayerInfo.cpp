@@ -203,7 +203,7 @@ __declspec(naked) void MobilePlayerInfo::MyStoreCurrentStar(short) {
 }
 
 void MobilePlayerInfo::MyDrawWantedLevel(float x, float y, char *text) {
-    if (FindPlayerPed(-1)->m_pPlayerData->m_pWanted->m_dwWantedLevel > m_CurrentStar)
+    if (FindPlayerPed(-1)->m_pPlayerData->m_pWanted->m_nWantedLevel > m_CurrentStar)
         CFont::SetOutlinePosition(2);
     else
         CFont::SetOutlinePosition(0);
