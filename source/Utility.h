@@ -10,3 +10,5 @@ void DrawProgressBar_BilinearOffset_RightAlign(float x, float y, float width, fl
 void DrawProgressBarWithProgressDelta_BilinearOffset(float x, float y, float width, float height, float progress,
     CRGBA const &color, float deltaProgress, CRGBA const &deltaColor);
 void StringReplace(std::string &str, std::string substring, std::string replacement);
+bool IsEscJustPressed();
+char *GetForMap(float a1, float a2);

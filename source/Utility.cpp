@@ -1,5 +1,6 @@
 #include "Utility.h"
 #include "game_sa\CSprite2d.h"
+#include "game_sa\CPad.h"
 #include <math.h>
 
 void RotateVertices(CVector2D *rect, unsigned int numVerts, float x, float y, float angle) {
@@ -61,4 +62,12 @@ void StringReplace(std::string &str, std::string substring, std::string replacem
         str.replace(i, len, replacement);
         i = str.find(substring, i);
     }
+}
+
+bool IsEscJustPressed() {
+    return plugin::CallAndReturn<bool, 0x572DB0>();
+}
+
+char *GetForMap(float a1, float a2) {
+    return plugin::CallAndReturn<char *__stdcall, 0x571D90>(a1, a2);
 }

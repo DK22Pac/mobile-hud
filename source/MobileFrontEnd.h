@@ -22,6 +22,9 @@ public:
     static void DrawStandardMenu();
     static void __fastcall ProcessMobileMenuOptions(void *ecx0, int, signed char nArrowsInput, bool* bReturn, bool bEnterInput);
     static void PrintRadioStationList();
+    static void PrintMap();
+    static void PrintLegend();
+    static void PrintPlaceName();
     static void DisplaySlider(float x, float y, float width, float height, float progress);
 
     static void DrawStatsSlider(float x, float y, unsigned short width, unsigned char height, float percentage, signed char,

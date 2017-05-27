@@ -1,7 +1,12 @@
+#include <plugin.h>
 #include "MobileFrontEnd.h"
 #include "game_sa\CPad.h"
+#include "game_sa\CRadar.h"
 #include "game_sa\CHudColours.h"
 #include "game_sa\CVector2D.h"
+#include "game_sa\CTimer.h"
+#include "game_sa\CScene.h"
+#include "Utrax.h"
 
 MobileFrontEnd FrontEndMobileMenuManager;
 
@@ -11,6 +16,36 @@ void MobileFrontEnd::InstallPatches() {
     plugin::patch::RedirectCall(0x57B66F, ProcessMobileMenuOptions);
     plugin::patch::RedirectCall(0x57B702, ProcessMobileMenuOptions);
     plugin::patch::RedirectCall(0x574F54, DrawStatsSlider);
+
+    // PrintMap Patches
+    // Legend
+    plugin::patch::Set<BYTE>(0x5760A1, 0x83);
+    plugin::patch::Set<BYTE>(0x5760A2, 0xC4);
+    plugin::patch::Set<BYTE>(0x5760A3, 0x18);
+    plugin::patch::Nop(0x5760A4, 0x90);
+    plugin::patch::Nop(0x5760A5, 0x90);
+    plugin::patch::Nop(0x5761D3, 0x90);
+    plugin::patch::Nop(0x5761D4, 0x90);
+    plugin::patch::Nop(0x5761D5, 0x90);
+    plugin::patch::Nop(0x5761D6, 0x90);
+    plugin::patch::Nop(0x5761D7, 0x90);
+    plugin::patch::Nop(0x5761D8, 0x90);
+    // Borders
+    plugin::patch::Set(0x575E12, 5);
+    plugin::patch::Set(0x575DC2, 5);
+    plugin::patch::Set(0x575D6F, 5);
+    plugin::patch::Set(0x575D1F, 5);
+    plugin::patch::Set(0x575CCE, 5);
+    plugin::patch::Set(0x575C84, 5);
+    plugin::patch::Set(0x575C40, 5);
+    plugin::patch::Set(0x575BF6, 5);
+    // Place name 
+    plugin::patch::Set(0x575F89, 5);
+    // Help texts
+    plugin::patch::SetChar(0x5762E7 + 1, 0);
+    plugin::patch::SetChar(0x5762FD + 1, 0);
+    // Legend text
+    plugin::patch::Set(0x582DEE, 5);
 }
 
 void MobileFrontEnd::DrawBackground(void *ecx0) {
@@ -26,7 +61,9 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
     }
 
     if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_MAP) {
-        FrontEndMenuManager.PrintMap();
+        MobileFrontEnd::PrintMap();
+        MobileFrontEnd::PrintLegend();
+        MobileFrontEnd::PrintPlaceName();
     }
 
     else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_CONTROLS_VEHICLE_ONFOOT) {
@@ -52,6 +89,20 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
 
     if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_AUDIO_SETTINGS) {
         MobileFrontEnd::PrintRadioStationList();
+    }
+
+    if (FrontEndMenuManager.m_bScanningUserTracks) {
+        // TODO: ScanningUserTracks
+        CFont::SetBackground(0, 0);
+        CFont::SetProp(1);
+        CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
+        CFont::SetFontStyle(FONT_SUBTITLES);
+        CFont::SetAlignment(ALIGN_RIGHT);
+        CFont::SetOutlinePosition(2);
+        CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+        CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
+        CFont::SetScale(SCREEN_MULTIPLIER(0.6f), SCREEN_MULTIPLIER(1.2f));
+        CFont::PrintStringFromBottom(SCREEN_COORD_RIGHT(10.0f), SCREEN_COORD_BOTTOM(-35.0f), TheText.Get("FEA_SMP"));
     }
 
     if (FrontEndMenuManager.m_bDrawMouse) {
@@ -85,7 +136,7 @@ void MobileFrontEnd::GetRandomBGCoords() {
 }
 
 float __fastcall MobileFrontEnd::CheckMouseInput(float a1) {
-    return SCREEN_COORD_CENTER_Y - SCREEN_COORD(-a1 - 30.0f);
+    return SCREEN_COORD_CENTER_Y - SCREEN_COORD(-a1 - 32.5f);
 }
 
 void MobileFrontEnd::DrawStandardMenu() {
@@ -882,8 +933,7 @@ void MobileFrontEnd::PrintRadioStationList()
     float spacing = SCREEN_COORD(0.5f);
     float size = SCREEN_MULTIPLIER(58.125f);
 
-    do
-    {
+    do {
         if (FrontEndMenuManager.m_nRadioStation == v2) {
             RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
             RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
@@ -905,6 +955,280 @@ void MobileFrontEnd::PrintRadioStationList()
         ++v2;
         spacing += size;
     } while (v2 < 13);
+}
+
+void MobileFrontEnd::PrintMap() {
+    // Background
+    CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0f + SCREEN_HEIGHT), CRGBA(0, 0, 0, 255));
+
+    // PrintMap TODO: Draw our own map?!?
+    FrontEndMenuManager.PrintMap();
+}
+
+void MobileFrontEnd::PrintLegend() {
+    signed int v104 = 0;
+    float fSpacingX = 0.0f;
+    float fSpacingY = 0.0f;
+    char *str;
+    CFont::SetBackground(0, 0);
+    CFont::SetProp(1);
+    CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
+    CFont::SetOutlinePosition(0);
+    CFont::SetDropShadowPosition(1);
+    CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+    CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_BLUELIGHT, 255));
+    CFont::SetAlignment(ALIGN_LEFT);
+    CFont::SetFontStyle(FONT_MENU);
+
+    if (FrontEndMenuManager.m_bMapLegend) {
+        if (CRadar::MapLegendCounter) {
+            do {
+                switch (CRadar::MapLegendList[v104])
+                {
+                case 3:
+                    str = TheText.Get("LG_01");
+                    break;
+                case 5:
+                    str = TheText.Get("LG_02");
+                    break;
+                case 6:
+                    str = TheText.Get("LG_03");
+                    break;
+                case 7:
+                    str = TheText.Get("LG_04");
+                    break;
+                case 8:
+                    str = TheText.Get("LG_05");
+                    break;
+                case 9:
+                    str = TheText.Get("LG_06");
+                    break;
+                case 10:
+                    str = TheText.Get("LG_07");
+                    break;
+                case 12:
+                    str = TheText.Get("LG_09");
+                    break;
+                case 13:
+                    str = TheText.Get("LG_10");
+                    break;
+                case 14:
+                    str = TheText.Get("LG_11");
+                    break;
+                case 15:
+                    str = TheText.Get("LG_12");
+                    break;
+                case 16:
+                    str = TheText.Get("LG_13");
+                    break;
+                case 18:
+                    str = TheText.Get("LG_15");
+                    break;
+                case 19:
+                    str = TheText.Get("LG_16");
+                    break;
+                case 20:
+                    str = TheText.Get("LG_17");
+                    break;
+                case 21:
+                    str = TheText.Get("LG_18");
+                    break;
+                case 22:
+                    str = TheText.Get("LG_19");
+                    break;
+                case 23:
+                    str = TheText.Get("LG_20");
+                    break;
+                case 24:
+                    str = TheText.Get("LG_21");
+                    break;
+                case 25:
+                    str = TheText.Get("LG_22");
+                    break;
+                case 26:
+                    str = TheText.Get("LG_23");
+                    break;
+                case 27:
+                    str = TheText.Get("LG_24");
+                    break;
+                case 28:
+                    str = TheText.Get("LG_25");
+                    break;
+                case 29:
+                    str = TheText.Get("LG_26");
+                    break;
+                case 30:
+                    str = TheText.Get("LG_27");
+                    break;
+                case 31:
+                    str = TheText.Get("LG_28");
+                    break;
+                case 32:
+                    str = TheText.Get("LG_29");
+                    break;
+                case 33:
+                    str = TheText.Get("LG_30");
+                    break;
+                case 34:
+                    str = TheText.Get("LG_31");
+                    break;
+                case 35:
+                    str = TheText.Get("LG_32");
+                    break;
+                case 36:
+                    str = TheText.Get("LG_33");
+                    break;
+                case 63:
+                    str = TheText.Get("LG_34");
+                    break;
+                case 38:
+                    str = TheText.Get("LG_35");
+                    break;
+                case 39:
+                    str = TheText.Get("LG_36");
+                    break;
+                case 40:
+                    str = TheText.Get("LG_37");
+                    break;
+                case 42:
+                    str = TheText.Get("LG_39");
+                    break;
+                case 43:
+                    str = TheText.Get("LG_40");
+                    break;
+                case 44:
+                    str = TheText.Get("LG_41");
+                    break;
+                case 45:
+                    str = TheText.Get("LG_42");
+                    break;
+                case 46:
+                    str = TheText.Get("LG_43");
+                    break;
+                case 47:
+                    str = TheText.Get("LG_44");
+                    break;
+                case 48:
+                    str = TheText.Get("LG_45");
+                    break;
+                case 49:
+                    str = TheText.Get("LG_46");
+                    break;
+                case 50:
+                    str = TheText.Get("LG_47");
+                    break;
+                case 51:
+                    str = TheText.Get("LG_48");
+                    break;
+                case 52:
+                    str = TheText.Get("LG_51");
+                    break;
+                case 53:
+                    str = TheText.Get("LG_52");
+                    break;
+                case 54:
+                    str = TheText.Get("LG_53");
+                    break;
+                case 55:
+                    str = TheText.Get("LG_57");
+                    break;
+                case 58:
+                    str = TheText.Get("LG_58");
+                    break;
+                case 59:
+                    str = TheText.Get("LG_59");
+                    break;
+                case 60:
+                    str = TheText.Get("LG_60");
+                    break;
+                case 61:
+                    str = TheText.Get("LG_61");
+                    break;
+                case 62:
+                    str = TheText.Get("LG_62");
+                    break;
+                case 37:
+                    str = TheText.Get("LG_63");
+                    break;
+                case 41:
+                    str = TheText.Get("LG_64");
+                    break;
+                case 11:
+                    str = TheText.Get("LG_66");
+                    break;
+                case 17:
+                    str = TheText.Get("LG_67");
+                    break;
+                case 57:
+                    str = TheText.Get("LG_65");
+                    break;
+                case 4294967295:
+                    str = TheText.Get("LG_49");
+                    break;
+                case 4294967294:
+                    str = TheText.Get("LG_50");
+                    break;
+                case 4294967293:
+                    str = TheText.Get("LG_54");
+                    break;
+                case 4294967292:
+                    str = TheText.Get("LG_55");
+                    break;
+                case 4294967291:
+                    str = TheText.Get("LG_56");
+                    break;
+                default:
+                    str = "";
+                    break;
+                }
+
+                CFont::SetScale(SCREEN_MULTIPLIER(0.4f), SCREEN_MULTIPLIER(1.0f));
+                float width = CFont::GetStringWidth(str, true, false);
+                if (width > SCREEN_MULTIPLIER(150.0f))
+                    CFont::SetScale(SCREEN_MULTIPLIER(0.4f * SCREEN_MULTIPLIER(150.0f) / width), SCREEN_MULTIPLIER(1.0f));
+                CFont::PrintString(SCREEN_COORD_LEFT(45.0f) + fSpacingX, SCREEN_COORD_BOTTOM(225.0f) + fSpacingY, str);
+                CRadar::DrawLegend(SCREEN_COORD_LEFT(5.0f) + fSpacingX, SCREEN_COORD_BOTTOM(230.0f) + fSpacingY, CRadar::MapLegendList[v104]);
+
+                if (v104 == 6) {
+                    fSpacingX += SCREEN_COORD(200.0f);
+                    fSpacingY -= SCREEN_COORD(32.0f * 6);
+                }
+                else if (v104 == 13) {
+                    fSpacingX += SCREEN_COORD(200.0f);
+                    fSpacingY -= SCREEN_COORD(32.0f * 6);
+                }
+                else if (v104 == 20) {
+                    fSpacingX += SCREEN_COORD(200.0f);
+                    fSpacingY -= SCREEN_COORD(32.0f * 6);
+                }
+                else if (v104 == 27) {
+                    fSpacingX += SCREEN_COORD(200.0f);
+                    fSpacingY -= SCREEN_COORD(32.0f * 6);
+                }
+                else
+                    fSpacingY += SCREEN_COORD(32.0f);
+
+                ++v104;
+
+            } while (v104 < CRadar::MapLegendCounter);
+        }
+    }
+}
+
+void MobileFrontEnd::PrintPlaceName() {
+    // Place 
+    CFont::SetBackground(0, 0);
+    CFont::SetProp(1);
+    CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
+    CFont::SetOutlinePosition(3);
+    CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+    CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
+    CFont::SetAlignment(ALIGN_RIGHT);
+    CFont::SetFontStyle(FONT_PRICEDOWN);
+    CFont::SetScale(SCREEN_MULTIPLIER(0.8f), SCREEN_MULTIPLIER(1.8f));
+
+    char *strc = GetForMap(FrontEndMenuManager.m_vMousePos.x, FrontEndMenuManager.m_vMousePos.y);
+    CFont::PrintString(SCREEN_COORD_RIGHT(30.0f), SCREEN_COORD_BOTTOM(120.0f), strc);
 }
 
 void MobileFrontEnd::DisplaySlider(float x, float y, float width, float height, float progress) {
