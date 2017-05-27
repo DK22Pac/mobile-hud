@@ -6,7 +6,6 @@
 #include "game_sa\CVector2D.h"
 #include "game_sa\CTimer.h"
 #include "game_sa\CScene.h"
-#include "Utrax.h"
 
 MobileFrontEnd FrontEndMobileMenuManager;
 
