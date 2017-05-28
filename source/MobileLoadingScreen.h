@@ -1,4 +1,6 @@
 #pragma once
+#define NUM_LOADING_SPLASHES 6
+
 #include <plugin.h>
 #include "game_sa\CFont.h"
 #include "game_sa\CTxdStore.h"
