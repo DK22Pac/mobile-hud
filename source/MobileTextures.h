@@ -22,7 +22,6 @@ enum eLoadScreenTexture {
 };
 
 enum eMenuBackgroundTexture {
-    MENU_BGMAP,
     MENU_CHAR_0,
     MENU_CHAR_1,
     MENU_CHAR_2,
@@ -31,7 +30,9 @@ enum eMenuBackgroundTexture {
     MENU_CHAR_5,
     MENU_CHAR_6,
     MENU_CHAR_7,
-    MENU_CHAR_8
+    MENU_CHAR_8,
+    MENU_BGMAP,
+    MENU_MAINMASK
 };
 
 class MobileTexDictionary {

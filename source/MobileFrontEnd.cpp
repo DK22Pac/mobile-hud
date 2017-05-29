@@ -4,8 +4,6 @@
 #include "game_sa\CRadar.h"
 #include "game_sa\CHudColours.h"
 #include "game_sa\CVector2D.h"
-#include "game_sa\CTimer.h"
-#include "game_sa\CScene.h"
 
 MobileFrontEnd FrontEndMobileMenuManager;
 
@@ -57,16 +55,15 @@ void MobileFrontEnd::InstallPatches() {
 void MobileFrontEnd::DrawBackground(void *ecx0) {
     CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT), CRGBA(0, 0, 0, 255));
 
-    if (FrontEndMenuManager.m_nCurrentMenuPage != 5) {
-        MobileFrontEnd::GetRandomBGCoords();
+    if (FrontEndMenuManager.m_nCurrentMenuPage != 5)
+    MobileFrontEnd::GetRandomBGCoords();
 
-        // Char Template
-        mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_CHAR_0);
-
-        if (FrontEndMenuManager.m_nCurrentMenuPage != 0)
+    // Char
+    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_CHAR_0);
+    if (FrontEndMenuManager.m_nCurrentMenuPage != 0)
         mobileTex.m_nBackgroundSprite.Draw(CRect(SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2),
             SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2) + SCREEN_MULTIPLIER(375.0f), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2) + SCREEN_MULTIPLIER(837.0f)), CRGBA(255, 255, 255, 255));
-    }
+
 
     if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_MAP) {
         MobileFrontEnd::PrintMap();
@@ -111,6 +108,8 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
         CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
         CFont::SetScale(SCREEN_MULTIPLIER(0.6f), SCREEN_MULTIPLIER(1.2f));
         CFont::PrintStringFromBottom(SCREEN_COORD_RIGHT(10.0f), SCREEN_COORD_BOTTOM(-35.0f), TheText.Get("FEA_SMP"));
+
+        FrontEndMenuManager.m_bScanningUserTracks = 0;
     }
 
     if (FrontEndMenuManager.m_bDrawMouse) {
@@ -118,9 +117,9 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
         POINT position;
         if (GetCursorPos(&position)) {
             if (FrontEndMenuManager.m_nCurrentMenuPage == 5 && CPad::NewMouseControllerState.lmb)
-            FrontEndMenuManager.m_apTextures[24].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
+                FrontEndMenuManager.m_apTextures[24].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
             else
-            FrontEndMenuManager.m_apTextures[23].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
+                FrontEndMenuManager.m_apTextures[23].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
 
         }
     }
@@ -131,14 +130,14 @@ void MobileFrontEnd::GetRandomBGCoords() {
     RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
 
-    // Background Template
+    // Background
     mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_BGMAP);
-    mobileTex.m_nBackgroundSprite.Draw(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH + SCREEN_COORD(900.0f), 0.0 + SCREEN_HEIGHT + SCREEN_COORD(1024.0f)), CRGBA(255, 255, 255, 50));
+    mobileTex.m_nBackgroundSprite.Draw(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH + SCREEN_COORD(900.0f), 0.0 + SCREEN_HEIGHT + SCREEN_COORD(1024.0f)), CRGBA(255, 255, 255, 40));
 
-    // Mask Template
-    CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT),
-        CRGBA(0, 0, 0, 255), CRGBA(0, 0, 0, 255),
-        CRGBA(0, 0, 0, 0), CRGBA(0, 0, 0, 0));
+    // Mask
+    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_MAINMASK);
+    mobileTex.m_nBackgroundSprite.Draw(CRect(0.0, 0.0f, 0.0f + SCREEN_WIDTH, 0.0f + SCREEN_HEIGHT), CRGBA(255, 255, 255, 250));
+    mobileTex.m_nBackgroundSprite.m_pTexture = nullptr;
 
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
 }
@@ -603,8 +602,9 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
         FrontEndMenuManager.SwitchToNewScreen(MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_dwSelectedMenuItem].m_nTargetMenu);
         return;
     case 11:
-        // TODO: Do
-        return;
+        FrontEndMenuManager.field_160 = 261 * FrontEndMenuManager.m_dwSelectedMenuItem - 169;
+        FrontEndMenuManager.SwitchToNewScreen(8);
+    return;
     case 10:
         FrontEndMenuManager.ProcessMissionPackNewGame();
         return;
@@ -948,12 +948,11 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
     }
 }
 
-void MobileFrontEnd::PrintRadioStationList()
-{
+void MobileFrontEnd::PrintRadioStationList() {
     signed int v2 = 1;
     int savedAlpha;
     float fPosX = SCREEN_COORD_CENTER_X - SCREEN_COORD(282.5f / 2);
-    float fPosY = SCREEN_COORD_CENTER_Y - SCREEN_COORD(-150.0f / 2);
+    float fPosY = SCREEN_COORD_CENTER_Y - SCREEN_COORD(-270.0f / 2);
     float spacing = SCREEN_COORD(0.5f);
     float size = SCREEN_MULTIPLIER(58.125f);
 
@@ -982,11 +981,22 @@ void MobileFrontEnd::PrintRadioStationList()
 }
 
 void MobileFrontEnd::PrintMap() {
+    int savedAlpha;
+    RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
+
     // Background
     CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0f + SCREEN_HEIGHT), CRGBA(0, 0, 0, 255));
 
     // PrintMap TODO: Draw our own map?!?
     FrontEndMenuManager.PrintMap();
+
+    // Mask
+    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_MAINMASK);
+    mobileTex.m_nBackgroundSprite.Draw(CRect(SCREEN_COORD(-600.0), SCREEN_COORD_BOTTOM(535.0f), SCREEN_COORD(-600.0) + SCREEN_WIDTH + SCREEN_COORD(600.0 * 2), SCREEN_COORD_BOTTOM(535.0f) + SCREEN_MULTIPLIER(535.0f)), CRGBA(255, 255, 255, 240));
+    mobileTex.m_nBackgroundSprite.m_pTexture = nullptr;
+
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
 }
 
 void MobileFrontEnd::PrintLegend() {
@@ -1004,7 +1014,7 @@ void MobileFrontEnd::PrintLegend() {
     CFont::SetAlignment(ALIGN_LEFT);
     CFont::SetFontStyle(FONT_MENU);
 
-    if (FrontEndMenuManager.m_bMapLegend) {
+   // if (FrontEndMenuManager.m_bMapLegend) {
         if (CRadar::MapLegendCounter) {
             do {
                 switch (CRadar::MapLegendList[v104])
@@ -1202,7 +1212,7 @@ void MobileFrontEnd::PrintLegend() {
                     str = TheText.Get("LG_56");
                     break;
                 default:
-                    str = "";
+                    str = TheText.Get("LG_00");
                     break;
                 }
 
@@ -1236,7 +1246,7 @@ void MobileFrontEnd::PrintLegend() {
 
             } while (v104 < CRadar::MapLegendCounter);
         }
-    }
+   // }
 }
 
 void MobileFrontEnd::PrintPlaceName() {

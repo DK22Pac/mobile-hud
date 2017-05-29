@@ -90,8 +90,8 @@ CMenuPage MobileMenuPage::PagesMenu[] = {
     29,  "FEA_SFX",      MENU_ENTRY_OPTION,       3,  0,  fPosY2,  0,
     30,  "FEA_BAS",      MENU_ENTRY_OPTION,       3,  0,  fPosY3,  0,
     31,  "FEA_ART",      MENU_ENTRY_OPTION,       3,  0,  fPosY4,  0,
-    // 5,  "FEA_TIT",      MENU_ENTRY_BUTTON,      26,  0,  fPosY5,  0,
-    32,  "FEA_RSS",      MENU_ENTRY_OPTION,       3,  0,  fPosY5,  0,
+     5,  "FEA_TIT",      MENU_ENTRY_BUTTON,      26,  0,  fPosY5,  0,
+    32,  "FEA_RSS",      MENU_ENTRY_OPTION,       3,  0,  fPosY6,  0,
      5,  "FET_DEF",      MENU_ENTRY_BUTTON,      24,  0,  fPosYd,  0,
     },
 
