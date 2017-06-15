@@ -77,7 +77,7 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
 
     else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_EMPTY) {
         FrontEndMenuManager.SaveSettings();
-        ExitProcess(0);
+        exit(0);
     }
 
     else {
