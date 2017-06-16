@@ -4,6 +4,7 @@
 #include "game_sa\CRadar.h"
 #include "game_sa\CHudColours.h"
 #include "game_sa\CVector2D.h"
+#include "game_sa\CStats.h"
 
 MobileFrontEnd FrontEndMobileMenuManager;
 
@@ -1310,7 +1311,7 @@ void MobileFrontEnd::DisplaySlider(float x, float y, float width, float height, 
 void MobileFrontEnd::PrintStats() {
     FrontEndMenuManager.PrintStats();
 
-    char *Rate = getPlayerRatingText();
+    char *Rate = CStats::FindCriminalRatingString();
     static char Value[6];
 
     // Player Rating 
@@ -1323,7 +1324,7 @@ void MobileFrontEnd::PrintStats() {
     CFont::SetFontStyle(FONT_PRICEDOWN);
     CFont::SetScale(SCREEN_MULTIPLIER(0.8f), SCREEN_MULTIPLIER(1.5f));
 
-    sprintf(gString, "%d", getPlayerRatingValue());
+    sprintf(gString, "%d", CStats::FindCriminalRatingNumber());
     AsciiToGxtChar(gString, Value);
 
     CFont::PrintString(SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2), SCREEN_COORD_BOTTOM(60.0f), Rate);

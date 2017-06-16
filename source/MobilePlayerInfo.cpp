@@ -55,7 +55,7 @@ void MobilePlayerInfo::InstallPatches() {
 
 void MobilePlayerInfo::MyDrawWeaponIcon(CPed *player, int, int, float alpha) {
     RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, reinterpret_cast<void *>(rwFILTERLINEAR));
-    int weapModel = CWeaponInfo::GetWeaponInfo(player->m_aWeapons[player->m_nActiveWeaponSlot].m_Type, 1)->m_nModelId1;
+    int weapModel = CWeaponInfo::GetWeaponInfo((eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nType, 1)->m_nModelId1;
     if (weapModel <= 0) {
         float baseY = 0.0f;
         if (player == CWorld::Players[1].m_pPed)
@@ -85,9 +85,9 @@ void MobilePlayerInfo::MyDrawWeaponIcon(CPed *player, int, int, float alpha) {
 }
 
 void MobilePlayerInfo::MyDrawWeaponAmmo(CPed *player, int, int, float alpha) {
-    unsigned int ammoInClip = player->m_aWeapons[player->m_nActiveWeaponSlot].m_dwAmmoInClip;
-    unsigned int totalAmmo = player->m_aWeapons[player->m_nActiveWeaponSlot].m_dwTotalAmmo;
-    eWeaponType wepType = player->m_aWeapons[player->m_nActiveWeaponSlot].m_Type;
+    unsigned int ammoInClip = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
+    unsigned int totalAmmo = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nTotalAmmo;
+    eWeaponType wepType = (eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nType;
     unsigned short maxAmmoInClip = CWeaponInfo::GetWeaponInfo(wepType, player->GetWeaponSkill())->m_nAmmoClip;
     if (maxAmmoInClip <= 1 || maxAmmoInClip >= 1000)
         sprintf(gString, "%d", totalAmmo);
@@ -153,7 +153,7 @@ void MobilePlayerInfo::MyDrawMoney(float x, float y, char *text) {
 void MobilePlayerInfo::MyDrawHealth(int playerId, int, int) {
     if (CHud::m_ItemToFlash != 4 || CTimer::m_FrameCounter & 8) {
         if (CWorld::Players[playerId].m_pPed->m_fHealth >= 10 || CTimer::m_FrameCounter & 8) {
-            float barSize = static_cast<float>(CWorld::Players[playerId].m_bMaxHealth) / plugin::CallAndReturn<float, 0x559AF0>(10);
+            float barSize = static_cast<float>(CWorld::Players[playerId].m_bMaxHealth) / CStats::GetFatAndMuscleModifier((eStatModAbilities)10);
             if (barSize > 1.0f)
                 barSize = 1.0f;
             float progress = CWorld::Players[playerId].m_pPed->m_fHealth / static_cast<float>(CWorld::Players[playerId].m_bMaxHealth);
@@ -185,7 +185,7 @@ void MobilePlayerInfo::MyDrawArmor(int playerId, int, int) {
 
 void MobilePlayerInfo::MyDrawBreath(int playerId, int, int) {
     if (CHud::m_ItemToFlash != 10 || CTimer::m_FrameCounter & 8) {
-        float progress = CWorld::Players[playerId].m_pPed->m_pPlayerData->m_fBreath / plugin::CallAndReturn<float, 0x559AF0>(8);
+        float progress = CWorld::Players[playerId].m_pPed->m_pPlayerData->m_fBreath / CStats::GetFatAndMuscleModifier(STAT_MOD_AIR_IN_LUNG);
         if (progress > 1.0f)
             progress = 1.0f;
         float positionY = settings.vecBreathPosn.y;

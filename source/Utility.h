@@ -12,5 +12,3 @@ void DrawProgressBarWithProgressDelta_BilinearOffset(float x, float y, float wid
 void StringReplace(std::string &str, std::string substring, std::string replacement);
 bool IsEscJustPressed();
 char *GetForMap(float a1, float a2);
-int getPlayerRatingValue();
-char *getPlayerRatingText();

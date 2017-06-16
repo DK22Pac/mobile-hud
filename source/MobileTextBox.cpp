@@ -15,6 +15,7 @@
 #include "game_sa\CCutsceneMgr.h"
 #include "game_sa\CGarages.h"
 #include "game_sa\CMenuSystem.h"
+#include "game_sa\CStats.h"
 
 void MobileTextBox::InstallPatches() {
     plugin::patch::RedirectCall(0x573EF4, MyHelpBox_DrawBox);
@@ -42,7 +43,7 @@ float MobileTextBox::GetHelpBoxXShift() {
         CVehicle *vehicle = FindPlayerVehicle(-1, 0);
         if (vehicle && vehicle->m_wModelIndex != MODEL_VORTEX && (vehicle->m_dwVehicleSubClass == VEHICLE_PLANE || vehicle->m_dwVehicleSubClass == VEHICLE_HELI))
             return settings.fTextBoxPosnXWithRadarAndPlane;
-        else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_Type == WEAPON_PARACHUTE)
+        else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_nType == WEAPON_PARACHUTE)
             return settings.fTextBoxPosnXWithRadarAndPlane;
         else return settings.fTextBoxPosnXWithRadar;
     }
@@ -184,7 +185,7 @@ void MobileTextBox::MyHelpBox_Draw() {
                     if (CHud::m_nHelpMessageStatId == 336)
                         progress = plugin::CallMethodAndReturn<unsigned int, 0x5F6AA0>(0xC09928 + FindPlayerPed(-1)->m_pPlayerData->m_dwPlayerGroup * 0x2D4);
                     else
-                        progress = plugin::CallAndReturn<float, 0x558E40>(CHud::m_nHelpMessageStatId);
+                        progress = CStats::GetStatValue(CHud::m_nHelpMessageStatId);
                     if (CHud::m_pHelpMessageToPrint[0] == '+') {
                         CFont::SetBackground(false, false);
                         DrawProgressBarWithProgressDelta_BilinearOffset(posX + SCREEN_COORD(10.0f), SCREEN_COORD(5.0f * 0.6f) +
