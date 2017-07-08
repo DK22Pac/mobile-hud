@@ -6,6 +6,22 @@
 
 class Settings {
 public:
+    bool      bEnableColors;
+    bool      bEnablePlayerInfo;
+    bool      bEnableRadar;
+    bool      bEnableSubtitles;
+    bool      bEnableRadioNames;
+    bool      bEnableAreaNames;
+    bool      bEnableVehicleNames;
+    bool      bEnableStatsBox;
+    bool      bEnableTextBox;
+    bool      bEnableTimers;
+    bool      bEnableProgressBars;
+    bool      bEnableMenuSystem;
+    bool      bEnableLoadingScreens;
+    bool      bEnableMenuPages;
+    bool      bEnableFrontends;
+
     bool      bRadarTop;
     CVector2D vecWeaponIconPosn;
     CVector2D vecWeaponIconScale;

@@ -1,5 +1,21 @@
 # Mobile HUD settings
 
+ENABLE_COLORS                           YES   
+ENABLE_PLAYER_INFO                      YES   
+ENABLE_RADAR                            YES    
+ENABLE_SUBTITLES                        YES     
+ENABLE_RADIO_NAMES                      YES   
+ENABLE_AREA_NAMES                       YES   
+ENABLE_VEHICLE_NAMES                    YES   
+ENABLE_STATS_BOX                        YES   
+ENABLE_TEXT_BOX                         YES   
+ENABLE_TIMERS                           YES     
+ENABLE_PROGRESS_BARS                    YES   
+ENABLE_MENU_SYSTEM                      YES   
+ENABLE_LOADING_SCREENS                  YES   
+ENABLE_MENU_PAGES                       YES       
+ENABLE_FRONTEND                         YES      
+
 RADAR_TOP                               YES
 
 WEAPON_ICON_POSN                        141.0 20.0
@@ -74,7 +90,7 @@ AREA_NAME_SCALE                         1.1   2.1
 VEHICLE_NAME_POSN                       25.0  40.0
 VEHICLE_NAME_SCALE                      0.8   1.6
 
-STATS_BOX_POSN							10.0  10.0
+STATS_BOX_POSN                          10.0  10.0
 
 # YES (enable), NO (disable), or VirtualKey number (9 for TAB) to reload when key is pressed
 RELOAD_SETTINGS                         NO

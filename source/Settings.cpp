@@ -5,7 +5,24 @@ Settings settings;
 
 void Settings::Read() {
     plugin::config_file config(PLUGIN_PATH("MobileHud\\mobileHud.dat"));
-    bRadarTop                             = config["RADAR_TOP"                              ].asBool(false);
+
+    bEnableColors                         = config["ENABLE_COLORS"                          ].asBool(true);
+    bEnablePlayerInfo                     = config["ENABLE_PLAYER_INFO"                     ].asBool(true);
+    bEnableRadar                          = config["ENABLE_RADAR"                           ].asBool(true);
+    bEnableSubtitles                      = config["ENABLE_SUBTITLES"                       ].asBool(true);
+    bEnableRadioNames                     = config["ENABLE_RADIO_NAMES"                     ].asBool(true);
+    bEnableAreaNames                      = config["ENABLE_AREA_NAMES"                      ].asBool(true);
+    bEnableVehicleNames                   = config["ENABLE_VEHICLE_NAMES"                   ].asBool(true);
+    bEnableStatsBox                       = config["ENABLE_STATS_BOX"                       ].asBool(true);
+    bEnableTextBox                        = config["ENABLE_TEXT_BOX"                        ].asBool(true);
+    bEnableTimers                         = config["ENABLE_TIMERS"                          ].asBool(true);
+    bEnableProgressBars                   = config["ENABLE_PROGRESS_BARS"                   ].asBool(true);
+    bEnableMenuSystem                     = config["ENABLE_MENU_SYSTEM"                     ].asBool(true);
+    bEnableLoadingScreens                 = config["ENABLE_LOADING_SCREENS"                 ].asBool(true);
+    bEnableMenuPages                      = config["ENABLE_MENU_PAGES"                      ].asBool(true);
+    bEnableFrontends                      = config["ENABLE_FRONTEND"                        ].asBool(true);
+
+    bRadarTop                             = config["RADAR_TOP"                              ].asBool(true);
     vecWeaponIconPosn                     = config["WEAPON_ICON_POSN"                       ].asVec2d(CVector2D(141.0f, 20.0f));
     vecWeaponIconScale                    = config["WEAPON_ICON_SCALE"                      ].asVec2d(CVector2D(124.0f, 124.0f));
     vecWeaponAmmoPosn                     = config["WEAPON_AMMO_POSN"                       ].asVec2d(CVector2D(79.0f, 132.0f));

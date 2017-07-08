@@ -27,22 +27,25 @@ public:
         Events::initRwEvent += [] {
             screen::SetBaseResolution(900.0f);
             settings.Read();
-            MobileColors::Read();
-            MobilePlayerInfo::InstallPatches();
-            MobileRadar::InstallPatches();
-            MobileSubtitles::InstallPatches();
-            MobileRadioName::InstallPatches();
-            MobileTextBox::InstallPatches();
-            MobileMissionTimers::InstallPatches();
-            MobileProgressBar::InstallPatches();
-            MobileAreaName::InstallPatches();
-            MobileVehicleName::InstallPatches();
-            MobileMenuSystem::InstallPatches();
-            MobileLoadingScreen::InstallPatches();
-            MobileMenuPage::InstallPatches();
-            MobileFrontEnd::InstallPatches();
             MobileTextures::Setup();
-            MobileStatsBox::InstallPatches();
+
+            {
+                if (settings.bEnableColors)         MobileColors::Read();
+                if (settings.bEnablePlayerInfo)     MobilePlayerInfo::InstallPatches();
+                if (settings.bEnableRadar)          MobileRadar::InstallPatches();
+                if (settings.bEnableSubtitles)      MobileSubtitles::InstallPatches();
+                if (settings.bEnableRadioNames)     MobileRadioName::InstallPatches();
+                if (settings.bEnableAreaNames)      MobileAreaName::InstallPatches();
+                if (settings.bEnableVehicleNames)   MobileVehicleName::InstallPatches();
+                if (settings.bEnableStatsBox)       MobileStatsBox::InstallPatches();
+                if (settings.bEnableTextBox)        MobileTextBox::InstallPatches();
+                if (settings.bEnableTimers)         MobileMissionTimers::InstallPatches();
+                if (settings.bEnableProgressBars)   MobileProgressBar::InstallPatches();
+                if (settings.bEnableMenuSystem)     MobileMenuSystem::InstallPatches();
+                if (settings.bEnableLoadingScreens) MobileLoadingScreen::InstallPatches();
+                if (settings.bEnableMenuPages)      MobileMenuPage::InstallPatches();
+                if (settings.bEnableFrontends)      MobileFrontEnd::InstallPatches();
+            }
 
             if (settings.iReloadKey) {
                 Events::gameProcessEvent += [] {
