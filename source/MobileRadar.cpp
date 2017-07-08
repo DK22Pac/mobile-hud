@@ -145,19 +145,33 @@ void __fastcall MobileRadar::MyDrawRadarPlane(CSprite2d *sprite, int, float x1, 
 }
 
 void MobileRadar::MyDrawPlaneHeightBorder(CRect const& rect, CRGBA const& color) {
-    DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)),
-        BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) + SCREEN_COORD(settings.vecPlaneRadarSize.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)
-            + SCREEN_COORD(settings.vecPlaneRadarSize.y))), CRGBA(0, 0, 0, 255));
-    DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x)),
-        BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y)),
-        BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
-        BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(120, 120, 120, 255));
+    CPed *player = FindPlayerPed();
+    CPad *pad = CPad::GetPad(0);
+    if (!pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0)) {
+        DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) + SCREEN_COORD(settings.vecPlaneRadarSize.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)
+                + SCREEN_COORD(settings.vecPlaneRadarSize.y))), CRGBA(0, 0, 0, 255));
+        DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(120, 120, 120, 255));
+    }
+    else {
+        DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarSize.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)
+                + SCREEN_COORD(settings.vecPlaneRadarSize.y))), CRGBA(0, 0, 0, 255));
+        DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
+            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(120, 120, 120, 255));
+    }
 }
 
 void MobileRadar::MyDrawPlaneHeight(CRect const& rect, CRGBA const& color) {
     float playerHeight = 0.0f;
     float blackLineBaseY = 0.0f;
     CPed *playa = FindPlayerPed();
+    CPad *pad = CPad::GetPad(0);
     CVehicle *playaVeh = FindPlayerVehicle(-1, false);
     if (playaVeh)
         playerHeight = playaVeh->GetPosition().z;
@@ -177,11 +191,20 @@ void MobileRadar::MyDrawPlaneHeight(CRect const& rect, CRGBA const& color) {
                 BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(255, 255, 255, 255));
         }
         else {
-            CSprite2d::DrawRect(CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x)),
-                BilinearOffset(SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) -
-                    SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y) * playerHeight),
-                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
-                BilinearOffset(SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y))), CRGBA(255, 255, 255, 255));
+            if (!pad->GetDisplayVitalStats(playa) || FindPlayerVehicle(-1, 0)) {
+                CSprite2d::DrawRect(CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x)),
+                    BilinearOffset(SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) -
+                        SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y) * playerHeight),
+                    BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
+                    BilinearOffset(SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y))), CRGBA(255, 255, 255, 255));
+            }
+            else {
+                CSprite2d::DrawRect(CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f)),
+                    BilinearOffset(SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) -
+                        SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y) * playerHeight),
+                    BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
+                    BilinearOffset(SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y))), CRGBA(255, 255, 255, 255));
+            }
         }
     }
     if (settings.bRadarTop) {
@@ -193,11 +216,21 @@ void MobileRadar::MyDrawPlaneHeight(CRect const& rect, CRGBA const& color) {
             BilinearOffset(blackLineBaseY + SCREEN_COORD(4.0f))), CRGBA(0, 0, 0, 255));
     }
     else {
-        blackLineBaseY = playerHeight * (settings.vecPlaneRadarLightPartSize.y) > 4.0f ?
-            SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) - SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y) * playerHeight :
-            SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) - SCREEN_COORD(4.0f);
-        CSprite2d::DrawRect(CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) - SCREEN_COORD(3.0f)),
-            BilinearOffset(blackLineBaseY), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) + SCREEN_COORD(settings.vecPlaneRadarSize.x) + SCREEN_COORD(3.0f)),
-            BilinearOffset(blackLineBaseY + SCREEN_COORD(4.0f))), CRGBA(0, 0, 0, 255));
+        if (!pad->GetDisplayVitalStats(playa) || FindPlayerVehicle(-1, 0)) {
+            blackLineBaseY = playerHeight * (settings.vecPlaneRadarLightPartSize.y) > 4.0f ?
+                SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) - SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y) * playerHeight :
+                SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) - SCREEN_COORD(4.0f);
+            CSprite2d::DrawRect(CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) - SCREEN_COORD(3.0f)),
+                BilinearOffset(blackLineBaseY), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) + SCREEN_COORD(settings.vecPlaneRadarSize.x) + SCREEN_COORD(3.0f)),
+                BilinearOffset(blackLineBaseY + SCREEN_COORD(4.0f))), CRGBA(0, 0, 0, 255));
+        }
+        else {
+            blackLineBaseY = playerHeight * (settings.vecPlaneRadarLightPartSize.y) > 4.0f ?
+                SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) - SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y) * playerHeight :
+                SCREEN_COORD_MAX_Y + 1.0f - SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) - SCREEN_COORD(4.0f);
+            CSprite2d::DrawRect(CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f) - SCREEN_COORD(3.0f)),
+                BilinearOffset(blackLineBaseY), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarSize.x) + SCREEN_COORD(3.0f)),
+                BilinearOffset(blackLineBaseY + SCREEN_COORD(4.0f))), CRGBA(0, 0, 0, 255));
+        }
     }
 }
