@@ -79,8 +79,13 @@ void __cdecl MobileStatsBox::DrawVitalStats() {
     vecStatsBoxScale.y = 255.0f;
 
     if (!pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0)) {
+        // Set Statsbox is closed
+        settings.IsStatsBoxOpen = 0;
     }
     else {
+        // Set Statsbox is open
+        settings.IsStatsBoxOpen = 1;
+
         // Window
         DrawRect(SCREEN_COORD(settings.vecStatsBoxPosn.x), SCREEN_COORD_BOTTOM(settings.vecStatsBoxPosn.y + vecStatsBoxScale.y), SCREEN_MULTIPLIER(vecStatsBoxScale.x), SCREEN_MULTIPLIER(vecStatsBoxScale.y), 1, CRGBA(0, 0, 0, 130));
 

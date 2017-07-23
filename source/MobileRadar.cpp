@@ -58,7 +58,7 @@ void MobileRadar::MyTransformRadarPointToScreenSpace(CVector2D *out, CVector2D *
         if (settings.bRadarTop)
             out->x = SCREEN_COORD(settings.vecRadarPosn.x) + in->x * SCREEN_COORD(settings.fRadarWidthHalf);
         else
-        if (!pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0))
+        if (!settings.IsStatsBoxOpen)
             out->x = SCREEN_COORD(settings.vecRadarPosn.x) + in->x * SCREEN_COORD(settings.fRadarWidthHalf);
         else
             out->x = SCREEN_COORD(settings.vecRadarPosn.x + 270.0f) + in->x * SCREEN_COORD(settings.fRadarWidthHalf);
@@ -90,7 +90,7 @@ void __fastcall MobileRadar::MyDrawRadarCircle(CSprite2d *sprite, int, CRect con
             SCREEN_COORD(settings.vecRadarPosn.x), SCREEN_COORD(settings.vecRadarPosn.y)), CRGBA(255, 255, 255, 255));
     }
     else
-    if (!pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0)) {
+    if (!settings.IsStatsBoxOpen) {
         DrawRadarRectangle(sprite, CRect(SCREEN_COORD(settings.vecRadarPosn.x - settings.fRadarBorderWidthHalf),
             SCREEN_COORD(settings.vecRadarPosn.y - settings.fRadarBorderHeightHalf),
             SCREEN_COORD(settings.vecRadarPosn.x),
@@ -147,7 +147,7 @@ void __fastcall MobileRadar::MyDrawRadarPlane(CSprite2d *sprite, int, float x1, 
 void MobileRadar::MyDrawPlaneHeightBorder(CRect const& rect, CRGBA const& color) {
     CPed *player = FindPlayerPed();
     CPad *pad = CPad::GetPad(0);
-    if (!pad->GetDisplayVitalStats(player) || FindPlayerVehicle(-1, 0)) {
+    if (settings.bRadarTop) {
         DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)),
             BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) + SCREEN_COORD(settings.vecPlaneRadarSize.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)
                 + SCREEN_COORD(settings.vecPlaneRadarSize.y))), CRGBA(0, 0, 0, 255));
@@ -157,13 +157,24 @@ void MobileRadar::MyDrawPlaneHeightBorder(CRect const& rect, CRGBA const& color)
             BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(120, 120, 120, 255));
     }
     else {
-        DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)),
-            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarSize.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)
-                + SCREEN_COORD(settings.vecPlaneRadarSize.y))), CRGBA(0, 0, 0, 255));
-        DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f)),
-            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y)),
-            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
-            BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(120, 120, 120, 255));
+        if (!settings.IsStatsBoxOpen) {
+            DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x) + SCREEN_COORD(settings.vecPlaneRadarSize.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)
+                    + SCREEN_COORD(settings.vecPlaneRadarSize.y))), CRGBA(0, 0, 0, 255));
+            DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(120, 120, 120, 255));
+        }
+        else {
+            DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarSize.x)), BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarPosn.y)
+                    + SCREEN_COORD(settings.vecPlaneRadarSize.y))), CRGBA(0, 0, 0, 255));
+            DrawRadarRectangle(NULL, CRect(BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.x + 270.0f) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.x)),
+                BilinearOffset(SCREEN_COORD(settings.vecPlaneRadarLightPartPosn.y) + SCREEN_COORD(settings.vecPlaneRadarLightPartSize.y))), CRGBA(120, 120, 120, 255));
+        }
     }
 }
 

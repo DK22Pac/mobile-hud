@@ -90,6 +90,8 @@ public:
 
     CVector2D vecStatsBoxPosn;
 
+    bool      IsStatsBoxOpen;
+
     int       iReloadKey;
 
     void Read();
