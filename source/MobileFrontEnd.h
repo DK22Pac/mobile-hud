@@ -12,12 +12,21 @@
 
 class MobileFrontEnd {
 public:
-    int SlotValidation[8 + 1];
+    bool      IsTimeForBackground;
+    CVector2D BGCoords;
+    int       BGAlpha;
+    int       CharAlpha;
+    bool      BGFrameZero;
+    bool      BGFrameFirst;
+    bool      BGFrameSecond;
+    bool      BGCoordsEnded;
+    int       SlotValidation[8 + 1];
+
 
 public:
     static void InstallPatches();
     static void __fastcall DrawBackground(void *ecx0);
-    static void GetRandomBGCoords();
+    static void GetRandomBGCoords(int coordsId);
     static float __fastcall CheckMouseInput(float a1);
     static void DrawStandardMenu();
     static void __fastcall ProcessMobileMenuOptions(void *ecx0, int, signed char nArrowsInput, bool* bReturn, bool bEnterInput);

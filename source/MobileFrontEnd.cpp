@@ -5,6 +5,8 @@
 #include "game_sa\CHudColours.h"
 #include "game_sa\CVector2D.h"
 #include "game_sa\CStats.h"
+#include "Settings.h"
+#include <time.h>
 
 MobileFrontEnd FrontEndMobileMenuManager;
 
@@ -56,15 +58,55 @@ void MobileFrontEnd::InstallPatches() {
 void MobileFrontEnd::DrawBackground(void *ecx0) {
     CSprite2d::DrawRect(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH, 0.0 + SCREEN_HEIGHT), CRGBA(0, 0, 0, 255));
 
-    if (FrontEndMenuManager.m_nCurrentMenuPage != 5)
-    MobileFrontEnd::GetRandomBGCoords();
+    if (FrontEndMenuManager.m_nCurrentMenuPage != 5) {
+        RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
 
-    // Char
-    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_CHAR_0);
+        // Background
+        mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_BGMAP);
+        mobileTex.m_nBackgroundSprite.Draw(CRect(SCREEN_COORD(-FrontEndMobileMenuManager.BGCoords.x), SCREEN_COORD(-FrontEndMobileMenuManager.BGCoords.y), SCREEN_COORD(-FrontEndMobileMenuManager.BGCoords.x) + SCREEN_WIDTH + SCREEN_COORD(900.0f), SCREEN_COORD(-FrontEndMobileMenuManager.BGCoords.y) + SCREEN_HEIGHT + SCREEN_COORD(1024.0f)), CRGBA(255, 255, 255, FrontEndMobileMenuManager.BGAlpha));
+
+        // Mask
+        mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_MAINMASK);
+        mobileTex.m_nBackgroundSprite.Draw(CRect(0.0, 0.0f, 0.0f + SCREEN_WIDTH, 0.0f + SCREEN_HEIGHT), CRGBA(255, 255, 255, 250));
+        mobileTex.m_nBackgroundSprite.m_pTexture = nullptr;
+
+        int coordsId;
+
+        if (FrontEndMobileMenuManager.BGFrameFirst)
+            coordsId = 1;
+        else if (FrontEndMobileMenuManager.BGFrameSecond)
+            coordsId = 2;
+        else
+            coordsId = 0;
+
+        MobileFrontEnd::GetRandomBGCoords(coordsId);
+    }
+
+    // Char     
+    int charId;
+
+    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_MAIN_MENU)
+        charId = MENU_CHAR_0;
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_OPTIONS)
+        charId = MENU_CHAR_1;
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_SELECT_GAME)
+        charId = MENU_CHAR_5;
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_QUIT_GAME_2)
+        charId = MENU_CHAR_6;
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_LANGUAGE)
+        charId = MENU_CHAR_7;
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_BRIEF)
+        charId = MENU_CHAR_8;
+    else
+        charId = MENU_CHAR_2;
+
+    if (FrontEndMobileMenuManager.CharAlpha != 255)
+        FrontEndMobileMenuManager.CharAlpha += 5;
+
+    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(charId);
     if (FrontEndMenuManager.m_nCurrentMenuPage != 0)
         mobileTex.m_nBackgroundSprite.Draw(CRect(SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2),
-            SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2) + SCREEN_MULTIPLIER(375.0f), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2) + SCREEN_MULTIPLIER(837.0f)), CRGBA(255, 255, 255, 255));
-
+            SCREEN_COORD_CENTER_X - SCREEN_COORD(1113.0f / 2) + SCREEN_MULTIPLIER(375.0f), SCREEN_COORD_CENTER_Y - SCREEN_COORD(843.7 / 2) + SCREEN_MULTIPLIER(837.0f)), CRGBA(255, 255, 255, FrontEndMobileMenuManager.CharAlpha));
 
     if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_MAP) {
         MobileFrontEnd::PrintMap();
@@ -126,21 +168,107 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
     }
 }
 
-void MobileFrontEnd::GetRandomBGCoords() {
-    int savedAlpha;
-    RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
-    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
+void MobileFrontEnd::GetRandomBGCoords(int coordsId) {
+    switch (coordsId) {
+    case 0:
+        if (!FrontEndMenuManager.m_bMenuActive) {
+            FrontEndMobileMenuManager.BGCoords.x = 0.0f;
+            FrontEndMobileMenuManager.BGCoords.y = 0.0f;
+            FrontEndMobileMenuManager.BGAlpha = 0.0f;
+        }
+        else {
+            if (FrontEndMobileMenuManager.BGCoords.y >= SCREEN_COORD(750.0f)) {
+                // End Animation
+                if (FrontEndMobileMenuManager.BGAlpha != 0.0f)
+                    FrontEndMobileMenuManager.BGAlpha -= 1;
 
-    // Background
-    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_BGMAP);
-    mobileTex.m_nBackgroundSprite.Draw(CRect(0.0, 0.0, 0.0 + SCREEN_WIDTH + SCREEN_COORD(900.0f), 0.0 + SCREEN_HEIGHT + SCREEN_COORD(1024.0f)), CRGBA(255, 255, 255, 40));
+                else if (FrontEndMobileMenuManager.BGAlpha == 0.0f) {
+                    if (FrontEndMobileMenuManager.BGAlpha != 40.0f)
+                        FrontEndMobileMenuManager.BGAlpha += 1;
 
-    // Mask
-    mobileTex.m_nBackgroundSprite.m_pTexture = mobileTex.m_nBackgroundSpriteTxd.GetTexture(MENU_MAINMASK);
-    mobileTex.m_nBackgroundSprite.Draw(CRect(0.0, 0.0f, 0.0f + SCREEN_WIDTH, 0.0f + SCREEN_HEIGHT), CRGBA(255, 255, 255, 250));
-    mobileTex.m_nBackgroundSprite.m_pTexture = nullptr;
+                    FrontEndMobileMenuManager.BGCoords.x = 640.0f;
+                    FrontEndMobileMenuManager.BGCoords.y = 1024.0f;
 
-    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
+                    FrontEndMobileMenuManager.BGFrameFirst = 1;
+                }
+            }
+            else {
+                // Start Animation
+                if (FrontEndMobileMenuManager.BGAlpha != 40.0f)
+                    FrontEndMobileMenuManager.BGAlpha += 1;
+                if (FrontEndMobileMenuManager.BGCoords.y != SCREEN_COORD(1024.0f))
+                    FrontEndMobileMenuManager.BGCoords.y += 1.0f * 0.3f;
+            }
+        }
+        break;
+    case 1:
+        if (!FrontEndMenuManager.m_bMenuActive) {
+            FrontEndMobileMenuManager.BGCoords.x = 0.0f;
+            FrontEndMobileMenuManager.BGCoords.y = 0.0f;
+            FrontEndMobileMenuManager.BGAlpha = 0.0f;
+        }
+        else {
+            if (FrontEndMobileMenuManager.BGCoords.y <= SCREEN_COORD(330.0f)) {
+                // End Animation
+                if (FrontEndMobileMenuManager.BGAlpha != 0.0f)
+                    FrontEndMobileMenuManager.BGAlpha -= 1;
+
+                else if (FrontEndMobileMenuManager.BGAlpha == 0.0f) {
+                    if (FrontEndMobileMenuManager.BGAlpha != 40.0f)
+                        FrontEndMobileMenuManager.BGAlpha += 1;
+
+                    FrontEndMobileMenuManager.BGCoords.x = 800.0f;
+                    FrontEndMobileMenuManager.BGCoords.y = 0.0f;
+
+                    FrontEndMobileMenuManager.BGFrameFirst = 0;
+                    FrontEndMobileMenuManager.BGFrameSecond = 1;
+                }
+            }
+            else {
+                // Start Animation
+                if (FrontEndMobileMenuManager.BGAlpha != 40.0f)
+                    FrontEndMobileMenuManager.BGAlpha += 1;
+                if (FrontEndMobileMenuManager.BGCoords.y != SCREEN_COORD(0.0f))
+                    FrontEndMobileMenuManager.BGCoords.y -= 1.0f * 0.3f;
+            }
+        }
+        break;
+    case 2:
+        if (!FrontEndMenuManager.m_bMenuActive) {
+            FrontEndMobileMenuManager.BGCoords.x = 0.0f;
+            FrontEndMobileMenuManager.BGCoords.y = 0.0f;
+            FrontEndMobileMenuManager.BGAlpha = 0.0f;
+        }
+        else {
+            if (FrontEndMobileMenuManager.BGCoords.x < SCREEN_COORD(40.0f) || FrontEndMobileMenuManager.BGCoords.y >= SCREEN_COORD(800.0f)) {
+                // End Animation
+                if (FrontEndMobileMenuManager.BGAlpha != 0.0f)
+                    FrontEndMobileMenuManager.BGAlpha -= 1;
+
+                else if (FrontEndMobileMenuManager.BGAlpha == 0.0f) {
+                    if (FrontEndMobileMenuManager.BGAlpha != 40.0f)
+                        FrontEndMobileMenuManager.BGAlpha += 1;
+
+                    FrontEndMobileMenuManager.BGCoords.x = 0.0f;
+                    FrontEndMobileMenuManager.BGCoords.y = 0.0f;
+
+                    FrontEndMobileMenuManager.BGFrameZero = 1;
+                    FrontEndMobileMenuManager.BGFrameFirst = 0;
+                    FrontEndMobileMenuManager.BGFrameSecond = 0;
+                }
+            }
+            else {
+                // Start Animation
+                if (FrontEndMobileMenuManager.BGAlpha != 40.0f)
+                    FrontEndMobileMenuManager.BGAlpha += 1;
+                if (FrontEndMobileMenuManager.BGCoords.x != SCREEN_COORD(900.0f))
+                    FrontEndMobileMenuManager.BGCoords.x -= 1.0f * 0.3f;
+                if (FrontEndMobileMenuManager.BGCoords.y != SCREEN_COORD(1024.0f))
+                    FrontEndMobileMenuManager.BGCoords.y += 1.0f * 0.4f;
+            }
+        }
+        break;
+    };
 }
 
 float __fastcall MobileFrontEnd::CheckMouseInput(float a1) {
