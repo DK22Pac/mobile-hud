@@ -153,10 +153,10 @@ void MobilePlayerInfo::MyDrawMoney(float x, float y, char *text) {
 void MobilePlayerInfo::MyDrawHealth(int playerId, int, int) {
     if (CHud::m_ItemToFlash != 4 || CTimer::m_FrameCounter & 8) {
         if (CWorld::Players[playerId].m_pPed->m_fHealth >= 10 || CTimer::m_FrameCounter & 8) {
-            float barSize = static_cast<float>(CWorld::Players[playerId].m_bMaxHealth) / CStats::GetFatAndMuscleModifier((eStatModAbilities)10);
+            float barSize = static_cast<float>(CWorld::Players[playerId].m_nMaxHealth) / CStats::GetFatAndMuscleModifier((eStatModAbilities)10);
             if (barSize > 1.0f)
                 barSize = 1.0f;
-            float progress = CWorld::Players[playerId].m_pPed->m_fHealth / static_cast<float>(CWorld::Players[playerId].m_bMaxHealth);
+            float progress = CWorld::Players[playerId].m_pPed->m_fHealth / static_cast<float>(CWorld::Players[playerId].m_nMaxHealth);
             if (progress > 1.0f)
                 progress = 1.0f;
             float positionY = settings.vecHealthPosn.y;
@@ -171,7 +171,7 @@ void MobilePlayerInfo::MyDrawHealth(int playerId, int, int) {
 
 void MobilePlayerInfo::MyDrawArmor(int playerId, int, int) {
     if ((CHud::m_ItemToFlash != 3 || CTimer::m_FrameCounter & 8) && CWorld::Players[playerId].m_pPed->m_fArmour > 1.0) {
-        float progress = CWorld::Players[playerId].m_pPed->m_fArmour / static_cast<float>(CWorld::Players[playerId].m_bMaxArmour);
+        float progress = CWorld::Players[playerId].m_pPed->m_fArmour / static_cast<float>(CWorld::Players[playerId].m_nMaxArmour);
         if (progress > 1.0f)
             progress = 1.0f;
         float positionY = settings.vecArmorPosn.y;

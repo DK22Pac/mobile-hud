@@ -52,15 +52,15 @@ void MobileMenuPage::InstallPatches() {
     plugin::patch::Set<void*>(0x580496, &MenuPages->m_aButtons->m_nActionType);
     plugin::patch::Set<void*>(0x5804EB, &MenuPages->m_aButtons->m_nActionType);
     plugin::patch::Set<void*>(0x5805D3, &MenuPages->m_aButtons->m_nActionType);
-    plugin::patch::Set<void*>(0x57FE57, &MenuPages->m_aButtons->m_wPosnX);
-    plugin::patch::Set<void*>(0x57FE96, &MenuPages->m_aButtons->m_wPosnY);
+    plugin::patch::Set<void*>(0x57FE57, &MenuPages->m_aButtons->m_nPosnX);
+    plugin::patch::Set<void*>(0x57FE96, &MenuPages->m_aButtons->m_nPosnY);
     plugin::patch::Set<void*>(0x57B6AD, &FrontEndMobileMenuManager.SlotValidation);
     plugin::patch::Set<void*>(0x619157, &FrontEndMobileMenuManager.SlotValidation[1]);
     plugin::patch::Set<void*>(0x61922D, &FrontEndMobileMenuManager.SlotValidation[1]);
     plugin::patch::Set<void*>(0x619247, &FrontEndMobileMenuManager.SlotValidation[1]);
 }
 
-CMenuPage MobileMenuPage::PagesMenu[] = {
+MyMenuPage MobileMenuPage::PagesMenu[] = {
     // Stats
     {   "FEH_STA", 42, 3,
     21, "FES_PLA",       MENU_ENTRY_OPTION,      0,  0,  fPosY1,  0,
@@ -370,5 +370,5 @@ CMenuPage MobileMenuPage::PagesMenu[] = {
     24,   "FEM_FRM",    MENU_ENTRY_OPTION,      27,  0,  fPosY2,  0,
     65,   "FED_GLS",    MENU_ENTRY_OPTION,       4,  0,  fPosY3,  0,
    100,   "FEN_NET",    MENU_ENTRY_BUTTON,       0,  0,  fPosY4,  0,
-    },
+    }
 };

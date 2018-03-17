@@ -82,13 +82,13 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     x1 = SCREEN_COORD_CENTER_RIGHT(settings.vecMissionTimersBoxSize.x / 2.0f - settings.fMissionTimersTextValueOffsetX);
                 else
                     x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.fMissionTimersTextValueOffsetX);
-                CFont::PrintString(x1, baseY + SCREEN_COORD(settings.fMissionTimersTextOffsetY), CUserDisplay::OnscnTimer.m_Clock.m_acDisplayedText);
-                if (CUserDisplay::OnscnTimer.m_Clock.m_acDescriptionTextKey[0]) {
+                CFont::PrintString(x1, baseY + SCREEN_COORD(settings.fMissionTimersTextOffsetY), CUserDisplay::OnscnTimer.m_Clock.m_szDisplayedText);
+                if (CUserDisplay::OnscnTimer.m_Clock.m_szDescriptionTextKey[0]) {
                     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, alpha * 255));
                     CFont::SetOutlinePosition(0);
                     CFont::SetAlignment(ALIGN_LEFT);
                     CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
-                    float width = CFont::GetStringWidth(TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_acDescriptionTextKey), true, false);
+                    float width = CFont::GetStringWidth(TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_szDescriptionTextKey), true, false);
                     if (width > SCREEN_COORD(settings.fMissionTimersTextMaxWidth))
                         CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x * SCREEN_COORD(settings.fMissionTimersTextMaxWidth) / width), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
                     if (settings.bMissionTimersTop)
@@ -96,7 +96,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     else
                         x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.vecMissionTimersBoxSize.x - settings.fMissionTimersTextDescriptionOffsetX);
                     CFont::PrintString(x1, baseY + SCREEN_COORD(settings.fMissionTimersTextOffsetY),
-                        TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_acDescriptionTextKey));
+                        TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_szDescriptionTextKey));
                 }
                 baseY += SCREEN_COORD(settings.vecMissionTimersBoxSize.y);
             }
@@ -133,7 +133,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                             x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.vecMissionTimersProgressBarOffset.x + settings.vecMissionTimersProgressBarSize.x);
                         CSprite2d::DrawBarChart(x1, baseY + SCREEN_COORD(boxY + settings.vecMissionTimersProgressBarOffset.y) + i + 1,
                             SCREEN_COORD(settings.vecMissionTimersProgressBarSize.x), SCREEN_COORD(settings.vecMissionTimersProgressBarSize.y),
-                            static_cast<float>(atoi(CUserDisplay::OnscnTimer.m_aCounters[i].m_acDisplayedText)), 0, 0, 1,
+                            static_cast<float>(atoi(CUserDisplay::OnscnTimer.m_aCounters[i].m_szDisplayedText)), 0, 0, 1,
                             HudColour.GetRGB(CUserDisplay::OnscnTimer.m_aCounters[i].m_nColourId, alpha * 255), CRGBA(0, 0, 0, 0));
                     }
                     else {
@@ -147,14 +147,14 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                         else
                             x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.fMissionTimersTextValueOffsetX);
                         CFont::PrintString(x1, baseY + SCREEN_COORD(boxY + settings.fMissionTimersTextOffsetY) + i + 1,
-                            CUserDisplay::OnscnTimer.m_aCounters[i].m_acDisplayedText);
+                            CUserDisplay::OnscnTimer.m_aCounters[i].m_szDisplayedText);
                     }
-                    if (CUserDisplay::OnscnTimer.m_aCounters[i].m_acDescriptionTextKey) {
+                    if (CUserDisplay::OnscnTimer.m_aCounters[i].m_szDescriptionTextKey) {
                         CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, alpha * 255));
                         CFont::SetOutlinePosition(0);
                         CFont::SetAlignment(ALIGN_LEFT);
                         CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
-                        float width = CFont::GetStringWidth(TheText.Get(CUserDisplay::OnscnTimer.m_aCounters[i].m_acDescriptionTextKey), true, false);
+                        float width = CFont::GetStringWidth(TheText.Get(CUserDisplay::OnscnTimer.m_aCounters[i].m_szDescriptionTextKey), true, false);
                         if (width > SCREEN_COORD(settings.fMissionTimersTextMaxWidth)) {
                             float multiplier = SCREEN_COORD(settings.fMissionTimersTextMaxWidth) / width;
                             CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x * multiplier), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
@@ -164,7 +164,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                         else
                             x1 = SCREEN_COORD_RIGHT(settings.fMissionTimersBoxPosnX + settings.vecMissionTimersBoxSize.x - settings.fMissionTimersTextDescriptionOffsetX);
                         CFont::PrintString(x1, baseY + SCREEN_COORD(boxY + settings.fMissionTimersTextOffsetY) + i + 1,
-                            TheText.Get(CUserDisplay::OnscnTimer.m_aCounters[i].m_acDescriptionTextKey));
+                            TheText.Get(CUserDisplay::OnscnTimer.m_aCounters[i].m_szDescriptionTextKey));
                     }
                 }
             }

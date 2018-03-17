@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\MobileAreaName.cpp" />
+    <ClCompile Include="source\MobileColors.cpp" />
+    <ClCompile Include="source\MobileFrontEnd.cpp" />
+    <ClCompile Include="source\MobileHud.cpp" />
+    <ClCompile Include="source\MobileLoadingScreen.cpp" />
+    <ClCompile Include="source\MobileMenuPage.cpp" />
+    <ClCompile Include="source\MobileMenuSystem.cpp" />
+    <ClCompile Include="source\MobileMissionTimers.cpp" />
+    <ClCompile Include="source\MobilePlayerInfo.cpp" />
+    <ClCompile Include="source\MobileProgressBar.cpp" />
+    <ClCompile Include="source\MobileRadar.cpp" />
+    <ClCompile Include="source\MobileRadioName.cpp" />
+    <ClCompile Include="source\MobileStatsBox.cpp" />
+    <ClCompile Include="source\MobileSubtitles.cpp" />
+    <ClCompile Include="source\MobileTextBox.cpp" />
+    <ClCompile Include="source\MobileTextures.cpp" />
+    <ClCompile Include="source\MobileVehicleName.cpp" />
+    <ClCompile Include="source\Settings.cpp" />
+    <ClCompile Include="source\Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\MobileAreaName.h" />
+    <ClInclude Include="source\MobileColors.h" />
+    <ClInclude Include="source\MobileFrontEnd.h" />
+    <ClInclude Include="source\MobileLoadingScreen.h" />
+    <ClInclude Include="source\MobileMenuPage.h" />
+    <ClInclude Include="source\MobileMenuSystem.h" />
+    <ClInclude Include="source\MobileMissionTimers.h" />
+    <ClInclude Include="source\MobilePlayerInfo.h" />
+    <ClInclude Include="source\MobileProgressBar.h" />
+    <ClInclude Include="source\MobileRadar.h" />
+    <ClInclude Include="source\MobileRadioName.h" />
+    <ClInclude Include="source\MobileStatsBox.h" />
+    <ClInclude Include="source\MobileSubtitles.h" />
+    <ClInclude Include="source\MobileText.h" />
+    <ClInclude Include="source\MobileTextBox.h" />
+    <ClInclude Include="source\MobileTextures.h" />
+    <ClInclude Include="source\MobileVehicleName.h" />
+    <ClInclude Include="source\Settings.h" />
+    <ClInclude Include="source\Utility.h" />
+  </ItemGroup>
+</Project>

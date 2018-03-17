@@ -41,7 +41,7 @@ void MobileTextBox::MyHelpBox_DrawBox(CRect const& rect, CRGBA const& color) {
 float MobileTextBox::GetHelpBoxXShift() {
     if (settings.bRadarTop && FrontEndMenuManager.drawRadarOrMap != 2) {
         CVehicle *vehicle = FindPlayerVehicle(-1, 0);
-        if (vehicle && vehicle->m_wModelIndex != MODEL_VORTEX && (vehicle->m_nVehicleSubClass == VEHICLE_PLANE || vehicle->m_nVehicleSubClass == VEHICLE_HELI))
+        if (vehicle && vehicle->m_nModelIndex != MODEL_VORTEX && (vehicle->m_nVehicleSubClass == VEHICLE_PLANE || vehicle->m_nVehicleSubClass == VEHICLE_HELI))
             return settings.fTextBoxPosnXWithRadarAndPlane;
         else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_nType == WEAPON_PARACHUTE)
             return settings.fTextBoxPosnXWithRadarAndPlane;
@@ -183,7 +183,7 @@ void MobileTextBox::MyHelpBox_Draw() {
                     }
                     float progress = 0.0f;
                     if (CHud::m_nHelpMessageStatId == 336)
-                        progress = plugin::CallMethodAndReturn<unsigned int, 0x5F6AA0>(0xC09928 + FindPlayerPed(-1)->m_pPlayerData->m_dwPlayerGroup * 0x2D4);
+                        progress = plugin::CallMethodAndReturn<unsigned int, 0x5F6AA0>(0xC09928 + FindPlayerPed(-1)->m_pPlayerData->m_nPlayerGroup * 0x2D4);
                     else
                         progress = CStats::GetStatValue(CHud::m_nHelpMessageStatId);
                     if (CHud::m_pHelpMessageToPrint[0] == '+') {
