@@ -1,13 +1,10 @@
 #pragma once
-// plugin-sdk
-#include <plugin.h>
-#include "game_sa\common.h"
-#include "game_sa\CFont.h"
-#include "game_sa\CMenuSystem.h"
-#include "game_sa\CMessages.h"
-#include "game_sa\CText.h"
-
-// mobile-hud
+#include "plugin.h"
+#include "common.h"
+#include "CFont.h"
+#include "CMenuSystem.h"
+#include "CMessages.h"
+#include "CText.h"
 #include "Utility.h"
 
 class MobileMenuSystem {

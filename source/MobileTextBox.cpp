@@ -2,25 +2,27 @@
 #include "Utility.h"
 #include "Settings.h"
 #include "plugin.h"
-#include "game_sa\CFont.h"
-#include "game_sa\CMessages.h"
-#include "game_sa\CText.h"
-#include "game_sa\common.h"
-#include "game_sa\CSprite2d.h"
-#include "game_sa\CTimer.h"
-#include "game_sa\CHudColours.h"
-#include "game_sa\CMenuManager.h"
-#include "game_sa\CHud.h"
-#include "game_sa\CCamera.h"
-#include "game_sa\CCutsceneMgr.h"
-#include "game_sa\CGarages.h"
-#include "game_sa\CMenuSystem.h"
-#include "game_sa\CStats.h"
+#include "CFont.h"
+#include "CMessages.h"
+#include "CText.h"
+#include "common.h"
+#include "CSprite2d.h"
+#include "CTimer.h"
+#include "CHudColours.h"
+#include "CMenuManager.h"
+#include "CHud.h"
+#include "CCamera.h"
+#include "CCutsceneMgr.h"
+#include "CGarages.h"
+#include "CMenuSystem.h"
+#include "CStats.h"
+
+using namespace plugin;
 
 void MobileTextBox::InstallPatches() {
-    plugin::patch::RedirectCall(0x573EF4, MyHelpBox_DrawBox);
-    plugin::patch::RedirectCall(0x71A7EE, MyHelpBox_DrawBox);
-    plugin::patch::RedirectCall(0x58FCFA, MyHelpBox_Draw);
+    patch::RedirectCall(0x573EF4, MyHelpBox_DrawBox);
+    patch::RedirectCall(0x71A7EE, MyHelpBox_DrawBox);
+    patch::RedirectCall(0x58FCFA, MyHelpBox_Draw);
 }
 
 void MobileTextBox::MyHelpBox_DrawBox(CRect const& rect, CRGBA const& color) {
@@ -32,8 +34,8 @@ void MobileTextBox::MyHelpBox_DrawBox(CRect const& rect, CRGBA const& color) {
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
     CSprite2d::DrawRect(CRect(BilinearOffset(rect.left - settings.fTextBoxBorderSize), BilinearOffset(rect.bottom - settings.fTextBoxBorderSize),
         BilinearOffset(rect.right + settings.fTextBoxBorderSize), BilinearOffset(rect.top + settings.fTextBoxBorderSize)),
-        CRGBA(color.red, color.green, color.blue, 130), CRGBA(color.red, color.green, color.blue, 130),
-        CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, 255));
+        CRGBA(color.r, color.g, color.b, 130), CRGBA(color.r, color.g, color.b, 130),
+        CRGBA(color.r, color.g, color.b, 255), CRGBA(color.r, color.g, color.b, 255));
     RwRenderStateSet(rwRENDERSTATESHADEMODE, reinterpret_cast<void *>(savedShade));
     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
 }
@@ -67,7 +69,7 @@ void MobileTextBox::MyHelpBox_Draw() {
                 CHud::m_nHelpMessageTimer = 0;
                 CHud::m_nHelpMessageFadeTimer = 0;
                 CMessages::StringCopy(CHud::m_pHelpMessageToPrint, CHud::m_pHelpMessage, 400);
-                CFont::SetAlignment(ALIGN_LEFT);
+                CFont::SetOrientation(ALIGN_LEFT);
                 CFont::SetJustify(false);
                 CFont::SetFontStyle(FONT_SUBTITLES);
                 CFont::SetBackground(true, true);
@@ -77,11 +79,11 @@ void MobileTextBox::MyHelpBox_Draw() {
                     CHud::m_fHelpMessageTime = 4;
                 else {
                     CFont::SetWrapx(SCREEN_COORD(GetHelpBoxXShift() + settings.fTextBoxWidth - settings.fTextBoxBorderSize) - 4.0f);
-                    CHud::m_fHelpMessageTime = CFont::GetNumberLinesNoPrint(SCREEN_COORD(GetHelpBoxXShift() + settings.fTextBoxBorderSize) + 4.0f,
+                    CHud::m_fHelpMessageTime = CFont::GetNumberLines(SCREEN_COORD(GetHelpBoxXShift() + settings.fTextBoxBorderSize) + 4.0f,
                         SCREEN_COORD(settings.vecTextBoxPosn.y), CHud::m_pHelpMessageToPrint) + 3;
                 }
                 CFont::SetWrapx(SCREEN_WIDTH);
-                plugin::CallMethod<0x506EA0>(0xB6BC90, 32, 0.0f, 1.0f);
+                CallMethod<0x506EA0>(0xB6BC90, 32, 0.0f, 1.0f);
                 break;
             case 1:
             case 2:
@@ -141,7 +143,7 @@ void MobileTextBox::MyHelpBox_Draw() {
             if (!CCutsceneMgr::ms_running) {
                 CHud::m_nHelpMessageTimer += (CTimer::ms_fTimeStep * 0.02f * 1000.0f);
                 CFont::SetAlphaFade(alpha);
-                CFont::SetProp(true);
+                CFont::SetProportional(true);
                 CFont::SetScale(SCREEN_MULTIPLIER(settings.vecTextBoxFontScale.x), SCREEN_MULTIPLIER(settings.vecTextBoxFontScale.y));
                 if (CHud::m_nHelpMessageStatId) {
                     if (TheCamera.m_bWideScreenOn) {
@@ -156,7 +158,7 @@ void MobileTextBox::MyHelpBox_Draw() {
                     }
                     else
                         sprintf(gString, "STAT00%d", CHud::m_nHelpMessageStatId);
-                    CFont::SetAlignment(ALIGN_LEFT);
+                    CFont::SetOrientation(ALIGN_LEFT);
                     CFont::SetJustify(false);
                     CFont::SetWrapx(RsGlobal.maximumWidth);
                     CFont::SetFontStyle(FONT_SUBTITLES);
@@ -183,7 +185,7 @@ void MobileTextBox::MyHelpBox_Draw() {
                     }
                     float progress = 0.0f;
                     if (CHud::m_nHelpMessageStatId == 336)
-                        progress = plugin::CallMethodAndReturn<unsigned int, 0x5F6AA0>(0xC09928 + FindPlayerPed(-1)->m_pPlayerData->m_nPlayerGroup * 0x2D4);
+                        progress = CallMethodAndReturn<unsigned int, 0x5F6AA0>(0xC09928 + FindPlayerPed(-1)->m_pPlayerData->m_nPlayerGroup * 0x2D4);
                     else
                         progress = CStats::GetStatValue(CHud::m_nHelpMessageStatId);
                     if (CHud::m_pHelpMessageToPrint[0] == '+') {
@@ -210,7 +212,7 @@ void MobileTextBox::MyHelpBox_Draw() {
                         CFont::SetAlphaFade(255.0f);
                         return;
                     }
-                    CFont::SetAlignment(ALIGN_LEFT);
+                    CFont::SetOrientation(ALIGN_LEFT);
                     CFont::SetJustify(false);
                     CFont::SetFontStyle(FONT_SUBTITLES);
                     CFont::SetDropShadowPosition(0);

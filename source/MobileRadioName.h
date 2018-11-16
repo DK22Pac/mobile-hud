@@ -1,5 +1,5 @@
 #pragma once
-#include "game_sa\CFont.h"
+#include "CFont.h"
 
 class MobileRadioName {
 public:

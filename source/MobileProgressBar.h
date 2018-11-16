@@ -1,5 +1,5 @@
 #pragma once
-#include "game_sa\CRGBA.h"
+#include "CRGBA.h"
 
 class MobileProgressBar {
 public:

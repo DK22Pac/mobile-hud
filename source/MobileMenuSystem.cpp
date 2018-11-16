@@ -1,8 +1,9 @@
-// mobile-hud
 #include "MobileMenuSystem.h"
 
+using namespace plugin;
+
 void MobileMenuSystem::InstallPatches() {
-    plugin::patch::RedirectJump(0x580E00, DisplayStandardMenu);
+    patch::RedirectJump(0x580E00, DisplayStandardMenu);
 }
 
 void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFont) {
@@ -86,9 +87,9 @@ void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFon
                     CMessages::InsertPlayerControlKeysInString(gString);
 
                     // Set and print
-                    CFont::SetProp(true);
-                    CFont::SetAlignment(ALIGN_LEFT);
-                    CFont::SetOutlinePosition(2);
+                    CFont::SetProportional(true);
+                    CFont::SetOrientation(ALIGN_LEFT);
+                    CFont::SetEdge(2);
                     CFont::SetFontStyle(FONT_MENU);
 
                     if (MenuNumber[menuId]->m_nNumColumns == 2) { // bottom
@@ -116,10 +117,10 @@ void MobileMenuSystem::DisplayStandardMenu(unsigned char menuId, bool bBrightFon
     }
 
     // Header
-    CFont::SetProp(true);
-    CFont::SetAlignment(ALIGN_LEFT);
+    CFont::SetProportional(true);
+    CFont::SetOrientation(ALIGN_LEFT);
     CFont::SetFontStyle(FONT_GOTHIC);
-    CFont::SetOutlinePosition(2);
+    CFont::SetEdge(2);
     CFont::SetScale(SCREEN_MULTIPLIER(3.5f), SCREEN_MULTIPLIER(6.5f));
     float width = CFont::GetStringWidth(TheText.Get(MenuNumber[menuId]->m_acTitle), true, false);
     if (width > SCREEN_MULTIPLIER(464.0f))
@@ -139,8 +140,7 @@ void MobileMenuSystem::DrawRect(CRect const& rect, bool bFading, CRGBA const& co
     if (bFading)
         CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
             BilinearOffset(rect.right), BilinearOffset(rect.top)),
-            CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha),
-            CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha));
+            color.ToRGB(), color, color.ToRGB(), color);
     else
         CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
             BilinearOffset(rect.right), BilinearOffset(rect.top)), color);

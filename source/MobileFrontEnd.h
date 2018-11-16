@@ -1,14 +1,15 @@
 #pragma once
-#define MenuPages (MobileMenuPage::PagesMenu)
 
 #include "plugin.h"
-#include "game_sa\CMenuManager.h"
-#include "game_sa\Fx_c.h"
-#include "game_sa\CAERadioTrackManager.h"
-#include "game_sa\CControllerConfigManager.h"
-#include "game_sa\CCamera.h"
+#include "CMenuManager.h"
+#include "Fx_c.h"
+#include "CAERadioTrackManager.h"
+#include "CControllerConfigManager.h"
+#include "CCamera.h"
 #include "MobileMenuPage.h"
 #include "MobileTextures.h"
+
+#define MenuPages (MobileMenuPage::PagesMenu)
 
 class MobileFrontEnd {
 public:

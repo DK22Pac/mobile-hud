@@ -1,7 +1,7 @@
 #include "MobileTextures.h"
-#include "game_sa\CTxdStore.h"
-#include "game_sa\CFileLoader.h"
-#include "game_sa\CTimer.h"
+#include "CTxdStore.h"
+#include "CFileLoader.h"
+#include "CTimer.h"
 
 MobileTextures mobileTex;
 MobileTexDictionary MobileTextures::m_menuSliderTxd, MobileTextures::m_aSplashesTxd, MobileTextures::m_nBackgroundSpriteTxd;

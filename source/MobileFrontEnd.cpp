@@ -1,58 +1,60 @@
-#include <plugin.h>
+#include "plugin.h"
 #include "MobileFrontEnd.h"
-#include "game_sa\CPad.h"
-#include "game_sa\CRadar.h"
-#include "game_sa\CHudColours.h"
-#include "game_sa\CVector2D.h"
-#include "game_sa\CStats.h"
+#include "CPad.h"
+#include "CRadar.h"
+#include "CHudColours.h"
+#include "CVector2D.h"
+#include "CStats.h"
 #include "Settings.h"
 #include <time.h>
+
+using namespace plugin;
 
 MobileFrontEnd FrontEndMobileMenuManager;
 
 void MobileFrontEnd::InstallPatches() {
-    plugin::patch::RedirectJump(0x57B750, DrawBackground);
-    plugin::patch::RedirectCall(0x57FEAB, CheckMouseInput);
-    plugin::patch::RedirectCall(0x57B66F, ProcessMobileMenuOptions);
-    plugin::patch::RedirectCall(0x57B702, ProcessMobileMenuOptions);
-    plugin::patch::RedirectCall(0x5764E7, PrintBriefsText);
-    plugin::patch::RedirectCall(0x574DC1, PrintStatsText);
-    plugin::patch::RedirectCall(0x574E4D, PrintStatsText2);
-    plugin::patch::RedirectCall(0x574F54, DrawStatsSlider);
+    patch::RedirectJump(0x57B750, DrawBackground);
+    patch::RedirectCall(0x57FEAB, CheckMouseInput);
+    patch::RedirectCall(0x57B66F, ProcessMobileMenuOptions);
+    patch::RedirectCall(0x57B702, ProcessMobileMenuOptions);
+    patch::RedirectCall(0x5764E7, PrintBriefsText);
+    patch::RedirectCall(0x574DC1, PrintStatsText);
+    patch::RedirectCall(0x574E4D, PrintStatsText2);
+    patch::RedirectCall(0x574F54, DrawStatsSlider);
 
     // PrintMap Patches
     // Legend
-    plugin::patch::Set<BYTE>(0x5760A1, 0x83);
-    plugin::patch::Set<BYTE>(0x5760A2, 0xC4);
-    plugin::patch::Set<BYTE>(0x5760A3, 0x18);
-    plugin::patch::Nop(0x5760A4, 0x90);
-    plugin::patch::Nop(0x5760A5, 0x90);
-    plugin::patch::Nop(0x5761D3, 0x90);
-    plugin::patch::Nop(0x5761D4, 0x90);
-    plugin::patch::Nop(0x5761D5, 0x90);
-    plugin::patch::Nop(0x5761D6, 0x90);
-    plugin::patch::Nop(0x5761D7, 0x90);
-    plugin::patch::Nop(0x5761D8, 0x90);
+    patch::Set<BYTE>(0x5760A1, 0x83);
+    patch::Set<BYTE>(0x5760A2, 0xC4);
+    patch::Set<BYTE>(0x5760A3, 0x18);
+    patch::Nop(0x5760A4, 0x90);
+    patch::Nop(0x5760A5, 0x90);
+    patch::Nop(0x5761D3, 0x90);
+    patch::Nop(0x5761D4, 0x90);
+    patch::Nop(0x5761D5, 0x90);
+    patch::Nop(0x5761D6, 0x90);
+    patch::Nop(0x5761D7, 0x90);
+    patch::Nop(0x5761D8, 0x90);
     // Borders
-    plugin::patch::Set(0x575E12, 5);
-    plugin::patch::Set(0x575DC2, 5);
-    plugin::patch::Set(0x575D6F, 5);
-    plugin::patch::Set(0x575D1F, 5);
-    plugin::patch::Set(0x575CCE, 5);
-    plugin::patch::Set(0x575C84, 5);
-    plugin::patch::Set(0x575C40, 5);
-    plugin::patch::Set(0x575BF6, 5);
+    patch::Set(0x575E12, 5);
+    patch::Set(0x575DC2, 5);
+    patch::Set(0x575D6F, 5);
+    patch::Set(0x575D1F, 5);
+    patch::Set(0x575CCE, 5);
+    patch::Set(0x575C84, 5);
+    patch::Set(0x575C40, 5);
+    patch::Set(0x575BF6, 5);
     // Place name 
-    plugin::patch::Set(0x575F89, 5);
+    patch::Set(0x575F89, 5);
     // Help texts
-    plugin::patch::SetChar(0x5762E7 + 1, 0);
-    plugin::patch::SetChar(0x5762FD + 1, 0);
+    patch::SetChar(0x5762E7 + 1, 0);
+    patch::SetChar(0x5762FD + 1, 0);
     // Legend text
-    plugin::patch::Set(0x582DEE, 5);
+    patch::Set(0x582DEE, 5);
     // PrintStats Patches
-    plugin::patch::Set(0x5750BA, 5);
-    plugin::patch::Set(0x57511B, 5);
-    plugin::patch::Set(0x574957, 5);
+    patch::Set(0x5750BA, 5);
+    patch::Set(0x57511B, 5);
+    patch::Set(0x574957, 5);
 }
 
 void MobileFrontEnd::DrawBackground(void *ecx0) {
@@ -142,11 +144,11 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
     if (FrontEndMenuManager.m_bScanningUserTracks) {
         // TODO: ScanningUserTracks
         CFont::SetBackground(0, 0);
-        CFont::SetProp(1);
+        CFont::SetProportional(1);
         CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
         CFont::SetFontStyle(FONT_SUBTITLES);
-        CFont::SetAlignment(ALIGN_RIGHT);
-        CFont::SetOutlinePosition(2);
+        CFont::SetOrientation(ALIGN_RIGHT);
+        CFont::SetEdge(2);
         CFont::SetDropColor(CRGBA(0, 0, 0, 255));
         CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
         CFont::SetScale(SCREEN_MULTIPLIER(0.6f), SCREEN_MULTIPLIER(1.2f));
@@ -277,9 +279,9 @@ float __fastcall MobileFrontEnd::CheckMouseInput(float a1) {
 
 void MobileFrontEnd::DrawStandardMenu() {
     CFont::SetBackground(0, 0);
-    CFont::SetProp(1);
+    CFont::SetProportional(1);
     CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
-    CFont::SetOutlinePosition(2);
+    CFont::SetEdge(2);
     CFont::SetRightJustifyWrap(12.5f);
     CFont::SetCentreSize(SCREEN_COORD_MAX_X);
     CFont::SetDropColor(CRGBA(0, 0, 0, 255));
@@ -287,10 +289,10 @@ void MobileFrontEnd::DrawStandardMenu() {
     // Header
     if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_szTitleName[0]) {
         if (FrontEndMenuManager.m_nCurrentMenuPage != 5 || !FrontEndMenuManager.field_78) {
-            CFont::SetAlignment(ALIGN_LEFT);
+            CFont::SetOrientation(ALIGN_LEFT);
             CFont::SetFontStyle(FONT_GOTHIC);
             CFont::SetScale(SCREEN_MULTIPLIER(1.8f), SCREEN_MULTIPLIER(3.6f));
-            CFont::SetOutlinePosition(2);
+            CFont::SetEdge(2);
             CFont::SetColor(CRGBA(255, 255, 255, 255));
             CFont::SetDropColor(CRGBA(0, 0, 0, 255));
             if (FrontEndMenuManager.m_nCurrentMenuPage != 0)
@@ -305,9 +307,9 @@ void MobileFrontEnd::DrawStandardMenu() {
     {
         static char* pText;
         CFont::SetFontStyle(FONT_SUBTITLES);
-        CFont::SetAlignment(ALIGN_LEFT);
+        CFont::SetOrientation(ALIGN_LEFT);
         CFont::SetScale(SCREEN_MULTIPLIER(0.9f), SCREEN_MULTIPLIER(1.7f));
-        CFont::SetOutlinePosition(2);
+        CFont::SetEdge(2);
         CFont::SetColor(CRGBA(255, 255, 255, 255));
         CFont::SetDropColor(CRGBA(0, 0, 0, 255));
 
@@ -354,7 +356,7 @@ void MobileFrontEnd::DrawStandardMenu() {
 
     for (unsigned int i = 0; i < 12; i++) {
         CFont::SetFontStyle(FONT_MENU);
-        CFont::SetOutlinePosition(2);
+        CFont::SetEdge(2);
 
         if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nActionType != 1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_szName[0]) {
             const char* LeftColumn = nullptr;
@@ -364,7 +366,7 @@ void MobileFrontEnd::DrawStandardMenu() {
             if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType >= MENU_ENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType <= MENU_ENTRY_SAVE_8) { 
                 switch (FrontEndMobileMenuManager.SlotValidation[i]) {
                 case 0:
-                    LeftColumn = plugin::CallAndReturn<const char*, 0x5D0F40>(i - 1);
+                    LeftColumn = CallAndReturn<const char*, 0x5D0F40>(i - 1);
                     break;
                 case 2:
                     LeftColumn = TheText.Get("FESZ_CS");
@@ -569,7 +571,7 @@ void MobileFrontEnd::DrawStandardMenu() {
             // Print left column
             CFont::SetDropColor(CRGBA(0, 0, 0, 255));
             CFont::SetColor(CRGBA(255, 255, 255, 255));
-            CFont::SetAlignment(ALIGN_LEFT);
+            CFont::SetOrientation(ALIGN_LEFT);
 
             if (FrontEndMenuManager.m_nCurrentMenuPage == 0)
                 CFont::PrintString(fPosnXForStats, fPosY, (char*)LeftColumn);
@@ -584,7 +586,7 @@ void MobileFrontEnd::DrawStandardMenu() {
                 if (width > SCREEN_COORD(312.0f))
                     CFont::SetScale(SCREEN_MULTIPLIER(0.8f * SCREEN_COORD(312.0f) / width), SCREEN_MULTIPLIER(1.7f));
 
-                CFont::SetAlignment(ALIGN_RIGHT);
+                CFont::SetOrientation(ALIGN_RIGHT);
                 CFont::PrintString(f_rightPosX, fPosY, (char*)RightColumn);
             }
 
@@ -858,7 +860,7 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
 
             if (nArrowsInput > 0)
             {
-                int		nCurrentVidMode = FrontEndMenuManager.m_nResolution + 1;
+                int        nCurrentVidMode = FrontEndMenuManager.m_nResolution + 1;
 
                 if (nCurrentVidMode >= nNumVideoModes)
                     nCurrentVidMode = 0;
@@ -992,7 +994,7 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
         FrontEndMenuManager.SetDefaultPreferences((eMenuPage)MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[2].m_nTargetMenu);
 
         if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[2].m_nTargetMenu == 36)
-            plugin::CallAndReturn<char, 0x531F20>();
+            CallAndReturn<char, 0x531F20>();
 
         FrontEndMenuManager.SaveSettings();
         FrontEndMenuManager.SwitchToNewScreen(MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[2].m_nTargetMenu);
@@ -1134,13 +1136,13 @@ void MobileFrontEnd::PrintLegend() {
     float fSpacingY = 0.0f;
     char *str;
     CFont::SetBackground(0, 0);
-    CFont::SetProp(1);
+    CFont::SetProportional(1);
     CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
-    CFont::SetOutlinePosition(0);
+    CFont::SetEdge(0);
     CFont::SetDropShadowPosition(1);
     CFont::SetDropColor(CRGBA(0, 0, 0, 255));
     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_BLUELIGHT, 255));
-    CFont::SetAlignment(ALIGN_LEFT);
+    CFont::SetOrientation(ALIGN_LEFT);
     CFont::SetFontStyle(FONT_MENU);
 
    // if (FrontEndMenuManager.m_bMapLegend) {
@@ -1381,12 +1383,12 @@ void MobileFrontEnd::PrintLegend() {
 void MobileFrontEnd::PrintPlaceName() {
     // Place 
     CFont::SetBackground(0, 0);
-    CFont::SetProp(1);
+    CFont::SetProportional(1);
     CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
-    CFont::SetOutlinePosition(3);
+    CFont::SetEdge(3);
     CFont::SetDropColor(CRGBA(0, 0, 0, 255));
     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
-    CFont::SetAlignment(ALIGN_RIGHT);
+    CFont::SetOrientation(ALIGN_RIGHT);
     CFont::SetFontStyle(FONT_PRICEDOWN);
     CFont::SetScale(SCREEN_MULTIPLIER(0.8f), SCREEN_MULTIPLIER(1.8f));
 
@@ -1411,17 +1413,17 @@ void MobileFrontEnd::DisplaySlider(float x, float y, float width, float height, 
 
     CFont::SetWrapx(SCREEN_WIDTH);
     CFont::SetRightJustifyWrap(0.0f);
-    CFont::SetOutlinePosition(0);
+    CFont::SetEdge(0);
     CFont::SetFontStyle(FONT_SUBTITLES);
     CFont::SetScale(height * 0.020f, height * 0.038f);
 
     if (percentage > 80.0f) {
-        CFont::SetAlignment(ALIGN_LEFT);
+        CFont::SetOrientation(ALIGN_LEFT);
         CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_BLACK, 200));
         CFont::PrintString(x + SCREEN_COORD(12.0f), y + SCREEN_COORD(3.5f), text);
     }
     if (percentage < 80.0) {
-        CFont::SetAlignment(ALIGN_RIGHT);
+        CFont::SetOrientation(ALIGN_RIGHT);
         CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
         CFont::PrintString(x + width - SCREEN_COORD(12.0f), y + SCREEN_COORD(3.5f), text);
     }
@@ -1444,11 +1446,11 @@ void MobileFrontEnd::PrintStats() {
 
     // Player Rating 
     CFont::SetBackground(0, 0);
-    CFont::SetProp(1);
+    CFont::SetProportional(1);
     CFont::SetWrapx(SCREEN_COORD_MAX_X - 12.5f);
-    CFont::SetOutlinePosition(0);
+    CFont::SetEdge(0);
     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
-    CFont::SetAlignment(ALIGN_LEFT);
+    CFont::SetOrientation(ALIGN_LEFT);
     CFont::SetFontStyle(FONT_PRICEDOWN);
     CFont::SetScale(SCREEN_MULTIPLIER(0.8f), SCREEN_MULTIPLIER(1.5f));
 
@@ -1460,18 +1462,18 @@ void MobileFrontEnd::PrintStats() {
 }
 
 void MobileFrontEnd::PrintStatsText(float x, float y, char *str) {
-    CFont::SetAlignment(ALIGN_LEFT);
+    CFont::SetOrientation(ALIGN_LEFT);
     CFont::SetFontStyle(FONT_SUBTITLES);
-    CFont::SetOutlinePosition(2);
+    CFont::SetEdge(2);
     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
     CFont::SetScale(SCREEN_MULTIPLIER(0.9f), SCREEN_MULTIPLIER(1.7f));
     CFont::PrintString(SCREEN_COORD_CENTER_X - SCREEN_COORD(450.0f / 2), y, str);
 }
 
 void MobileFrontEnd::PrintStatsText2(float x, float y, char *str) {
-    CFont::SetAlignment(ALIGN_RIGHT);
+    CFont::SetOrientation(ALIGN_RIGHT);
     CFont::SetFontStyle(FONT_SUBTITLES);
-    CFont::SetOutlinePosition(2);
+    CFont::SetEdge(2);
     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
     CFont::SetScale(SCREEN_MULTIPLIER(0.9f), SCREEN_MULTIPLIER(1.7f));
     CFont::PrintString(SCREEN_COORD_CENTER_X - SCREEN_COORD(-1113.0f / 2), y - SCREEN_COORD(35.0f), str);
@@ -1490,7 +1492,7 @@ void MobileFrontEnd::DrawStatsSlider(float x, float y, unsigned short width, uns
 }
 
 void MobileFrontEnd::PrintBriefsText(float x, float y, char *str) {
-    CFont::SetOutlinePosition(2);
+    CFont::SetEdge(2);
     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
     CFont::SetScale(SCREEN_MULTIPLIER(0.9f), SCREEN_MULTIPLIER(1.7f));
     CFont::PrintString(SCREEN_COORD_CENTER_X - SCREEN_COORD(282.0f / 2), y, str);

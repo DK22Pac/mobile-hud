@@ -1,8 +1,8 @@
 #pragma once
-#include <plugin.h>
-#include "game_sa\CFont.h"
-#include "game_sa\CTxdStore.h"
-#include "game_sa\CMenuManager.h"
+#include "plugin.h"
+#include "CFont.h"
+#include "CTxdStore.h"
+#include "CMenuManager.h"
 #include "MobileTextures.h"
 #include "MobileText.h"
 #include "MobileMenuSystem.h"

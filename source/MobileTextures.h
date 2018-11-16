@@ -1,7 +1,7 @@
 #pragma once
 #include "MobileLoadingScreen.h"
 #include "plugin.h"
-#include "game_sa\CSprite2d.h"
+#include "CSprite2d.h"
 
 enum eMenuSliderTexture {
     MENU_SLIDER_NUB,

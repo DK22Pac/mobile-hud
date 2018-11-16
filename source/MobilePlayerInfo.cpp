@@ -2,53 +2,55 @@
 #include "Settings.h"
 #include "Utility.h"
 #include "plugin.h"
-#include "game_sa\CHudColours.h"
-#include "game_sa\CWorld.h"
-#include "game_sa\CStats.h"
-#include "game_sa\common.h"
-#include "game_sa\CSprite.h"
-#include "game_sa\CFont.h"
-#include "game_sa\CHud.h"
-#include "game_sa\CTimer.h"
-#include "game_sa\CTxdStore.h"
-#include "game_sa\CModelInfo.h"
-#include "game_sa\CKeyGen.h"
-#include "game_sa\CDarkel.h"
+#include "CHudColours.h"
+#include "CWorld.h"
+#include "CStats.h"
+#include "common.h"
+#include "CSprite.h"
+#include "CFont.h"
+#include "CHud.h"
+#include "CTimer.h"
+#include "CTxdStore.h"
+#include "CModelInfo.h"
+#include "CKeyGen.h"
+#include "CDarkel.h"
 #include <math.h>
+
+using namespace plugin;
 
 unsigned int MobilePlayerInfo::m_CurrentStar;
 
 void MobilePlayerInfo::InstallPatches() {
     static float shadowOffsetMp = 0.0009765625f;
-    plugin::patch::SetPointer(0x719D7C + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719D94 + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719DB5 + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719DD1 + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719DF2 + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719E0E + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719E2F + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719E4B + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719E6F + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719E97 + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719EBF + 2, &shadowOffsetMp);
-    plugin::patch::SetPointer(0x719EE3 + 2, &shadowOffsetMp);
-    plugin::patch::SetUInt(0x719D90, 0xC17048);
-    plugin::patch::SetUInt(0x719DCD, 0xC17048);
-    plugin::patch::SetUInt(0x719E0A, 0xC17048);
-    plugin::patch::SetUInt(0x719E47, 0xC17048);
-    plugin::patch::SetUInt(0x719E63, 0xC17048);
-    plugin::patch::SetUInt(0x719E8B, 0xC17048);
-    plugin::patch::RedirectJump(0x58D7D0, MyDrawWeaponIcon);
-    plugin::patch::RedirectJump(0x5893B0, MyDrawWeaponAmmo);
-    plugin::patch::RedirectCall(0x58EB4E, MySetClockScale);
-    plugin::patch::RedirectCall(0x58EC21, MyDrawClock);
-    plugin::patch::RedirectCall(0x58F56B, MySetMoneyScale);
-    plugin::patch::RedirectCall(0x58F607, MyDrawMoney);
-    plugin::patch::RedirectJump(0x589270, MyDrawHealth);
-    plugin::patch::RedirectJump(0x5890A0, MyDrawArmor);
-    plugin::patch::RedirectJump(0x589190, MyDrawBreath);
-    plugin::patch::RedirectCall(0x58DD42, MyStoreCurrentStar);
-    plugin::patch::RedirectCall(0x58DFD3, MyDrawWantedLevel);
+    patch::SetPointer(0x719D7C + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719D94 + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719DB5 + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719DD1 + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719DF2 + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719E0E + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719E2F + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719E4B + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719E6F + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719E97 + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719EBF + 2, &shadowOffsetMp);
+    patch::SetPointer(0x719EE3 + 2, &shadowOffsetMp);
+    patch::SetUInt(0x719D90, 0xC17048);
+    patch::SetUInt(0x719DCD, 0xC17048);
+    patch::SetUInt(0x719E0A, 0xC17048);
+    patch::SetUInt(0x719E47, 0xC17048);
+    patch::SetUInt(0x719E63, 0xC17048);
+    patch::SetUInt(0x719E8B, 0xC17048);
+    patch::RedirectJump(0x58D7D0, MyDrawWeaponIcon);
+    patch::RedirectJump(0x5893B0, MyDrawWeaponAmmo);
+    patch::RedirectCall(0x58EB4E, MySetClockScale);
+    patch::RedirectCall(0x58EC21, MyDrawClock);
+    patch::RedirectCall(0x58F56B, MySetMoneyScale);
+    patch::RedirectCall(0x58F607, MyDrawMoney);
+    patch::RedirectJump(0x589270, MyDrawHealth);
+    patch::RedirectJump(0x5890A0, MyDrawArmor);
+    patch::RedirectJump(0x589190, MyDrawBreath);
+    patch::RedirectCall(0x58DD42, MyStoreCurrentStar);
+    patch::RedirectCall(0x58DFD3, MyDrawWantedLevel);
     strcpy(reinterpret_cast<char *>(0x866C8C), "$-%d");
     strcpy(reinterpret_cast<char *>(0x866C94), "$%d");
 }
@@ -107,10 +109,10 @@ void MobilePlayerInfo::MyDrawWeaponAmmo(CPed *player, int, int, float alpha) {
     }
     CFont::SetBackground(false, false);
     CFont::SetScale(SCREEN_MULTIPLIER(settings.vecWeaponAmmoScale.x), SCREEN_MULTIPLIER(settings.vecWeaponAmmoScale.y));
-    CFont::SetAlignment(ALIGN_CENTER);
+    CFont::SetOrientation(ALIGN_CENTER);
     CFont::SetCentreSize(SCREEN_WIDTH);
-    CFont::SetProp(true);
-    CFont::SetOutlinePosition(2);
+    CFont::SetProportional(true);
+    CFont::SetEdge(2);
     CFont::SetDropColor(CRGBA(0, 0, 0, 255));
     CFont::SetFontStyle(FONT_SUBTITLES);
     if ((totalAmmo - ammoInClip) >= 9999
@@ -122,7 +124,7 @@ void MobilePlayerInfo::MyDrawWeaponAmmo(CPed *player, int, int, float alpha) {
         || CWeaponInfo::GetWeaponInfo(wepType, 1)->m_nWeaponFire == 5
         || CWeaponInfo::GetWeaponInfo(wepType, 1)->m_nSlot <= 1)
     {
-        CFont::SetOutlinePosition(0);
+        CFont::SetEdge(0);
     }
     else {
         CFont::SetColor(HudColour.GetRGBA(HUD_COLOUR_WHITE));
@@ -130,7 +132,7 @@ void MobilePlayerInfo::MyDrawWeaponAmmo(CPed *player, int, int, float alpha) {
         if (player == CWorld::Players[1].m_pPed)
             baseY = settings.fSecondPlayerOffsetY;
         CFont::PrintString(SCREEN_COORD_RIGHT(settings.vecWeaponAmmoPosn.x), SCREEN_COORD(baseY + settings.vecWeaponAmmoPosn.y), gString);
-        CFont::SetOutlinePosition(0);
+        CFont::SetEdge(0);
     }
 }
 
@@ -204,9 +206,9 @@ __declspec(naked) void MobilePlayerInfo::MyStoreCurrentStar(short) {
 
 void MobilePlayerInfo::MyDrawWantedLevel(float x, float y, char *text) {
     if (FindPlayerPed(-1)->m_pPlayerData->m_pWanted->m_nWantedLevel > m_CurrentStar)
-        CFont::SetOutlinePosition(2);
+        CFont::SetEdge(2);
     else
-        CFont::SetOutlinePosition(0);
+        CFont::SetEdge(0);
     CFont::SetScale(SCREEN_MULTIPLIER(settings.vecWantedLevelStarScale.x), SCREEN_MULTIPLIER(settings.vecWantedLevelStarScale.y));
     CFont::PrintString(SCREEN_COORD_MAX_X - SCREEN_COORD(settings.vecWantedLevelPosn.x) - SCREEN_COORD(settings.fWantedLevelStarSpace) * m_CurrentStar,
         SCREEN_COORD(settings.vecWantedLevelPosn.y), text);

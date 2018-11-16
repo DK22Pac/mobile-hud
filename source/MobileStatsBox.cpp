@@ -1,20 +1,22 @@
-#include <plugin.h>
-#include "game_sa\common.h"
-#include "game_sa\CClock.h"
-#include "game_sa\CFont.h"
-#include "game_sa\CHudColours.h"
-#include "game_sa\CMenuManager.h"
-#include "game_sa\CPad.h"
-#include "game_sa\CSprite2d.h"
-#include "game_sa\CStats.h"
-#include "game_sa\CText.h"
+#include "plugin.h"
+#include "common.h"
+#include "CClock.h"
+#include "CFont.h"
+#include "CHudColours.h"
+#include "CMenuManager.h"
+#include "CPad.h"
+#include "CSprite2d.h"
+#include "CStats.h"
+#include "CText.h"
 #include "MobileStatsBox.h"
 #include "Settings.h"
 #include "Utility.h"
 
+using namespace plugin;
+
 void MobileStatsBox::InstallPatches() {
-    plugin::patch::Set<BYTE>(0x58FC2C, 0xEB);
-    plugin::Events::drawHudEvent += DrawVitalStats;
+    patch::Set<BYTE>(0x58FC2C, 0xEB);
+    Events::drawHudEvent += DrawVitalStats;
 }
 
 void __cdecl MobileStatsBox::DrawVitalStats() {
@@ -90,10 +92,10 @@ void __cdecl MobileStatsBox::DrawVitalStats() {
         DrawRect(SCREEN_COORD(settings.vecStatsBoxPosn.x), SCREEN_COORD_BOTTOM(settings.vecStatsBoxPosn.y + vecStatsBoxScale.y), SCREEN_MULTIPLIER(vecStatsBoxScale.x), SCREEN_MULTIPLIER(vecStatsBoxScale.y), 1, CRGBA(0, 0, 0, 130));
 
         // Header
-        CFont::SetProp(true);
-        CFont::SetAlignment(ALIGN_LEFT);
+        CFont::SetProportional(true);
+        CFont::SetOrientation(ALIGN_LEFT);
         CFont::SetFontStyle(FONT_GOTHIC);
-        CFont::SetOutlinePosition(2);
+        CFont::SetEdge(2);
         CFont::SetScale(SCREEN_MULTIPLIER(1.7f), SCREEN_MULTIPLIER(2.9f));
         float width = CFont::GetStringWidth(TheText.Get("FEH_STA"), true, false);
         if (width > SCREEN_MULTIPLIER(225.0f))
@@ -103,9 +105,9 @@ void __cdecl MobileStatsBox::DrawVitalStats() {
         CFont::PrintString(SCREEN_COORD(settings.vecStatsBoxPosn.x + 15.0f), SCREEN_COORD_BOTTOM(settings.vecStatsBoxPosn.y + vecStatsBoxScale.y + 35.0f), TheText.Get("FEH_STA"));
 
         // Stats
-        CFont::SetAlignment(ALIGN_LEFT);
+        CFont::SetOrientation(ALIGN_LEFT);
         CFont::SetFontStyle(FONT_MENU);
-        CFont::SetOutlinePosition(0);
+        CFont::SetEdge(0);
 
         // RESPECT_TOTAL
         CFont::SetColor(CRGBA(255, 255, 255, 255));
@@ -150,11 +152,11 @@ void __cdecl MobileStatsBox::DrawVitalStats() {
         CSprite2d::DrawBarChart(SCREEN_COORD(settings.vecStatsBoxPosn.x + vecStatsBoxScale.x - 110.0f), SCREEN_COORD_BOTTOM(settings.vecStatsBoxPosn.y + vecStatsBoxScale.y - 25.0f - 180.0f), SCREEN_MULTIPLIER(100.0f), SCREEN_MULTIPLIER(15.0f), CStats::GetStatValue(25) * 0.001 * 100.0, 0, 0, 0, HudColour.GetRGB(HUD_COLOUR_WHITE, 255), HudColour.GetRGB(HUD_COLOUR_WHITE, 255));
 
         // DAY
-        CFont::SetAlignment(ALIGN_RIGHT);
+        CFont::SetOrientation(ALIGN_RIGHT);
         CFont::SetFontStyle(FONT_PRICEDOWN);
         CFont::SetColor(CRGBA(255, 255, 255, 255));
         CFont::SetScale(SCREEN_MULTIPLIER(0.9f), SCREEN_MULTIPLIER(1.3f));
-        sprintf(gString, "DAY_%d", (unsigned __int8)CClock::ms_nGameClockDayOfWeek);
+        sprintf(gString, "DAY_%d", CClock::CurrentDay);
         CFont::PrintString(SCREEN_COORD(settings.vecStatsBoxPosn.x + vecStatsBoxScale.x - 10.0f), SCREEN_COORD_BOTTOM(settings.vecStatsBoxPosn.y + vecStatsBoxScale.y - 20.0f - 205.0f), TheText.Get(gString));
     }
 }
@@ -169,8 +171,7 @@ void MobileStatsBox::DrawRect(CRect const& rect, bool bFading, CRGBA const& colo
     if (bFading)
         CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
             BilinearOffset(rect.right), BilinearOffset(rect.top)),
-            CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha),
-            CRGBA(color.red, color.green, color.blue, 255), CRGBA(color.red, color.green, color.blue, color.alpha));
+            color.ToRGB(), color, color.ToRGB(), color);
     else
         CSprite2d::DrawRect(CRect(BilinearOffset(rect.left), BilinearOffset(rect.bottom),
             BilinearOffset(rect.right), BilinearOffset(rect.top)), color);

@@ -1,10 +1,12 @@
-// mobile-hud
 #include "Settings.h"
+#include "plugin.h"
+
+using namespace plugin;
 
 Settings settings;
 
 void Settings::Read() {
-    plugin::config_file config(PLUGIN_PATH("MobileHud\\mobileHud.dat"));
+    config_file config(PLUGIN_PATH("MobileHud\\mobileHud.dat"));
 
     bEnableColors                         = config["ENABLE_COLORS"                          ].asBool(true);
     bEnablePlayerInfo                     = config["ENABLE_PLAYER_INFO"                     ].asBool(true);

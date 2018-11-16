@@ -1,7 +1,4 @@
-// plugin-sdk
-#include <plugin.h>
-
-// mobile-hud
+#include "plugin.h"
 #include "MobilePlayerInfo.h"
 #include "MobileRadar.h"
 #include "MobileColors.h"

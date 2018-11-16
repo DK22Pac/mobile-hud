@@ -1,9 +1,11 @@
 #include "MobileColors.h"
 #include "plugin.h"
-#include "game_sa\CHudColours.h"
+#include "CHudColours.h"
+
+using namespace plugin;
 
 void MobileColors::Read() {
-	plugin::config_file config(PLUGIN_PATH("MobileHud\\hudcolor.dat"));
+    config_file config(PLUGIN_PATH("MobileHud\\hudcolor.dat"));
     CRGBA HudRed         = config["HUD_COLOUR_RED"        ].asRGBA(CRGBA(255,  38,  41, 255));
     CRGBA HudGreen       = config["HUD_COLOUR_GREEN"      ].asRGBA(CRGBA( 82, 157,  67, 255));
     CRGBA HudBluedark    = config["HUD_COLOUR_BLUEDARK"   ].asRGBA(CRGBA( 50,  60, 127, 255));
@@ -19,19 +21,19 @@ void MobileColors::Read() {
     CRGBA HudGreydark    = config["HUD_COLOUR_GREYDARK"   ].asRGBA(CRGBA( 74,  90, 107, 255));
     CRGBA HudBlue        = config["HUD_COLOUR_BLUE"       ].asRGBA(CRGBA( 20,  25, 200, 255));
     CRGBA HudYellow      = config["HUD_COLOUR_YELLOW"     ].asRGBA(CRGBA(255, 255,   0, 255));
-    HudColour.SetRGBAValue(HUD_COLOUR_RED, HudRed.red, HudRed.green, HudRed.blue, HudRed.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_GREEN, HudGreen.red, HudGreen.green, HudGreen.blue, HudGreen.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_BLUEDARK, HudBluedark.red, HudBluedark.green, HudBluedark.blue, HudBluedark.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_BLUELIGHT, HudBluelight.red, HudBluelight.green, HudBluelight.blue, HudBluelight.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_WHITE, HudWhite.red, HudWhite.green, HudWhite.blue, HudWhite.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_BLACK, HudBlack.red, HudBlack.green, HudBlack.blue, HudBlack.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_ORANGE, HudOrange.red, HudOrange.green, HudOrange.blue, HudOrange.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_PURPLE, HudPurple.red, HudPurple.green, HudPurple.blue, HudPurple.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_GREY, HudGrey.red, HudGrey.green, HudGrey.blue, HudGrey.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_REDDARK, HudReddark.red, HudReddark.green, HudReddark.blue, HudReddark.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_GREENDARK, HudGreendark.red, HudGreendark.green, HudGreendark.blue, HudGreendark.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_ORANGELIGHT, HudOrangelight.red, HudOrangelight.green, HudOrangelight.blue, HudOrangelight.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_GREYDARK, HudGreydark.red, HudGreydark.green, HudGreydark.blue, HudGreydark.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_BLUE, HudBlue.red, HudBlue.green, HudBlue.blue, HudBlue.alpha);
-    HudColour.SetRGBAValue(HUD_COLOUR_YELLOW, HudYellow.red, HudYellow.green, HudYellow.blue, HudYellow.alpha);
+    HudColour.SetRGBAValue(HUD_COLOUR_RED, HudRed.r, HudRed.g, HudRed.b, HudRed.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_GREEN, HudGreen.r, HudGreen.g, HudGreen.b, HudGreen.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_BLUEDARK, HudBluedark.r, HudBluedark.g, HudBluedark.b, HudBluedark.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_BLUELIGHT, HudBluelight.r, HudBluelight.g, HudBluelight.b, HudBluelight.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_WHITE, HudWhite.r, HudWhite.g, HudWhite.b, HudWhite.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_BLACK, HudBlack.r, HudBlack.g, HudBlack.b, HudBlack.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_ORANGE, HudOrange.r, HudOrange.g, HudOrange.b, HudOrange.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_PURPLE, HudPurple.r, HudPurple.g, HudPurple.b, HudPurple.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_GREY, HudGrey.r, HudGrey.g, HudGrey.b, HudGrey.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_REDDARK, HudReddark.r, HudReddark.g, HudReddark.b, HudReddark.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_GREENDARK, HudGreendark.r, HudGreendark.g, HudGreendark.b, HudGreendark.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_ORANGELIGHT, HudOrangelight.r, HudOrangelight.g, HudOrangelight.b, HudOrangelight.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_GREYDARK, HudGreydark.r, HudGreydark.g, HudGreydark.b, HudGreydark.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_BLUE, HudBlue.r, HudBlue.g, HudBlue.b, HudBlue.a);
+    HudColour.SetRGBAValue(HUD_COLOUR_YELLOW, HudYellow.r, HudYellow.g, HudYellow.b, HudYellow.a);
 }

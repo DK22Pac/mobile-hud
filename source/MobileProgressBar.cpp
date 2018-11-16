@@ -1,11 +1,13 @@
 #include "MobileProgressBar.h"
 #include "Utility.h"
 #include "plugin.h"
-#include "game_sa\CSprite2d.h"
-#include "game_sa\CFont.h"
+#include "CSprite2d.h"
+#include "CFont.h"
+
+using namespace plugin;
 
 void MobileProgressBar::InstallPatches() {
-    plugin::patch::RedirectJump(0x728640, MyDrawProgressBar);
+    patch::RedirectJump(0x728640, MyDrawProgressBar);
 }
 
 void MobileProgressBar::MyDrawProgressBar(float x, float y, unsigned short width, unsigned char height, float progress, signed char progressAdd,
@@ -21,15 +23,15 @@ void MobileProgressBar::MyDrawProgressBar(float x, float y, unsigned short width
         sprintf(text, "%d%%", (int)progress);
         CFont::SetWrapx(SCREEN_WIDTH);
         CFont::SetRightJustifyWrap(0.0f);
-        CFont::SetColor(CRGBA(0, 0, 0, color.alpha));
-        CFont::SetOutlinePosition(0);
+        CFont::SetColor(CRGBA(0, 0, 0, color.a));
+        CFont::SetEdge(0);
         CFont::SetFontStyle(FONT_SUBTITLES);
         CFont::SetScale(height * 0.035f, height * 0.05f);
         float text_x = x + width * progress / 100.0f;
         if (progress > 50.0)
-            CFont::SetAlignment(ALIGN_RIGHT);
+            CFont::SetOrientation(ALIGN_RIGHT);
         else {
-            CFont::SetAlignment(ALIGN_LEFT);
+            CFont::SetOrientation(ALIGN_LEFT);
             text_x += 5.0f;
         }
         CFont::PrintString(text_x, y, text);

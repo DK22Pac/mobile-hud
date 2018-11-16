@@ -24,6 +24,7 @@ bld/
 [Rr]el*/
 [Dd]bg*/
 output/
+*obj/
 
 # Visual Studio 2015 cache/options directory
 .vs/

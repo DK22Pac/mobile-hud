@@ -1,7 +1,7 @@
 #pragma once
-#include "game_sa\RenderWare.h"
-#include "game_sa\CSprite2d.h"
-#include "game_sa\CPed.h"
+#include "RenderWare.h"
+#include "CSprite2d.h"
+#include "CPed.h"
 
 class MobilePlayerInfo {
 public:

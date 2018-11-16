@@ -2,17 +2,19 @@
 #include "Settings.h"
 #include "Utility.h"
 #include "plugin.h"
-#include "game_sa\CWorld.h"
-#include "game_sa\CHud.h"
-#include "game_sa\CFont.h"
-#include "game_sa\CUserDisplay.h"
-#include "game_sa\CGarages.h"
-#include "game_sa\CTimer.h"
-#include "game_sa\CText.h"
-#include "game_sa\CHudColours.h"
+#include "CWorld.h"
+#include "CHud.h"
+#include "CFont.h"
+#include "CUserDisplay.h"
+#include "CGarages.h"
+#include "CTimer.h"
+#include "CText.h"
+#include "CHudColours.h"
+
+using namespace plugin;
 
 void MobileMissionTimers::InstallPatches() {
-    plugin::patch::RedirectCall(0x58FBEE, MyDrawMissionTimers);
+    patch::RedirectCall(0x58FBEE, MyDrawMissionTimers);
 }
 
 void MobileMissionTimers::MyDrawMissionTimers() {
@@ -34,7 +36,7 @@ void MobileMissionTimers::MyDrawMissionTimers() {
         }
         else
             baseY = SCREEN_COORD(settings.fMissionTimersTopPosnY);
-        CFont::SetProp(true);
+        CFont::SetProportional(true);
         CFont::SetBackground(false, false);
         CFont::SetRightJustifyWrap(0.0);
         CFont::SetFontStyle(FONT_MENU);
@@ -74,9 +76,9 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     BilinearOffset(baseY + SCREEN_COORD(settings.vecMissionTimersBoxSize.y))),
                     CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 130), CRGBA(0, 0, 0, alpha * 255), CRGBA(0, 0, 0, alpha * 255));
                 CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_BLUELIGHT, alpha * 255));
-                CFont::SetOutlinePosition(1);
+                CFont::SetEdge(1);
                 CFont::SetDropColor(CRGBA(0, 0, 0, alpha * 255));
-                CFont::SetAlignment(ALIGN_RIGHT);
+                CFont::SetOrientation(ALIGN_RIGHT);
                 CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
                 if (settings.bMissionTimersTop)
                     x1 = SCREEN_COORD_CENTER_RIGHT(settings.vecMissionTimersBoxSize.x / 2.0f - settings.fMissionTimersTextValueOffsetX);
@@ -85,8 +87,8 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                 CFont::PrintString(x1, baseY + SCREEN_COORD(settings.fMissionTimersTextOffsetY), CUserDisplay::OnscnTimer.m_Clock.m_szDisplayedText);
                 if (CUserDisplay::OnscnTimer.m_Clock.m_szDescriptionTextKey[0]) {
                     CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, alpha * 255));
-                    CFont::SetOutlinePosition(0);
-                    CFont::SetAlignment(ALIGN_LEFT);
+                    CFont::SetEdge(0);
+                    CFont::SetOrientation(ALIGN_LEFT);
                     CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
                     float width = CFont::GetStringWidth(TheText.Get(CUserDisplay::OnscnTimer.m_Clock.m_szDescriptionTextKey), true, false);
                     if (width > SCREEN_COORD(settings.fMissionTimersTextMaxWidth))
@@ -138,9 +140,9 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     }
                     else {
                         CFont::SetColor(HudColour.GetRGB(CUserDisplay::OnscnTimer.m_aCounters[i].m_nColourId, alpha * 255));
-                        CFont::SetOutlinePosition(1);
+                        CFont::SetEdge(1);
                         CFont::SetDropColor(CRGBA(0, 0, 0, alpha * 255));
-                        CFont::SetAlignment(ALIGN_RIGHT);
+                        CFont::SetOrientation(ALIGN_RIGHT);
                         CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
                         if (settings.bMissionTimersTop)
                             x1 = SCREEN_COORD_CENTER_RIGHT(settings.vecMissionTimersBoxSize.x / 2.0f - settings.fMissionTimersTextValueOffsetX);
@@ -151,8 +153,8 @@ void MobileMissionTimers::MyDrawMissionTimers() {
                     }
                     if (CUserDisplay::OnscnTimer.m_aCounters[i].m_szDescriptionTextKey) {
                         CFont::SetColor(HudColour.GetRGB(HUD_COLOUR_WHITE, alpha * 255));
-                        CFont::SetOutlinePosition(0);
-                        CFont::SetAlignment(ALIGN_LEFT);
+                        CFont::SetEdge(0);
+                        CFont::SetOrientation(ALIGN_LEFT);
                         CFont::SetScale(SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.x), SCREEN_MULTIPLIER(settings.vecMissionTimersTextScale.y));
                         float width = CFont::GetStringWidth(TheText.Get(CUserDisplay::OnscnTimer.m_aCounters[i].m_szDescriptionTextKey), true, false);
                         if (width > SCREEN_COORD(settings.fMissionTimersTextMaxWidth)) {

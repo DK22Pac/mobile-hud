@@ -1,9 +1,6 @@
 #pragma once
-// plugin-sdk
-#include <plugin.h>
-#include "game_sa\CFont.h"
-
-// mobile-hud
+#include "plugin.h"
+#include "CFont.h"
 #include "Settings.h"
 
 class MobileVehicleName {

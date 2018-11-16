@@ -1,6 +1,6 @@
 #pragma once
-#include "game_sa\CVector2D.h"
-#include "game_sa\CSprite2d.h"
+#include "CVector2D.h"
+#include "CSprite2d.h"
 
 class MobileRadar {
 public:

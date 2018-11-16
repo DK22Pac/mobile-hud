@@ -1,7 +1,7 @@
 #pragma once
-#include <plugin.h>
-#include "game_sa\common.h"
-#include "game_sa\CMenuManager.h"
+#include "plugin.h"
+#include "common.h"
+#include "CMenuManager.h"
 #include "MobileFrontEnd.h"
 #include "Utility.h"
 
@@ -19,7 +19,7 @@ VALIDATE_SIZE(MyMenuPageButton, 0x12);
 
 struct MyMenuPage {
     char m_szTitleName[8];
-    char m_nPrevMenu;
+    unsigned char m_nPrevMenu;
     char m_nStartingButton;
     MyMenuPageButton m_aButtons[12];
 };

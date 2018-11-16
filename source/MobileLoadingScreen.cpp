@@ -1,14 +1,16 @@
 #include "MobileLoadingScreen.h"
 
+using namespace plugin;
+
 MobileLoadingScreen MobileLoad;
 
 void MobileLoadingScreen::InstallPatches() {
     static float f_255 = 0.0f;
-    plugin::patch::SetPointer(0x590BA7 + 2, &f_255);
-    plugin::patch::SetInt(0x748B0E, 5);
-    plugin::patch::RedirectJump(0x5900B0, LoadSplashes);
-    plugin::patch::RedirectJump(0x58FF60, RenderSplash);
-    plugin::patch::RedirectCall(0x590480, RenderLoadingBar);
+    patch::SetPointer(0x590BA7 + 2, &f_255);
+    patch::SetInt(0x748B0E, 5);
+    patch::RedirectJump(0x5900B0, LoadSplashes);
+    patch::RedirectJump(0x58FF60, RenderSplash);
+    patch::RedirectCall(0x590480, RenderLoadingBar);
 }
 
 float fPosX = 3000;
@@ -62,13 +64,13 @@ void MobileLoadingScreen::RenderSplash() {
     CSprite2d::InitPerFrame();
     RwRenderStateSet(rwRENDERSTATETEXTUREADDRESS, reinterpret_cast<void*>(rwTEXTUREADDRESSCLAMP));
 
-    CFont::SetProp(true);
+    CFont::SetProportional(true);
     CFont::SetBackground(0, 0);
     CFont::SetJustify(false);
-    CFont::SetOutlinePosition(1);
-    CFont::SetAlignment(ALIGN_LEFT);
+    CFont::SetEdge(1);
+    CFont::SetOrientation(ALIGN_LEFT);
     CFont::SetFontStyle(FONT_SUBTITLES);
-    CFont::SetOutlinePosition(1);
+    CFont::SetEdge(1);
     CFont::SetColor(CRGBA(255, 255, 255, 255));
 
     if (fPosX > 0) fPosX -= 200;

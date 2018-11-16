@@ -1,8 +1,5 @@
 #pragma once
-// plugin-sdk
-#include <plugin.h>
-
-// mobile-hud
+#include "CVector2D.h"
 
 class Settings {
 public:

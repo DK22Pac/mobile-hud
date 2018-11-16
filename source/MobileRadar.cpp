@@ -2,19 +2,21 @@
 #include "Settings.h"
 #include "Utility.h"
 #include "plugin.h"
-#include "game_sa\common.h"
-#include "game_sa\CMenuManager.h"
-#include "game_sa\CPad.h"
+#include "common.h"
+#include "CMenuManager.h"
+#include "CPad.h"
+
+using namespace plugin;
 
 void MobileRadar::InstallPatches() {
-    plugin::patch::RedirectCall(0x58AA25, MyDrawRadarCircle);
-    plugin::patch::RedirectCall(0x58A551, MyDrawRadarPlane);
-    plugin::patch::RedirectCall(0x58A649, MyDrawPlaneHeightBorder);
-    plugin::patch::RedirectCall(0x58A77A, MyDrawPlaneHeight);
-    plugin::patch::RedirectJump(0x583480, MyTransformRadarPointToScreenSpace);
-    plugin::patch::Nop(0x58A818, 16);
-    plugin::patch::Nop(0x58A8C2, 16);
-    plugin::patch::Nop(0x58A96C, 16);
+    patch::RedirectCall(0x58AA25, MyDrawRadarCircle);
+    patch::RedirectCall(0x58A551, MyDrawRadarPlane);
+    patch::RedirectCall(0x58A649, MyDrawPlaneHeightBorder);
+    patch::RedirectCall(0x58A77A, MyDrawPlaneHeight);
+    patch::RedirectJump(0x583480, MyTransformRadarPointToScreenSpace);
+    patch::Nop(0x58A818, 16);
+    patch::Nop(0x58A8C2, 16);
+    patch::Nop(0x58A96C, 16);
 }
 
 void MobileRadar::DrawRadarRectangle(CSprite2d *sprite, CRect const& rect, CRGBA const& color) {

@@ -1,7 +1,9 @@
 #include "Utility.h"
-#include "game_sa\CSprite2d.h"
-#include "game_sa\CPad.h"
+#include "CSprite2d.h"
+#include "CPad.h"
 #include <math.h>
+
+using namespace plugin;
 
 void RotateVertices(CVector2D *rect, unsigned int numVerts, float x, float y, float angle) {
     float xold, yold;
@@ -28,7 +30,7 @@ void DrawProgressBar_BilinearOffset_RightAlign(float x, float y, float width, fl
         (int)(y + height + borderSize) - 0.5f), borderColor);
     if (progress < 1.0f)
         CSprite2d::DrawRect(CRect((int)(x - width) - 0.5f, (int)(y)-0.5f, (int)(x)-0.5f, (int)(y + height) - 0.5f),
-            CRGBA(color.red, color.green, color.blue, color.alpha / 2));
+            CRGBA(color.r, color.g, color.b, color.a / 2));
     CSprite2d::DrawRect(CRect((int)(x - width) - 0.5f, (int)(y)-0.5f, (int)(x - width * (1.0 - progress)) - 0.5f,
         (int)(y + height) - 0.5f), color);
 }
@@ -41,7 +43,7 @@ void DrawProgressBarWithProgressDelta_BilinearOffset(float x, float y, float wid
         progress = 100.0f;
     else {
         CSprite2d::DrawRect(CRect((int)(x)-0.5f, (int)(y)-0.5f, (int)(x + width) - 0.5f, (int)(y + height) - 0.5f),
-            CRGBA(color.red, color.green, color.blue, color.alpha / 2));
+            CRGBA(color.r, color.g, color.b, color.a / 2));
     }
     if (progress > 0.0f) {
         CSprite2d::DrawRect(CRect((int)(x)-0.5f, (int)(y)-0.5f, (int)(x + width * (progress / 100.f)) - 0.5f,
@@ -65,9 +67,9 @@ void StringReplace(std::string &str, std::string substring, std::string replacem
 }
 
 bool IsEscJustPressed() {
-    return plugin::CallAndReturn<bool, 0x572DB0>();
+    return CallAndReturn<bool, 0x572DB0>();
 }
 
 char *GetForMap(float a1, float a2) {
-    return plugin::CallMethodAndReturn<char *, 0x571D90>(0, a1, a2);
+    return CallMethodAndReturn<char *, 0x571D90>(0, a1, a2);
 }

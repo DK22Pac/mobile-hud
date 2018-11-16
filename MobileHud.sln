@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MobileHud", "MobileHud.vcxproj", "{B212DDA4-2A8E-45B2-914D-7BEEB31D06B1}"
 EndProject
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6BCE736A-E475-4AC3-86B4-6575A244C33B}
+		SolutionGuid = {6BB4B07B-8492-4BDB-9215-863C6A362A54}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,6 @@
 #pragma once
-#include "game_sa\CVector2D.h"
-#include "game_sa\CRGBA.h"
+#include "CVector2D.h"
+#include "CRGBA.h"
 #include <string>
 
 void RotateVertices(CVector2D *rect, unsigned int numVerts, float x, float y, float angle);

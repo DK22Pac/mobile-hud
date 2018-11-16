@@ -2,10 +2,12 @@
 #include "plugin.h"
 #include "Settings.h"
 
+using namespace plugin;
+
 void MobileRadioName::InstallPatches() {
-    plugin::patch::RedirectCall(0x4E9F3F, MySetRadioNameScale);
-    plugin::patch::RedirectCall(0x4E9F4D, MySetRadioNameAlignment);
-    plugin::patch::RedirectCall(0x4E9FF1, MyDrawRadioName);
+    patch::RedirectCall(0x4E9F3F, MySetRadioNameScale);
+    patch::RedirectCall(0x4E9F4D, MySetRadioNameAlignment);
+    patch::RedirectCall(0x4E9FF1, MyDrawRadioName);
 }
 
 void MobileRadioName::MySetRadioNameScale(float x, float y) {
@@ -21,11 +23,11 @@ void MobileRadioName::MyDrawRadioName(float x, float y, char *name) {
 
 void MobileRadioName::MySetRadioNameAlignment(eFontAlignment alignment) {
     if (settings.bRadioNameTop) {
-        CFont::SetAlignment(ALIGN_CENTER);
+        CFont::SetOrientation(ALIGN_CENTER);
         CFont::SetCentreSize(SCREEN_WIDTH);
     }
     else {
-        CFont::SetAlignment(ALIGN_LEFT);
+        CFont::SetOrientation(ALIGN_LEFT);
         CFont::SetWrapx(SCREEN_COORD_MAX_X);
     }
 }
