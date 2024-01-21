@@ -25,7 +25,7 @@ void __cdecl MobileStatsBox::DrawVitalStats() {
     CPed *player = FindPlayerPed(-1);
     CPad *pad = CPad::GetPad(0);
 
-    switch (CWeaponInfo::GetWeaponInfo((eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nType, 1)->m_nModelId1) {
+    switch (CWeaponInfo::GetWeaponInfo((eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType, 1)->m_nModelId1) {
     case MODEL_COLT45:
         CURWSKL = 69;
         CURWSKL_ALPHA = 255;

@@ -93,11 +93,11 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
         charId = MENU_CHAR_1;
     else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_SELECT_GAME)
         charId = MENU_CHAR_5;
-    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_QUIT_GAME_2)
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_QUIT)
         charId = MENU_CHAR_6;
-    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_LANGUAGE)
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_LANGUAGE_SETTINGS)
         charId = MENU_CHAR_7;
-    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_BRIEF)
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_BRIEFS)
         charId = MENU_CHAR_8;
     else
         charId = MENU_CHAR_2;
@@ -116,7 +116,7 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
         MobileFrontEnd::PrintPlaceName();
     }
 
-    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_CONTROLS_VEHICLE_ONFOOT) {
+    else if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_REDEFINE_CONTROLS) {
         FrontEndMenuManager.DrawControllerSetupScreen();
     }
 
@@ -133,11 +133,11 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
         MobileFrontEnd::PrintStats();
     }
 
-    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_BRIEF) {
+    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_BRIEFS) {
         FrontEndMenuManager.PrintBriefs();
     }
 
-    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_AUDIO_SETTINGS) {
+    if (FrontEndMenuManager.m_nCurrentMenuPage == MENUPAGE_SOUND_SETTINGS) {
         MobileFrontEnd::PrintRadioStationList();
     }
 
@@ -157,14 +157,14 @@ void MobileFrontEnd::DrawBackground(void *ecx0) {
         FrontEndMenuManager.m_bScanningUserTracks = 0;
     }
 
-    if (FrontEndMenuManager.m_bDrawMouse) {
+    if (FrontEndMenuManager.m_bShowMouse) {
         // TODO: Get cursor icon from system.
         POINT position;
         if (GetCursorPos(&position)) {
             if (FrontEndMenuManager.m_nCurrentMenuPage == 5 && CPad::NewMouseControllerState.lmb)
-                FrontEndMenuManager.m_apTextures[24].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
+                FrontEndMenuManager.m_aMenuSprites[24].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
             else
-                FrontEndMenuManager.m_apTextures[23].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
+                FrontEndMenuManager.m_aMenuSprites[23].Draw(position.x, position.y, SCREEN_MULTIPLIER(22.5f), SCREEN_MULTIPLIER(22.5f), CRGBA(255, 255, 255, 255));
 
         }
     }
@@ -288,7 +288,7 @@ void MobileFrontEnd::DrawStandardMenu() {
 
     // Header
     if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_szTitleName[0]) {
-        if (FrontEndMenuManager.m_nCurrentMenuPage != 5 || !FrontEndMenuManager.field_78) {
+        if (FrontEndMenuManager.m_nCurrentMenuPage != 5 || !FrontEndMenuManager.m_bStandardInput) {
             CFont::SetOrientation(ALIGN_LEFT);
             CFont::SetFontStyle(FONT_GOTHIC);
             CFont::SetScale(SCREEN_MULTIPLIER(1.8f), SCREEN_MULTIPLIER(3.6f));
@@ -317,17 +317,17 @@ void MobileFrontEnd::DrawStandardMenu() {
         {
         case 6:
         {
-            pText = TheText.Get(FrontEndMenuManager.m_bMainMenuSwitch ? "FESZ_QQ" : MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[0].m_szName);
+            pText = TheText.Get(FrontEndMenuManager.m_bGameNotLoaded ? "FESZ_QQ" : MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[0].m_szName);
             break;
         }
         case 35:
         {
-            pText = TheText.Get(FrontEndMenuManager.m_bMainMenuSwitch ? "FEQ_SRW" : MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[0].m_szName);
+            pText = TheText.Get(FrontEndMenuManager.m_bGameNotLoaded ? "FEQ_SRW" : MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[0].m_szName);
             break;
         }
         case 17:
         {
-            switch (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_bSelectedSaveGame + 1]) {
+            switch (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_nSelectedSaveGame + 1]) {
             case 0:
                     pText = TheText.Get("FESZ_QO");
                     break;
@@ -342,7 +342,7 @@ void MobileFrontEnd::DrawStandardMenu() {
         }
         case 11:
         {
-            pText = TheText.Get(FrontEndMenuManager.m_bMainMenuSwitch ? "FES_LCG" : MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[0].m_szName);
+            pText = TheText.Get(FrontEndMenuManager.m_bGameNotLoaded ? "FES_LCG" : MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[0].m_szName);
             break;
         }
         default:
@@ -363,7 +363,7 @@ void MobileFrontEnd::DrawStandardMenu() {
             const char* RightColumn = nullptr;
             char ReservedSpace[64];
 
-            if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType >= MENU_ENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType <= MENU_ENTRY_SAVE_8) { 
+            if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType >= MENUENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType <= MENUENTRY_SAVE_8) { 
                 switch (FrontEndMobileMenuManager.SlotValidation[i]) {
                 case 0:
                     LeftColumn = CallAndReturn<const char*, 0x5D0F40>(i - 1);
@@ -380,10 +380,10 @@ void MobileFrontEnd::DrawStandardMenu() {
                 }
             }
 
-            else if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType == MENU_ENTRY_MISSIONPACK) {
+            else if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType == MENUENTRY_MISSIONPACK) {
             }
 
-            else if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType == MENU_ENTRY_JOYMOUSE) {
+            else if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nType == MENUENTRY_JOYMOUSE) {
                 LeftColumn = TheText.Get(FrontEndMenuManager.m_nController ? "FEJ_TIT" : "FEC_MOU");
             }
 
@@ -395,25 +395,25 @@ void MobileFrontEnd::DrawStandardMenu() {
 
             switch (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nActionType) {
             case 30:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bRadioEq ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsRadioEq? "FEM_ON" : "FEM_OFF");
                 break;
             case 31:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bRadioAutoSelect ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsRadioAutoSelect ? "FEM_ON" : "FEM_OFF");
                 break;
             case 32:
-                RightColumn = RadioEntity.GetRadioStationName(FrontEndMenuManager.m_nRadioStation);
+                RightColumn = RadioEntity.GetRadioStationName(FrontEndMenuManager.m_nPrefsRadioStation);
                 break;
             case 33:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bMapLegend ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsShowLegends ? "FEM_ON" : "FEM_OFF");
                 break;
             case 25:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bShowSubtitles ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsShowSubtitles ? "FEM_ON" : "FEM_OFF");
                 break;
             case 26:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bWidescreenOn ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsUseWideScreen? "FEM_ON" : "FEM_OFF");
                 break;
             case 34:
-                switch (FrontEndMenuManager.m_nRadarMode) {
+                switch (FrontEndMenuManager.m_nPrefsRadarMode) {
                 case 0:
                     RightColumn = TheText.Get("FED_RDM");
                     break;
@@ -426,22 +426,22 @@ void MobileFrontEnd::DrawStandardMenu() {
                 }
                 break;
             case 35:
-                switch (FrontEndMenuManager.m_bHudOn) {
+                switch (FrontEndMenuManager.m_bPrefsShowHud) {
                 case 0:
                     RightColumn = TheText.Get("FEM_OFF");
-                    FrontEndMenuManager.m_nRadarMode = 2;
+                    FrontEndMenuManager.m_nPrefsRadarMode = 2;
                     break;
                 case 1:
                     RightColumn = TheText.Get("FEM_ON");
-                    FrontEndMenuManager.m_nRadarMode = 0;
+                    FrontEndMenuManager.m_nPrefsRadarMode = 0;
                     break;
                 }
                 break;
             case 65:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bSavePhotos ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsSavePhotos ? "FEM_ON" : "FEM_OFF");
                 break;
             case 63:
-                switch (FrontEndMenuManager.m_nRadioMode) {
+                switch (FrontEndMenuManager.m_nPrefsRadarMode) {
                 case 0:
                     RightColumn = TheText.Get("FEA_PR1");
                     break;
@@ -454,34 +454,34 @@ void MobileFrontEnd::DrawStandardMenu() {
                 }
                 break;
             case 24:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bFrameLimiterOn ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsVsync ? "FEM_ON" : "FEM_OFF");
                 break;
             case 43:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bMipMapping ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsMipMapping ? "FEM_ON" : "FEM_OFF");
                 break;
             case 64:
-                RightColumn = TheText.Get(FrontEndMenuManager.m_bTracksAutoScan ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsTracksAutoScan ? "FEM_ON" : "FEM_OFF");
                 break;
             case 46:
                 RightColumn = TheText.Get(!FrontEndMenuManager.bInvertMouseY ? "FEM_ON" : "FEM_OFF");
                 break;
             case 47:
-                RightColumn = TheText.Get(FrontEndMenuManager.invertPadX1 ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsInvertPadX1 ? "FEM_ON" : "FEM_OFF");
                 break;
             case 48:
-                RightColumn = TheText.Get(FrontEndMenuManager.invertPadY1 ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsInvertPadY1 ? "FEM_ON" : "FEM_OFF");
                 break;
             case 49:
-                RightColumn = TheText.Get(FrontEndMenuManager.invertPadX2 ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsInvertPadX2 ? "FEM_ON" : "FEM_OFF");
                 break;
             case 50:
-                RightColumn = TheText.Get(FrontEndMenuManager.invertPadY2 ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsInvertPadY2 ? "FEM_ON" : "FEM_OFF");
                 break;
             case 51:
-                RightColumn = TheText.Get(FrontEndMenuManager.swapPadAxis1 ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsSwapPadAxis1 ? "FEM_ON" : "FEM_OFF");
                 break;
             case 52:
-                RightColumn = TheText.Get(FrontEndMenuManager.swapPadAxis2 ? "FEM_ON" : "FEM_OFF");
+                RightColumn = TheText.Get(FrontEndMenuManager.m_bPrefsSwapPadAxis2 ? "FEM_ON" : "FEM_OFF");
                 break;
             case 59:
                 RightColumn = TheText.Get(CVehicle::m_bEnableMouseSteering ? "FEM_ON" : "FEM_OFF");
@@ -491,7 +491,7 @@ void MobileFrontEnd::DrawStandardMenu() {
                 break;
             case 56:
             {
-                const char* pszResolution = ((const char**(*)())0x745AF0)()[FrontEndMenuManager.m_nResolution];
+                const char* pszResolution = ((const char**(*)())0x745AF0)()[FrontEndMenuManager.m_nPrefsVideoMode];
 
                 if (!pszResolution)
                     pszResolution = "";
@@ -545,7 +545,7 @@ void MobileFrontEnd::DrawStandardMenu() {
             float f_rightPosX = SCREEN_COORD_CENTER_X - SCREEN_COORD(-1113.0f / 2);
             float fPosY = SCREEN_COORD_CENTER_Y - SCREEN_COORD(-MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[i].m_nPosnY) + (0.0f / 2);
 
-            if (i == FrontEndMenuManager.m_nSelectedMenuItem) {
+            if (i == FrontEndMenuManager.m_nCurrentMenuEntry) {
                 if (FrontEndMenuManager.m_nCurrentMenuPage != 5) {
                     RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
                     RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
@@ -603,31 +603,31 @@ void MobileFrontEnd::DrawStandardMenu() {
             case 27:
             {
                 // Brightness
-                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nBrightness * 0.0026041667f, true);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nPrefsBrightness * 0.0026041667f, true);
                 break;
             }
             case 28:
             {
                 // Radio Volume
-                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nRadioVolume * 0.015625f, true);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nPrefsMusicVolume * 0.015625f, true);
                 break;
             }
             case 29:
             {
                 // SFX Volume
-                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nSfxVolume * 0.015625f, true);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), FrontEndMenuManager.m_nPrefsSfxVolume * 0.015625f, true);
                 break;
             }
             case 61:
             {
                 // Draw Distance
-                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), (FrontEndMenuManager.m_fDrawDistance - 0.925f) * 1.1428572f, true);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), (FrontEndMenuManager.m_fPrefsLOD - 0.925f) * 1.1428572f, true);
                 break;
             }
             case 62:
             {
                 // Mouse Sensitivity
-                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), (CCamera::m_fMouseAccelHorzntl / 0.005f), true);
+                DisplaySlider(SCREEN_COORD_CENTER_X - SCREEN_COORD(-vecPosition.x), SCREEN_COORD_CENTER_Y - SCREEN_COORD(-vecPosition.y), SCREEN_MULTIPLIER(vecScale.x), SCREEN_MULTIPLIER(vecScale.y), (CCamera::m_fMouseAccelHorzntal / 0.005f), true);
                 break;
             }
             }
@@ -636,44 +636,44 @@ void MobileFrontEnd::DrawStandardMenu() {
 }
 
 void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed char nArrowsInput, bool *bReturn, bool bEnterInput) {
-    switch (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nSelectedMenuItem].m_nActionType)
+    switch (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nCurrentMenuEntry].m_nActionType)
     {
     case 2:
         *bReturn = true;
         return;
     case 25:
-        FrontEndMenuManager.m_bShowSubtitles = FrontEndMenuManager.m_bShowSubtitles == false;
+        FrontEndMenuManager.m_bPrefsShowSubtitles = FrontEndMenuManager.m_bPrefsShowSubtitles == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 33:
-        FrontEndMenuManager.m_bMapLegend = FrontEndMenuManager.m_bMapLegend == false;
+        FrontEndMenuManager.m_bPrefsShowLegends = FrontEndMenuManager.m_bPrefsShowLegends == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 26:
-        FrontEndMenuManager.m_bWidescreenOn = FrontEndMenuManager.m_bWidescreenOn == false;
+        FrontEndMenuManager.m_bPrefsUseWideScreen = FrontEndMenuManager.m_bPrefsUseWideScreen == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 35:
-        FrontEndMenuManager.m_bHudOn = FrontEndMenuManager.m_bHudOn == false;
+        FrontEndMenuManager.m_bPrefsShowHud = FrontEndMenuManager.m_bPrefsShowHud == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 23:
         FrontEndMenuManager.field_31 = FrontEndMenuManager.field_31 == false;
         return;
     case 30:
-        FrontEndMenuManager.m_bRadioEq = FrontEndMenuManager.m_bRadioEq == false;
-        ((char(__stdcall *)(char))0x506F90)(FrontEndMenuManager.m_bRadioEq);
+        FrontEndMenuManager.m_bPrefsRadioEq = FrontEndMenuManager.m_bPrefsRadioEq == false;
+        ((char(__stdcall *)(char))0x506F90)(FrontEndMenuManager.m_bPrefsRadioEq);
         FrontEndMenuManager.SaveSettings();
         return;
     case 31:
-        FrontEndMenuManager.m_bRadioAutoSelect = FrontEndMenuManager.m_bRadioAutoSelect == false;
-        ((char(__stdcall *)(char))0x506F80)(FrontEndMenuManager.m_bRadioAutoSelect);
+        FrontEndMenuManager.m_bPrefsRadioAutoSelect = FrontEndMenuManager.m_bPrefsRadioAutoSelect == false;
+        ((char(__stdcall *)(char))0x506F80)(FrontEndMenuManager.m_bPrefsRadioAutoSelect);
         FrontEndMenuManager.SaveSettings();
         return;
     case 21:
         if (nArrowsInput >= 0)
         {
-            if (FrontEndMenuManager.field_0)
+            if (FrontEndMenuManager.m_nStatsScrollDir == 1)
             {
                 if (FrontEndMenuManager.m_fStatsScrollSpeed == 0.0f)
                     FrontEndMenuManager.m_fStatsScrollSpeed = 150.0f;
@@ -687,16 +687,16 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
                 else
                     FrontEndMenuManager.m_fStatsScrollSpeed = 0.0f;
 
-                FrontEndMenuManager.field_0 = true;
+                FrontEndMenuManager.m_nStatsScrollDir = 1;
             }
         }
         else
         {
-            if (FrontEndMenuManager.field_0)
+            if (FrontEndMenuManager.m_nStatsScrollDir == 1)
             {
                 if (FrontEndMenuManager.m_fStatsScrollSpeed != 0.0f)
                     FrontEndMenuManager.m_fStatsScrollSpeed = 0.0f;
-                FrontEndMenuManager.field_0 = false;
+                FrontEndMenuManager.m_nStatsScrollDir = 0;
             }
             else
             {
@@ -715,91 +715,91 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
     case 34:
         if (nArrowsInput >= 0)
         {
-            if (++FrontEndMenuManager.m_nRadarMode > 2)
-                FrontEndMenuManager.m_nRadarMode = 0;
+            if (++FrontEndMenuManager.m_nPrefsRadarMode > 2)
+                FrontEndMenuManager.m_nPrefsRadarMode = 0;
         }
         else
         {
-            if (FrontEndMenuManager.m_nRadarMode)
-                --FrontEndMenuManager.m_nRadarMode;
+            if (FrontEndMenuManager.m_nPrefsRadarMode)
+                --FrontEndMenuManager.m_nPrefsRadarMode;
             else
-                FrontEndMenuManager.m_nRadarMode = 2;
+                FrontEndMenuManager.m_nPrefsRadarMode = 2;
         }
         FrontEndMenuManager.SaveSettings();
         return;
     case 3:
     case 4:
     case 5:
-        FrontEndMenuManager.SwitchToNewScreen(MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nSelectedMenuItem].m_nTargetMenu);
+        FrontEndMenuManager.SwitchToNewScreen(MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nCurrentMenuEntry].m_nTargetMenu);
         return;
     case 11:
-        FrontEndMenuManager.field_160 = 261 * FrontEndMenuManager.m_nSelectedMenuItem - 169;
+        FrontEndMenuManager.m_nSelectedMissionPack = 261 * FrontEndMenuManager.m_nCurrentMenuEntry - 169;
         FrontEndMenuManager.SwitchToNewScreen(8);
     return;
     case 10:
         FrontEndMenuManager.ProcessMissionPackNewGame();
         return;
     case 13:
-        if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nSelectedMenuItem].m_nType >= MENU_ENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nSelectedMenuItem].m_nType <= MENU_ENTRY_SAVE_8)
+        if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nCurrentMenuEntry].m_nType >= MENUENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nCurrentMenuEntry].m_nType <= MENUENTRY_SAVE_8)
         {
-            FrontEndMenuManager.m_bSelectedSaveGame = FrontEndMenuManager.m_nSelectedMenuItem - 1;
+            FrontEndMenuManager.m_nSelectedSaveGame = FrontEndMenuManager.m_nCurrentMenuEntry - 1;
             if (FrontEndMenuManager.m_nCurrentMenuPage == 9)
             {
-                if (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_nSelectedMenuItem] != 1 && FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_nSelectedMenuItem] != 2)
+                if (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_nCurrentMenuEntry] != 1 && FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_nCurrentMenuEntry] != 2)
                     FrontEndMenuManager.SwitchToNewScreen(11);
             }
             else if (FrontEndMenuManager.m_nCurrentMenuPage == 10)
             {
-               if (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_nSelectedMenuItem] != 1)
+               if (FrontEndMobileMenuManager.SlotValidation[FrontEndMenuManager.m_nCurrentMenuEntry] != 1)
                     FrontEndMenuManager.SwitchToNewScreen(12);
             }
         }
         return;
     case 18:
-        if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nSelectedMenuItem].m_nType >= MENU_ENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nSelectedMenuItem].m_nType <= MENU_ENTRY_SAVE_8)
+        if (MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nCurrentMenuEntry].m_nType >= MENUENTRY_SAVE_1 && MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[FrontEndMenuManager.m_nCurrentMenuEntry].m_nType <= MENUENTRY_SAVE_8)
         {
-            FrontEndMenuManager.m_bSelectedSaveGame = FrontEndMenuManager.m_nSelectedMenuItem - 1;
+            FrontEndMenuManager.m_nSelectedSaveGame = FrontEndMenuManager.m_nCurrentMenuEntry - 1;
             FrontEndMenuManager.SwitchToNewScreen(17);
         }
         return;
     case 12:
-        *(char*)0xB72910 = FrontEndMenuManager.field_160;
+        *(char*)0xB72910 = FrontEndMenuManager.m_nSelectedMissionPack;
         FrontEndMenuManager.DoSettingsBeforeStartingAGame();
         return;
     case 14:
         *(char*)0xB72910 = 0;
         FrontEndMenuManager.DoSettingsBeforeStartingAGame();
-        FrontEndMenuManager.m_bDontDrawFrontEnd = true;
+        FrontEndMenuManager.m_bShutDownFrontEndRequested = true;
         return;
     case 15:
-        FrontEndMenuManager.m_bDontDrawFrontEnd = true;
+        FrontEndMenuManager.m_bShutDownFrontEndRequested = true;
         return;
     case 46:
         FrontEndMenuManager.bInvertMouseY = FrontEndMenuManager.bInvertMouseY == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 47:
-        FrontEndMenuManager.invertPadX1 = FrontEndMenuManager.invertPadX1 == false;
+        FrontEndMenuManager.m_bPrefsInvertPadX1 = FrontEndMenuManager.m_bPrefsInvertPadX1 == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 48:
-        FrontEndMenuManager.invertPadY1 = FrontEndMenuManager.invertPadY1 == false;
+        FrontEndMenuManager.m_bPrefsInvertPadY1 = FrontEndMenuManager.m_bPrefsInvertPadY1 == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 49:
-        FrontEndMenuManager.invertPadX2 = FrontEndMenuManager.invertPadX2 == false;
+        FrontEndMenuManager.m_bPrefsInvertPadX2 = FrontEndMenuManager.m_bPrefsInvertPadX2 == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 50:
-        FrontEndMenuManager.invertPadY2 = FrontEndMenuManager.invertPadY2 == false;
+        FrontEndMenuManager.m_bPrefsInvertPadY2 = FrontEndMenuManager.m_bPrefsInvertPadY2 == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 51:
-        FrontEndMenuManager.swapPadAxis1 = FrontEndMenuManager.swapPadAxis1 == false;
+        FrontEndMenuManager.m_bPrefsSwapPadAxis1 = FrontEndMenuManager.m_bPrefsSwapPadAxis1 == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 52:
-        FrontEndMenuManager.swapPadAxis2 = FrontEndMenuManager.swapPadAxis2 == false;
+        FrontEndMenuManager.m_bPrefsSwapPadAxis2 = FrontEndMenuManager.m_bPrefsSwapPadAxis2 == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 59:
@@ -817,15 +817,15 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
         }
         return;
     case 24:
-        FrontEndMenuManager.m_bFrameLimiterOn = FrontEndMenuManager.m_bFrameLimiterOn == false;
+        FrontEndMenuManager.m_bPrefsVsync = FrontEndMenuManager.m_bPrefsVsync == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 64:
-        FrontEndMenuManager.m_bTracksAutoScan = FrontEndMenuManager.m_bTracksAutoScan == false;
+        FrontEndMenuManager.m_bPrefsTracksAutoScan = FrontEndMenuManager.m_bPrefsTracksAutoScan == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 65:
-        FrontEndMenuManager.m_bSavePhotos = FrontEndMenuManager.m_bSavePhotos == false;
+        FrontEndMenuManager.m_bPrefsSavePhotos = FrontEndMenuManager.m_bPrefsSavePhotos == false;
         FrontEndMenuManager.SaveSettings();
         return;
     case 58:
@@ -844,12 +844,12 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
     case 56:
         if (bEnterInput)
         {
-            if (FrontEndMenuManager.m_nResolution != FrontEndMenuManager.m_nAppliedResolution)
+            if (FrontEndMenuManager.m_nPrefsVideoMode != FrontEndMenuManager.m_nDisplayVideoMode)
             {
-                FrontEndMenuManager.m_nAppliedResolution = FrontEndMenuManager.m_nResolution;
-                ((void(*)(int))0x745C70)(FrontEndMenuManager.m_nAppliedResolution);
+                FrontEndMenuManager.m_nDisplayVideoMode = FrontEndMenuManager.m_nPrefsVideoMode;
+                ((void(*)(int))0x745C70)(FrontEndMenuManager.m_nDisplayVideoMode);
 
-                FrontEndMenuManager.m_bDrawMouse = true;
+                FrontEndMenuManager.m_bShowMouse = true;
                 FrontEndMenuManager.SaveSettings();
             }
         }
@@ -860,7 +860,7 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
 
             if (nArrowsInput > 0)
             {
-                int        nCurrentVidMode = FrontEndMenuManager.m_nResolution + 1;
+                int        nCurrentVidMode = FrontEndMenuManager.m_nPrefsVideoMode + 1;
 
                 if (nCurrentVidMode >= nNumVideoModes)
                     nCurrentVidMode = 0;
@@ -873,11 +873,11 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
                         nCurrentVidMode = 0;
                 }
 
-                FrontEndMenuManager.m_nResolution = nCurrentVidMode;
+                FrontEndMenuManager.m_nPrefsVideoMode = nCurrentVidMode;
             }
             else
             {
-                int nCurrentVidMode = FrontEndMenuManager.m_nResolution - 1;
+                int nCurrentVidMode = FrontEndMenuManager.m_nPrefsVideoMode - 1;
 
                 if (nCurrentVidMode < 0)
                     nCurrentVidMode = nNumVideoModes - 1;
@@ -890,19 +890,19 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
                         nCurrentVidMode = nNumVideoModes - 1;
                 }
 
-                FrontEndMenuManager.m_nResolution = nCurrentVidMode;
+                FrontEndMenuManager.m_nPrefsVideoMode = nCurrentVidMode;
             }
         }
         return;
     case 44:
         if (bEnterInput)
         {
-            if (FrontEndMenuManager.m_nAntiAliasingLevel != FrontEndMenuManager.m_nAppliedAntiAliasingLevel)
+            if (FrontEndMenuManager.m_nAntiAliasingLevel != FrontEndMenuManager.m_nAntiAliasingLevel)
             {
-                FrontEndMenuManager.m_nAppliedAntiAliasingLevel = FrontEndMenuManager.m_nAntiAliasingLevel;
+                FrontEndMenuManager.m_nAntiAliasingLevel = FrontEndMenuManager.m_nAntiAliasingLevel;
 
-                RwD3D9ChangeMultiSamplingLevels(FrontEndMenuManager.m_nAppliedAntiAliasingLevel);
-                ((void(*)(int))0x745C70)(FrontEndMenuManager.m_nAppliedResolution);
+                RwD3D9ChangeMultiSamplingLevels(FrontEndMenuManager.m_nAntiAliasingLevel);
+                ((void(*)(int))0x745C70)(FrontEndMenuManager.m_nDisplayVideoMode);
                 FrontEndMenuManager.SaveSettings();
             }
         }
@@ -975,20 +975,20 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
     case 63:
         if (nArrowsInput >= 0)
         {
-            if (++FrontEndMenuManager.m_nRadioMode > 2)
-                FrontEndMenuManager.m_nRadioMode = 0;
+            if (++FrontEndMenuManager.m_nPrefsRadioMode > 2)
+                FrontEndMenuManager.m_nPrefsRadioMode = 0;
         }
         else
         {
-            if (FrontEndMenuManager.m_nRadioMode)
-                --FrontEndMenuManager.m_nRadioMode;
+            if (FrontEndMenuManager.m_nPrefsRadioMode)
+                --FrontEndMenuManager.m_nPrefsRadioMode;
             else
-                FrontEndMenuManager.m_nRadioMode = 2;
+                FrontEndMenuManager.m_nPrefsRadioMode = 2;
         }
         FrontEndMenuManager.SaveSettings();
         return;
     case 54:
-        FrontEndMenuManager.m_bDontDrawFrontEnd = true;
+        FrontEndMenuManager.m_bShutDownFrontEndRequested = true;
         return;
     case 57:
         FrontEndMenuManager.SetDefaultPreferences((eMenuPage)MenuPages[FrontEndMenuManager.m_nCurrentMenuPage].m_aButtons[2].m_nTargetMenu);
@@ -1003,12 +1003,12 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
         FrontEndMenuManager.SwitchToNewScreen(FrontEndMenuManager.m_nController == 1 ? 40 : 39);
         return;
     case 8:
-        FrontEndMenuManager.field_B7 = false;
+        FrontEndMenuManager.m_bInVehicleControlsScreen = false;
         FrontEndMenuManager.SwitchToNewScreen(38);
         FrontEndMenuManager.field_90 = 0;
         return;
     case 9:
-        FrontEndMenuManager.field_B7 = true;
+        FrontEndMenuManager.m_bInVehicleControlsScreen = true;
         FrontEndMenuManager.SwitchToNewScreen(38);
         FrontEndMenuManager.field_90 = 0;
         return;
@@ -1016,8 +1016,8 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
         FrontEndMenuManager.field_1B14 = 1;
         FrontEndMenuManager.field_1B09 = 1;
         FrontEndMenuManager.field_1B08 = 1;
-        FrontEndMenuManager.field_1B0C = FrontEndMenuManager.m_nSelectedMenuItem;
-        FrontEndMenuManager.field_F0 = FrontEndMenuManager.field_36[2];
+        FrontEndMenuManager.field_1B0C = FrontEndMenuManager.m_nCurrentMenuEntry;
+        FrontEndMenuManager.pControlEdit = (int*)FrontEndMenuManager.field_36[2];
         return;
     case 53:
         FrontEndMenuManager.SwitchToNewScreen(43);
@@ -1029,46 +1029,46 @@ void __fastcall MobileFrontEnd::ProcessMobileMenuOptions(void *ecx0, int, signed
         FrontEndMenuManager.m_bScanningUserTracks = 1;
         return;
     case 37:
-        if (FrontEndMenuManager.m_nLanguage != 0)
+        if (FrontEndMenuManager.m_nPrefsLanguage != 0)
         {
-            FrontEndMenuManager.m_nLanguage = 0;
-            FrontEndMenuManager.field_EB = true;
+            FrontEndMenuManager.m_nPrefsLanguage = 0;
+            FrontEndMenuManager.m_bReinitLanguageSettings = true;
             FrontEndMenuManager.InitialiseChangedLanguageSettings(false);
             FrontEndMenuManager.SaveSettings();
         }
         return;
     case 38:
-        if (FrontEndMenuManager.m_nLanguage != 1)
+        if (FrontEndMenuManager.m_nPrefsLanguage != 1)
         {
-            FrontEndMenuManager.m_nLanguage = 1;
-            FrontEndMenuManager.field_EB = true;
+            FrontEndMenuManager.m_nPrefsLanguage = 1;
+            FrontEndMenuManager.m_bReinitLanguageSettings = true;
             FrontEndMenuManager.InitialiseChangedLanguageSettings(false);
             FrontEndMenuManager.SaveSettings();
         }
         return;
     case 39:
-        if (FrontEndMenuManager.m_nLanguage != 2)
+        if (FrontEndMenuManager.m_nPrefsLanguage != 2)
         {
-            FrontEndMenuManager.m_nLanguage = 2;
-            FrontEndMenuManager.field_EB = true;
+            FrontEndMenuManager.m_nPrefsLanguage = 2;
+            FrontEndMenuManager.m_bReinitLanguageSettings = true;
             FrontEndMenuManager.InitialiseChangedLanguageSettings(false);
             FrontEndMenuManager.SaveSettings();
         }
         return;
     case 40:
-        if (FrontEndMenuManager.m_nLanguage != 3)
+        if (FrontEndMenuManager.m_nPrefsLanguage != 3)
         {
-            FrontEndMenuManager.m_nLanguage = 3;
-            FrontEndMenuManager.field_EB = true;
+            FrontEndMenuManager.m_nPrefsLanguage = 3;
+            FrontEndMenuManager.m_bReinitLanguageSettings = true;
             FrontEndMenuManager.InitialiseChangedLanguageSettings(false);
             FrontEndMenuManager.SaveSettings();
         }
         return;
     case 41:
-        if (FrontEndMenuManager.m_nLanguage != 4)
+        if (FrontEndMenuManager.m_nPrefsLanguage != 4)
         {
-            FrontEndMenuManager.m_nLanguage = 4;
-            FrontEndMenuManager.field_EB = true;
+            FrontEndMenuManager.m_nPrefsLanguage = 4;
+            FrontEndMenuManager.m_bReinitLanguageSettings = true;
             FrontEndMenuManager.InitialiseChangedLanguageSettings(false);
             FrontEndMenuManager.SaveSettings();
         }
@@ -1088,16 +1088,16 @@ void MobileFrontEnd::PrintRadioStationList() {
     float size = SCREEN_MULTIPLIER(58.125f);
 
     do {
-        if (FrontEndMenuManager.m_nRadioStation == v2) {
+        if (FrontEndMenuManager.m_nPrefsRadioStation == v2) {
             RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
             RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
             CSprite2d::DrawRect(CRect((fPosX - SCREEN_COORD(2.0f)) + (spacing), fPosY - SCREEN_COORD(2.0f), (fPosX - SCREEN_COORD(2.0f)) + (spacing) + (size + SCREEN_COORD(4.0f)), fPosY - SCREEN_COORD(2.0f) + (size + SCREEN_COORD(4.0f))), CRGBA(255, 255, 255, 100));
             RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(savedAlpha));
         }
 
-        FrontEndMenuManager.m_apTextures[v2].Draw(CRect(fPosX + (spacing), fPosY, fPosX + (spacing) + (size), fPosY + (size)), CRGBA(255, 255, 255, FrontEndMenuManager.m_nRadioStation == v2 ? 255 : 50));
+        FrontEndMenuManager.m_aMenuSprites[v2].Draw(CRect(fPosX + (spacing), fPosY, fPosX + (spacing) + (size), fPosY + (size)), CRGBA(255, 255, 255, FrontEndMenuManager.m_nPrefsRadioStation == v2 ? 255 : 50));
 
-        if (FrontEndMenuManager.m_nRadioStation == v2) {
+        if (FrontEndMenuManager.m_nPrefsRadioStation == v2) {
             RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, &savedAlpha);
             RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, reinterpret_cast<void *>(TRUE));
             CSprite2d::DrawRect(CRect((fPosX - SCREEN_COORD(2.0f)) + (spacing), fPosY - SCREEN_COORD(2.0f), (fPosX - SCREEN_COORD(2.0f)) + (spacing) + (size + SCREEN_COORD(4.0f)), fPosY - SCREEN_COORD(2.0f) + (size + SCREEN_COORD(4.0f))), 
