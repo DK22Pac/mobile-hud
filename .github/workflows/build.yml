@@ -1,0 +1,63 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: MSBuild
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: MobileHud.sln
+
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: GTASA Release
+
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Set PLUGIN_SDK_DIR
+      run: echo "PLUGIN_SDK_DIR=${{runner.temp}}/pluginsdk" | Out-File -FilePath $env:GITHUB_ENV
+
+    - name: Set GTA_SA_DIR
+      run: echo "GTA_SA_DIR=${{runner.temp}}/build" | Out-File -FilePath $env:GITHUB_ENV
+
+    - name: Download latest PluginSDK build
+      run: gh release download -R juicermv/plugin-sdk -p '*.zip' --dir "${{runner.temp}}"
+      
+    - name: Extract downloaded build
+      working-directory: ${{runner.temp}}
+      run: 7z x release.zip -y -o${{runner.temp}}/pluginsdk
+    
+    - name: Build plugin
+      working-directory: ${{github.workspace}}
+      run: msbuild /m /p:Configuration="\"${{env.BUILD_CONFIGURATION}}\"" ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Copy resources
+      run: copy ${{github.workspace}}/resources/MobileHud ${{runner.temp}}/build/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SA-MobileHUD
+        path: ${{runner.temp}}/build/
+      
