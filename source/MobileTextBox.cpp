@@ -41,11 +41,11 @@ void MobileTextBox::MyHelpBox_DrawBox(CRect const& rect, CRGBA const& color) {
 }
 
 float MobileTextBox::GetHelpBoxXShift() {
-    if (settings.bRadarTop && FrontEndMenuManager.drawRadarOrMap != 2) {
+    if (settings.bRadarTop && FrontEndMenuManager.m_bDrawRadarOrMap != 2) {
         CVehicle *vehicle = FindPlayerVehicle(-1, 0);
         if (vehicle && vehicle->m_nModelIndex != MODEL_VORTEX && (vehicle->m_nVehicleSubClass == VEHICLE_PLANE || vehicle->m_nVehicleSubClass == VEHICLE_HELI))
             return settings.fTextBoxPosnXWithRadarAndPlane;
-        else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_nType == WEAPON_PARACHUTE)
+        else if (FindPlayerPed(-1) && FindPlayerPed(-1)->m_aWeapons[FindPlayerPed(-1)->m_nActiveWeaponSlot].m_eWeaponType == WEAPON_PARACHUTE)
             return settings.fTextBoxPosnXWithRadarAndPlane;
         else return settings.fTextBoxPosnXWithRadar;
     }
@@ -219,7 +219,7 @@ void MobileTextBox::MyHelpBox_Draw() {
                     CFont::SetBackgroundColor(CRGBA(0, 0, 0, alpha));
                     CFont::SetColor(CRGBA(255, 255, 255, 255));
                     int baseY = 0;
-                    if (TheCamera.m_bWideScreenOn && !FrontEndMenuManager.m_bWidescreenOn)
+                    if (TheCamera.m_bWideScreenOn && !FrontEndMenuManager.m_bPrefsUseWideScreen)
                         baseY = 56;
                     if (IsMenuEnabled()) {
                         CFont::SetWrapx(SCREEN_WIDTH);

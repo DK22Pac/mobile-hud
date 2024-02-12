@@ -57,7 +57,7 @@ void MobilePlayerInfo::InstallPatches() {
 
 void MobilePlayerInfo::MyDrawWeaponIcon(CPed *player, int, int, float alpha) {
     RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, reinterpret_cast<void *>(rwFILTERLINEAR));
-    int weapModel = CWeaponInfo::GetWeaponInfo((eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nType, 1)->m_nModelId1;
+    int weapModel = CWeaponInfo::GetWeaponInfo((eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType, 1)->m_nModelId1;
     if (weapModel <= 0) {
         float baseY = 0.0f;
         if (player == CWorld::Players[1].m_pPed)
@@ -89,7 +89,7 @@ void MobilePlayerInfo::MyDrawWeaponIcon(CPed *player, int, int, float alpha) {
 void MobilePlayerInfo::MyDrawWeaponAmmo(CPed *player, int, int, float alpha) {
     unsigned int ammoInClip = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nAmmoInClip;
     unsigned int totalAmmo = player->m_aWeapons[player->m_nActiveWeaponSlot].m_nTotalAmmo;
-    eWeaponType wepType = (eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_nType;
+    eWeaponType wepType = (eWeaponType)player->m_aWeapons[player->m_nActiveWeaponSlot].m_eWeaponType;
     unsigned short maxAmmoInClip = CWeaponInfo::GetWeaponInfo(wepType, player->GetWeaponSkill())->m_nAmmoClip;
     if (maxAmmoInClip <= 1 || maxAmmoInClip >= 1000)
         sprintf(gString, "%d", totalAmmo);

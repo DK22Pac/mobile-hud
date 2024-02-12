@@ -52,7 +52,7 @@ void MobileRadar::MyTransformRadarPointToScreenSpace(CVector2D *out, CVector2D *
     CPad *pad = CPad::GetPad(0);
     __asm push edx
 
-    if (FrontEndMenuManager.drawRadarOrMap) {
+    if (FrontEndMenuManager.m_bDrawRadarOrMap) {
         out->x = FrontEndMenuManager.m_fMapZoom * in->x + FrontEndMenuManager.m_fMapBaseX;
         out->y = FrontEndMenuManager.m_fMapBaseY - FrontEndMenuManager.m_fMapZoom * in->y;
     }
